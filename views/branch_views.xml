@@ -1,0 +1,42 @@
+<!-- poultry_farm_management/views/branch_views.xml -->
+<odoo>
+  <record id="view_branch_tree" model="ir.ui.view">
+    <field name="name">poultry.branch.tree</field>
+    <field name="model">poultry.branch</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="code"/>
+        <field name="is_main"/>
+        <field name="manager_id"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_branch_form" model="ir.ui.view">
+    <field name="name">poultry.branch.form</field>
+    <field name="model">poultry.branch</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="code"/>
+            <field name="is_main"/>
+            <field name="manager_id"/>
+            <field name="address"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_branch" model="ir.actions.act_window">
+    <field name="name">Branches</field>
+    <field name="res_model">poultry.branch</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help">Manage branches.</field>
+  </record>
+
+  <menuitem id="menu_poultry_branches" name="Branches" parent="menu_poultry_setup" action="action_branch"/>
+</odoo>
