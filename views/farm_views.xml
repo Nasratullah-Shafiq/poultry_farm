@@ -1,0 +1,221 @@
+<!-- poultry_farm_management/views/farm_views.xml -->
+<odoo>
+  <!-- Poultry Type -->
+  <record id="view_poultry_type_tree" model="ir.ui.view">
+    <field name="name">poultry.type.tree</field>
+    <field name="model">poultry.type</field>
+    <field name="arch" type="xml">
+      <tree><field name="name"/></tree>
+    </field>
+  </record>
+  <record id="view_poultry_type_form" model="ir.ui.view">
+    <field name="name">poultry.type.form</field>
+    <field name="model">poultry.type</field>
+    <field name="arch" type="xml">
+      <form><sheet><field name="name"/><field name="description"/></sheet></form>
+    </field>
+  </record>
+  <record id="action_poultry_type" model="ir.actions.act_window">
+    <field name="name">Poultry Types</field>
+    <field name="res_model">poultry.type</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+  <menuitem id="menu_poultry_types" name="Poultry Types" parent="menu_poultry_setup" action="action_poultry_type"/>
+
+  <!-- Purchases -->
+  <record id="view_purchase_tree" model="ir.ui.view">
+    <field name="name">poultry.purchase.tree</field>
+    <field name="model">poultry.purchase</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="date"/>
+        <field name="branch_id"/>
+        <field name="poultry_type_id"/>
+        <field name="quantity"/>
+        <field name="unit_price"/>
+        <field name="total"/>
+      </tree>
+    </field>
+  </record>
+  <record id="view_purchase_form" model="ir.ui.view">
+    <field name="name">poultry.purchase.form</field>
+    <field name="model">poultry.purchase</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="date"/>
+            <field name="branch_id"/>
+            <field name="poultry_type_id"/>
+            <field name="quantity"/>
+            <field name="unit_price"/>
+            <field name="total" readonly="1"/>
+            <field name="supplier"/>
+            <field name="source_details"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+  <record id="action_purchase" model="ir.actions.act_window">
+    <field name="name">Poultry Purchases</field>
+    <field name="res_model">poultry.purchase</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+  <menuitem id="menu_poultry_purchases" name="Purchases" parent="menu_poultry_farm" action="action_purchase"/>
+
+  <!-- Sales -->
+  <record id="view_sale_tree" model="ir.ui.view">
+    <field name="name">poultry.sale.tree</field>
+    <field name="model">poultry.sale</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="date"/>
+        <field name="branch_id"/>
+        <field name="poultry_type_id"/>
+        <field name="quantity"/>
+        <field name="unit_price"/>
+        <field name="revenue"/>
+      </tree>
+    </field>
+  </record>
+  <record id="view_sale_form" model="ir.ui.view">
+    <field name="name">poultry.sale.form</field>
+    <field name="model">poultry.sale</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="date"/>
+            <field name="branch_id"/>
+            <field name="poultry_type_id"/>
+            <field name="quantity"/>
+            <field name="unit_price"/>
+            <field name="revenue" readonly="1"/>
+            <field name="buyer"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+  <record id="action_sale" model="ir.actions.act_window">
+    <field name="name">Poultry Sales</field>
+    <field name="res_model">poultry.sale</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+  <menuitem id="menu_poultry_sales" name="Sales" parent="menu_poultry_farm" action="action_sale"/>
+
+  <!-- Feed -->
+  <record id="view_feed_tree" model="ir.ui.view">
+    <field name="name">poultry.feed.tree</field>
+    <field name="model">poultry.feed</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="branch_id"/>
+        <field name="quantity"/>
+        <field name="unit"/>
+      </tree>
+    </field>
+  </record>
+  <record id="view_feed_form" model="ir.ui.view">
+    <field name="name">poultry.feed.form</field>
+    <field name="model">poultry.feed</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="branch_id"/>
+            <field name="quantity"/>
+            <field name="unit"/>
+            <field name="purchase_price"/>
+            <field name="currency_id"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+  <record id="action_feed" model="ir.actions.act_window">
+    <field name="name">Feed Inventory</field>
+    <field name="res_model">poultry.feed</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+  <menuitem id="menu_poultry_feed" name="Feed" parent="menu_poultry_farm" action="action_feed"/>
+
+  <!-- Medicine -->
+  <record id="view_medicine_tree" model="ir.ui.view">
+    <field name="name">poultry.medicine.tree</field>
+    <field name="model">poultry.medicine</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="branch_id"/>
+        <field name="quantity"/>
+      </tree>
+    </field>
+  </record>
+  <record id="view_medicine_form" model="ir.ui.view">
+    <field name="name">poultry.medicine.form</field>
+    <field name="model">poultry.medicine</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="branch_id"/>
+            <field name="quantity"/>
+            <field name="purchase_price"/>
+            <field name="currency_id"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+  <record id="action_medicine" model="ir.actions.act_window">
+    <field name="name">Medicine Inventory</field>
+    <field name="res_model">poultry.medicine</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+  <menuitem id="menu_poultry_medicine" name="Medicine" parent="menu_poultry_farm" action="action_medicine"/>
+
+  <!-- Vaccination -->
+  <record id="view_vaccination_tree" model="ir.ui.view">
+    <field name="name">poultry.vaccination.tree</field>
+    <field name="model">poultry.vaccination</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="vaccine_date"/>
+        <field name="vaccine_name"/>
+        <field name="poultry_type_id"/>
+        <field name="branch_id"/>
+      </tree>
+    </field>
+  </record>
+  <record id="view_vaccination_form" model="ir.ui.view">
+    <field name="name">poultry.vaccination.form</field>
+    <field name="model">poultry.vaccination</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="poultry_type_id"/>
+            <field name="branch_id"/>
+            <field name="vaccine_name"/>
+            <field name="vaccine_date"/>
+            <field name="responsible_id"/>
+            <field name="notes"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+  <record id="action_vaccination" model="ir.actions.act_window">
+    <field name="name">Vaccination</field>
+    <field name="res_model">poultry.vaccination</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+  <menuitem id="menu_poultry_vaccination" name="Vaccination" parent="menu_poultry_farm" action="action_vaccination"/>
+
+</odoo>
