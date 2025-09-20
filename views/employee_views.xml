@@ -1,0 +1,48 @@
+<!-- poultry_farm_management/views/employee_views.xml -->
+<odoo>
+  <record id="view_employee_tree" model="ir.ui.view">
+    <field name="name">poultry.employee.tree</field>
+    <field name="model">poultry.employee</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="employee_code"/>
+        <field name="job_title"/>
+        <field name="branch_id"/>
+        <field name="salary"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_employee_form" model="ir.ui.view">
+    <field name="name">poultry.employee.form</field>
+    <field name="model">poultry.employee</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="employee_code"/>
+            <field name="branch_id"/>
+            <field name="job_title"/>
+            <field name="phone"/>
+            <field name="address"/>
+            <field name="hire_date"/>
+            <field name="salary"/>
+            <field name="currency_id"/>
+            <field name="last_attendance"/>
+            <field name="active"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_employee" model="ir.actions.act_window">
+    <field name="name">Employees</field>
+    <field name="res_model">poultry.employee</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem id="menu_poultry_employees" name="Employees" parent="menu_poultry_hr" action="action_employee"/>
+</odoo>
