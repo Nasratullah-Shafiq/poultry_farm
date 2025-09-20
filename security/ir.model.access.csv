@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_poultry_branch,poultry.branch,model_poultry_branch,base.group_user,1,1,1,1
+access_poultry_employee,poultry.employee,model_poultry_employee,base.group_user,1,1,1,1
+access_poultry_salary,poultry.salary,model_poultry_salary,base.group_user,1,1,1,1
+access_poultry_finance,poultry.finance,model_poultry_finance,base.group_user,1,1,1,1
+access_poultry_type,poultry.type,model_poultry_type,base.group_user,1,1,1,1
+access_poultry_purchase,poultry.purchase,model_poultry_purchase,base.group_user,1,1,1,1
+access_poultry_sale,poultry.sale,model_poultry_sale,base.group_user,1,1,1,1
+access_poultry_feed,poultry.feed,model_poultry_feed,base.group_user,1,1,1,1
+access_poultry_medicine,poultry.medicine,model_poultry_medicine,base.group_user,1,1,1,1
+access_poultry_vaccination,poultry.vaccination,model_poultry_vaccination,base.group_user,1,1,1,1
