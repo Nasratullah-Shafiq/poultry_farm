@@ -1,0 +1,46 @@
+<!-- poultry_farm_management/views/finance_views.xml -->
+<odoo>
+  <record id="view_finance_tree" model="ir.ui.view">
+    <field name="name">poultry.finance.tree</field>
+    <field name="model">poultry.finance</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="date"/>
+        <field name="name"/>
+        <field name="entry_type"/>
+        <field name="branch_id"/>
+        <field name="amount"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_finance_form" model="ir.ui.view">
+    <field name="name">poultry.finance.form</field>
+    <field name="model">poultry.finance</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="date"/>
+            <field name="entry_type"/>
+            <field name="branch_id"/>
+            <field name="amount"/>
+            <field name="currency_id"/>
+            <field name="account_id"/>
+            <field name="journal_id"/>
+            <field name="description"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_finance" model="ir.actions.act_window">
+    <field name="name">Finance Entries</field>
+    <field name="res_model">poultry.finance</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem id="menu_poultry_finance_entries" name="Entries" parent="menu_poultry_finance" action="action_finance"/>
+</odoo>
