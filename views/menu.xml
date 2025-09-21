@@ -1,0 +1,32 @@
+<!-- poultry_farm_management/views/menu.xml -->
+<odoo>
+  <menuitem id="menu_poultry_root" name="Poultry Farm" sequence="10"/>
+  <menuitem id="menu_poultry_setup" name="Setup" parent="menu_poultry_root" sequence="1"/>
+
+  <menuitem id="menu_poultry_hr" name="HR" parent="menu_poultry_root" sequence="5"/>
+  <menuitem id="menu_poultry_finance" name="Finance" parent="menu_poultry_root" sequence="10"/>
+  <menuitem id="menu_poultry_farm" name="Farm" parent="menu_poultry_root" sequence="20"/>
+
+  <odoo>
+    <menuitem id="menu_finance_root" name="Finance" sequence="20" parent="" />
+
+    <menuitem id="menu_finance_reports"
+              name="Finance Reports"
+              parent="menu_finance_root"
+              sequence="10" />
+
+    <record id="action_finance_report_wizard" model="ir.actions.act_window">
+        <field name="name">Finance Report Wizard</field>
+        <field name="res_model">poultry.finance.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_finance_report_wizard"
+              name="Generate Finance Report"
+              parent="menu_finance_reports"
+              action="action_finance_report_wizard"
+              sequence="5"/>
+</odoo>
+
+</odoo>
