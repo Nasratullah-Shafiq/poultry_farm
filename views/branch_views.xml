@@ -8,7 +8,7 @@
         <field name="name"/>
         <field name="code"/>
         <field name="is_main"/>
-        <field name="manager_id"/>
+        <field name="manager_ids"/>
       </tree>
     </field>
   </record>
@@ -23,7 +23,7 @@
             <field name="name"/>
             <field name="code"/>
             <field name="is_main"/>
-            <field name="manager_id"/>
+            <field name="manager_ids"/>
             <field name="address"/>
           </group>
         </sheet>
