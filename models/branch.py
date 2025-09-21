@@ -10,3 +10,4 @@ class PoultryBranch(models.Model):
     address = fields.Text()
     manager_ids = fields.Many2one('res.users', string='Branch Manager')
     is_main = fields.Boolean(string='Is Main Branch', default=False)
+
