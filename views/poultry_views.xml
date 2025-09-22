@@ -1,0 +1,137 @@
+<odoo>
+    <!-- ===========================
+         POULTRY TYPE VIEWS
+         =========================== -->
+
+    <!-- Poultry Type Tree View -->
+    <record id="view_poultry_type_tree" model="ir.ui.view">
+        <field name="name">poultry.type.tree</field>
+        <field name="model">poultry.type</field>
+        <field name="arch" type="xml">
+            <tree string="Poultry Types">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Poultry Type Form View -->
+    <record id="view_poultry_type_form" model="ir.ui.view">
+        <field name="name">poultry.type.form</field>
+        <field name="model">poultry.type</field>
+        <field name="arch" type="xml">
+            <form string="Poultry Type">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Poultry Type Action -->
+    <record id="action_poultry_type" model="ir.actions.act_window">
+        <field name="name">Poultry Types</field>
+        <field name="res_model">poultry.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- ===========================
+         POULTRY RECORD VIEWS
+         =========================== -->
+
+    <!-- Poultry Tree View -->
+    <record id="view_poultry_tree" model="ir.ui.view">
+        <field name="name">poultry.farm.tree</field>
+        <field name="model">poultry.farm</field>
+        <field name="arch" type="xml">
+            <tree string="Poultry Records">
+                <field name="name"/>
+                <field name="age"/>
+                <field name="gender"/>
+                <field name="poultry_type_id"/>
+                <field name="branch_id"/>
+                <field name="date_added"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Poultry Form View -->
+    <record id="view_poultry_form" model="ir.ui.view">
+        <field name="name">poultry.farm.form</field>
+        <field name="model">poultry.farm</field>
+        <field name="arch" type="xml">
+            <form string="Poultry Record">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="age"/>
+                            <field name="gender"/>
+                            <field name="poultry_type_id"/>
+                            <field name="branch_id"/>
+                        </group>
+                        <group>
+                            <field name="date_added"/>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                </sheet>
+
+                <!-- ✅ Chatter placed inside the form correctly -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_poultry_search" model="ir.ui.view">
+    <field name="name">poultry.farm.search</field>
+    <field name="model">poultry.farm</field>
+    <field name="arch" type="xml">
+        <search string="Search Poultry">
+            <!-- Top search bar fields -->
+            <field name="name" string="Poultry Name"/>
+            <field name="branch_id"/>
+            <field name="poultry_type_id"/>
+            <field name="gender"/>
+            <field name="date_added"/>
+
+            <!-- Group By Options -->
+            <group expand="0" string="Group By">
+                <filter name="group_by_type" string="Type" context="{'group_by': 'poultry_type_id'}"/>
+                <filter name="group_by_gender" string="Gender" context="{'group_by': 'gender'}"/>
+                <filter name="group_by_branch" string="Branch" context="{'group_by': 'branch_id'}"/>
+                <filter name="group_by_date" string="Date Added" context="{'group_by': 'date_added'}"/>
+            </group>
+
+            <!-- Search Panel (Correct placement) -->
+            <searchpanel>
+                <field name="branch_id" string="Branch"/>
+                <field name="poultry_type_id" string="Poultry Type"/>
+                <field name="gender" string="Gender"/>
+                <field name="date_category" string="Date Category"/>
+            </searchpanel>
+
+        </search>
+    </field>
+</record>
+
+    <record id="action_poultry" model="ir.actions.act_window">
+        <field name="name">Poultry Records</field>
+        <field name="res_model">poultry.farm</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_poultry_search"/>
+    </record>
+
+    <!-- Medicine Menu -->
+    <menuitem id="menu_poultry" name="Poultry Farm"/>
+    <menuitem id="menu_farm" name="Farm" parent="menu_poultry"/>
+
+</odoo>
