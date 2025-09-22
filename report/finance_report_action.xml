@@ -1,0 +1,13 @@
+<odoo>
+    <!-- PDF Report Action -->
+<!--    <report-->
+<!--        id="action_poultry_finance_report"-->
+<!--        model="poultry.finance.report"-->
+<!--        string="Comprehensive Poultry Finance Report"-->
+<!--        report_type="qweb-pdf"-->
+<!--        name="poultry_farm.poultry_finance_report_template"-->
+<!--        file="poultry_farm.poultry_finance_report_template"-->
+<!--        print_report_name="'Poultry_Finance_Report_%s' % (object.start_date)"-->
+<!--    />-->
+
+</odoo>
