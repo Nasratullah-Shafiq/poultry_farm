@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 
+
 class PoultryFinanceReport(models.TransientModel):
     _name = 'poultry.finance.report'
     _description = 'Comprehensive Poultry Finance Report Wizard'
@@ -73,6 +74,21 @@ class PoultryFinanceReport(models.TransientModel):
             self.total_income + self.total_sales
             - (self.total_purchases + self.total_expenses + self.total_salaries + self.total_feed + self.total_medicine + self.total_vaccination)
         )
+
+    def compute_report(self):
+        self.generate_report()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': self._name,
+            'view_mode': 'form',
+            'res_id': self.id,
+            'views': [(False, 'form')],
+            'target': 'new',  # keep it as popup
+        }
+
+    @api.onchange('start_date', 'end_date', 'branch_id')
+    def _onchange_generate_report(self):
+        self.generate_report()
 
     # -------------------------------------------------------------------
     # Step 2: Print PDF report
