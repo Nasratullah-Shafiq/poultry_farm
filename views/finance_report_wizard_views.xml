@@ -11,10 +11,15 @@
                 </group>
 
                 <group string="Totals">
-                    <field name="total_income" readonly="1"/>
-                    <field name="total_purchases" readonly="1"/>
-                    <field name="total_expenses" readonly="1"/>
-                    <field name="net_profit" readonly="1"/>
+                     <field name="total_income" readonly="1"/>
+                        <field name="total_sales" readonly="1"/>
+                        <field name="total_purchases" readonly="1"/>
+                        <field name="total_expenses" readonly="1"/>
+                        <field name="total_salaries" readonly="1"/>
+                        <field name="total_feed" readonly="1"/>
+                        <field name="total_medicine" readonly="1"/>
+                        <field name="total_vaccination" readonly="1"/>
+                        <field name="net_profit" readonly="1"/>
                 </group>
 
                 <footer>
@@ -33,22 +38,4 @@
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
-
-        <!-- =========================================================
-         MENUS
-         ========================================================= -->
-
-   <!-- Add a Top-Level Menu next to Finance -->
-<!--    <menuitem id="menu_poultry_finance_report_main"-->
-<!--              name="Finance Reports"-->
-<!--              parent=""-->
-<!--              sequence="25"/>-->
-
-
-<!--    &lt;!&ndash; Link the Top Menu directly to Wizard Action &ndash;&gt;-->
-<!--    <menuitem id="menu_poultry_finance_report_wizard"-->
-<!--              name="Generate Report"-->
-<!--              parent="menu_poultry_root"-->
-<!--              action="action_poultry_finance_report_wizard"-->
-<!--              sequence="1"/>-->
 </odoo>
