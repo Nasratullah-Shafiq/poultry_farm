@@ -8,4 +8,14 @@
         <field name="report_file">poultry_farm.report_poultry_finance_template</field>
         <field name="print_report_name">'Poultry Finance Report - %s' % (object.start_date)</field>
     </record>
+
+    <!-- QWeb Report Action -->
+    <record id="report_poultry_sales" model="ir.actions.report">
+        <field name="name">Poultry Sales Report</field>
+        <field name="model">poultry.sale.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">poultry_farm.report_poultry_sales_template</field>
+        <field name="report_file">poultry_farm.report_poultry_sales_template</field>
+        <field name="print_report_name">'Poultry Sales Report'</field>
+    </record>
 </odoo>
