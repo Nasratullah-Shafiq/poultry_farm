@@ -9,3 +9,15 @@ access_poultry_sale,poultry.sale,model_poultry_sale,base.group_user,1,1,1,1
 access_poultry_feed,poultry.feed,model_poultry_feed,base.group_user,1,1,1,1
 access_poultry_medicine,poultry.medicine,model_poultry_medicine,base.group_user,1,1,1,1
 access_poultry_vaccination,poultry.vaccination,model_poultry_vaccination,base.group_user,1,1,1,1
+
+access_poultry_finance_report,poultry.finance.report,model_poultry_finance_report,,1,1,1,1
+access_poultry_farm,poultry.farm,model_poultry_farm,,1,1,1,1
+access_poultry_type,poultry.type,model_poultry_type,,1,1,1,1
+
+access_poultry_sale_report_wizard,poultry.sale.report.wizard,model_poultry_sale_report_wizard,base.group_user,1,1,1,1
+
+access_poultry_purchase_report,poultry.purchase.report,model_poultry_purchase_report,,1,1,1,1
+access_poultry_purchase_report_line,poultry.purchase.report.line,model_poultry_purchase_report_line,,1,1,1,1
+
+access_poultry_sale_report_wizard,poultry.sale.report.wizard,model_poultry_sale_report_wizard,,1,0,1,0
+access_poultry_sale_report_line,poultry.sale.report.line,model_poultry_sale_report_line,,1,0,1,0
