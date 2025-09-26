@@ -42,6 +42,12 @@ class Poultry(models.Model):
         string='Branch',
         help="The branch where this poultry is located"
     )
+    quantity = fields.Integer(
+        string="Quantity",
+        required=True,
+        default=0,
+        help="Number of birds in this poultry record"
+    )
 
     description = fields.Text(string="Description")
     date_added = fields.Date(string="Date Added", default=fields.Date.today)
@@ -58,6 +64,25 @@ class Poultry(models.Model):
         compute="_compute_date_category",
         store=True
     )
+    # One2many for Sales
+    sale_ids = fields.One2many(
+        'poultry.sale',  # Child model name
+        'poultry_id',  # Field in the child model
+        string='Sales'
+    )
+
+    remaining_quantity = fields.Integer(
+        string="Remaining Quantity",
+        compute="_compute_remaining_quantity",
+        store=True
+    )
+
+    @api.depends('quantity', 'sale_ids.quantity')
+    def _compute_remaining_quantity(self):
+        for record in self:
+            total_sold = sum(record.sale_ids.mapped('quantity'))
+            record.remaining_quantity = record.quantity - total_sold
+
 
     @api.depends('date_added')
     def _compute_date_category(self):
