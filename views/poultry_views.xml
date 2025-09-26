@@ -51,6 +51,8 @@
                 <field name="name"/>
                 <field name="age"/>
                 <field name="gender"/>
+                <field name="quantity"/>
+<!--                <field name="remaining_quantity"/>-->
                 <field name="poultry_type_id"/>
                 <field name="branch_id"/>
                 <field name="date_added"/>
@@ -70,6 +72,7 @@
                             <field name="name"/>
                             <field name="age"/>
                             <field name="gender"/>
+                            <field name="quantity"/>
                             <field name="poultry_type_id"/>
                             <field name="branch_id"/>
                         </group>
