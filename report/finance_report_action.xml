@@ -9,13 +9,34 @@
         <field name="print_report_name">'Poultry Finance Report - %s' % (object.start_date)</field>
     </record>
 
-    <!-- QWeb Report Action -->
-    <record id="report_poultry_sales" model="ir.actions.report">
-        <field name="name">Poultry Sales Report</field>
+    <!-- Report Action -->
+<!--    <record id="action_poultry_finance_report" model="ir.actions.report">-->
+<!--        <field name="name">Finance Report</field>-->
+<!--        <field name="model">poultry.finance.report</field>-->
+<!--        <field name="report_type">qweb-pdf</field>-->
+<!--        <field name="report_name">poultry_farm.report_poultry_finance_template</field>-->
+<!--        <field name="print_report_name">Finance_Report</field>-->
+<!--    </record>-->
+
+
+    <!-- Report Action for Poultry Purchase -->
+    <record id="action_poultry_purchase_report" model="ir.actions.report">
+        <field name="name">Poultry Purchase Report</field>
+        <field name="model">poultry.purchase.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">poultry_farm.report_poultry_purchase_template</field>
+        <field name="report_file">poultry_farm.report_poultry_purchase_template</field>
+        <field name="print_report_name">'Poultry Purchase Report - %s' % (object.start_date)</field>
+    </record>
+
+    <!-- Report Action for Poultry Sale -->
+    <record id="action_poultry_sale_report" model="ir.actions.report">
+        <field name="name">Poultry Sale Report</field>
         <field name="model">poultry.sale.report.wizard</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">poultry_farm.report_poultry_sales_template</field>
-        <field name="report_file">poultry_farm.report_poultry_sales_template</field>
-        <field name="print_report_name">'Poultry Sales Report'</field>
+        <field name="report_name">poultry_farm.report_poultry_sale_template</field>
+        <field name="report_file">poultry_farm.report_poultry_sale_template</field>
+        <field name="print_report_name">'Poultry Sale Report - %s' % (object.start_date)</field>
     </record>
+
 </odoo>
