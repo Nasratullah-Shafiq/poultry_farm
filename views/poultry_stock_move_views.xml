@@ -1,0 +1,52 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="view_poultry_stock_move_tree" model="ir.ui.view">
+        <field name="name">poultry.stock.move.tree</field>
+        <field name="model">poultry.stock.move</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="date"/>
+                <field name="item_id"/>
+                <field name="move_type"/>
+                <field name="quantity"/>
+                <field name="notes"/> <!-- Must match Python exactly -->
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_poultry_stock_move_form" model="ir.ui.view">
+        <field name="name">poultry.stock.move.form</field>
+        <field name="model">poultry.stock.move</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="date"/>
+                        <field name="item_id"/>
+                        <field name="move_type"/>
+                        <field name="quantity"/>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_poultry_stock_moves" model="ir.actions.act_window">
+        <field name="name">Stock Movements</field>
+        <field name="res_model">poultry.stock.move</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu Hierarchy -->
+    <menuitem id="menu_poultry_root" name="Poultry Management"/>
+
+    <menuitem id="poultry_inventory_menu_root" name="Inventory"
+              parent="menu_poultry_root" sequence="1"/>
+
+    <menuitem id="poultry_stock_move_menu" name="Stock Movements"
+              parent="poultry_inventory_menu_root"
+              action="action_poultry_stock_moves" sequence="2"/>
+</odoo>
