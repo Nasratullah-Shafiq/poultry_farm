@@ -1,0 +1,51 @@
+<odoo>
+    <!-- List View (Tree View) -->
+    <record id="view_poultry_item_tree" model="ir.ui.view">
+        <field name="name">poultry.item.tree</field>
+        <field name="model">poultry.item</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="unit"/>
+                <field name="initial_qty"/>
+                <field name="stock_in_qty"/>
+                <field name="stock_out_qty"/>
+                <field name="remaining_qty" string="Available Stock"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_poultry_item_form" model="ir.ui.view">
+        <field name="name">poultry.item.form</field>
+        <field name="model">poultry.item</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="category"/>
+                        <field name="unit"/>
+                    </group>
+                    <group>
+                        <field name="initial_qty"/>
+                        <field name="stock_in_qty"/>
+                        <field name="stock_out_qty"/>
+                        <field name="remaining_qty" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_poultry_item" model="ir.actions.act_window">
+        <field name="name">Poultry Items</field>
+        <field name="res_model">poultry.item</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
