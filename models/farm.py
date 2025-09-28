@@ -11,6 +11,7 @@ class PoultryType(models.Model):
 class PoultryPurchase(models.Model):
     _name = 'poultry.purchase'
     _description = 'Poultry Purchase'
+    _inherit = ['mail.thread', 'mail.activity.mixin']  # <-- Add chatter support
 
     date = fields.Date(required=True)
     branch_id = fields.Many2one('poultry.branch', required=True)
@@ -30,6 +31,7 @@ class PoultryPurchase(models.Model):
 class PoultrySale(models.Model):
     _name = 'poultry.sale'
     _description = 'Poultry Sale'
+    _inherit = ['mail.thread', 'mail.activity.mixin']  # <-- Add chatter support
 
     date = fields.Date(required=True)
     branch_id = fields.Many2one('poultry.branch', required=True)
@@ -39,6 +41,7 @@ class PoultrySale(models.Model):
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
     buyer = fields.Char()
     revenue = fields.Monetary(currency_field='currency_id', compute='_compute_revenue', store=True)
+    poultry_id = fields.Many2one('poultry.farm', string="Poultry Farm", required=True)
 
     @api.depends('quantity','unit_price')
     def _compute_revenue(self):
@@ -48,6 +51,7 @@ class PoultrySale(models.Model):
 class Feed(models.Model):
     _name = 'poultry.feed'
     _description = 'Feed Inventory'
+    _inherit = ['mail.thread', 'mail.activity.mixin']  # <-- Add chatter support
 
     name = fields.Char(required=True)
     branch_id = fields.Many2one('poultry.branch')
@@ -55,16 +59,19 @@ class Feed(models.Model):
     unit = fields.Char(default='kg')
     purchase_price = fields.Monetary(currency_field='currency_id')
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
+    date = fields.Date(string="Date Purchased", default=fields.Date.today)  # <-- add this
 
 class Medicine(models.Model):
     _name = 'poultry.medicine'
     _description = 'Medicine Inventory'
+    _inherit = ['mail.thread', 'mail.activity.mixin']  # <-- Add chatter support
 
     name = fields.Char(required=True)
     branch_id = fields.Many2one('poultry.branch')
     quantity = fields.Float()
     purchase_price = fields.Monetary(currency_field='currency_id')
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
+    date = fields.Date(string="Purchase Date", default=fields.Date.today)  # <-- add this
 
 class Vaccination(models.Model):
     _name = 'poultry.vaccination'
