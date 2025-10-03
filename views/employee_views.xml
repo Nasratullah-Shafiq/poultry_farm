@@ -1,48 +1,148 @@
 <!-- poultry_farm_management/views/employee_views.xml -->
 <odoo>
-  <record id="view_employee_tree" model="ir.ui.view">
-    <field name="name">poultry.employee.tree</field>
-    <field name="model">poultry.employee</field>
-    <field name="arch" type="xml">
-      <tree>
-        <field name="name"/>
-        <field name="employee_code"/>
-        <field name="job_title"/>
-        <field name="branch_id"/>
-        <field name="salary"/>
-      </tree>
-    </field>
-  </record>
+    <data>
+        <!-- ===========================
+             TREE VIEW: Employees
+        ============================ -->
+        <record id="view_employee_tree" model="ir.ui.view">
+            <field name="name">poultry.employee.tree</field>
+            <field name="model">poultry.employee</field>
+            <field name="arch" type="xml">
+                <tree string="Employees">
+                    <field name="name"/>
+                    <field name="employee_code"/>
+                    <field name="job_title"/>
+                    <field name="branch_id"/>
+                    <field name="salary"/>
+                    <field name="hire_date"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
 
-  <record id="view_employee_form" model="ir.ui.view">
-    <field name="name">poultry.employee.form</field>
-    <field name="model">poultry.employee</field>
-    <field name="arch" type="xml">
-      <form>
-        <sheet>
-          <group>
-            <field name="name"/>
-            <field name="employee_code"/>
-            <field name="branch_id"/>
-            <field name="job_title"/>
-            <field name="phone"/>
-            <field name="address"/>
-            <field name="hire_date"/>
-            <field name="salary"/>
-            <field name="currency_id"/>
-            <field name="last_attendance"/>
-            <field name="active"/>
-          </group>
-        </sheet>
-      </form>
-    </field>
-  </record>
+        <!-- ===========================
+             FORM VIEW: Employees (with chatter)
+        ============================ -->
+        <record id="view_employee_form" model="ir.ui.view">
+            <field name="name">poultry.employee.form</field>
+            <field name="model">poultry.employee</field>
+            <field name="arch" type="xml">
+                <form string="Employee Record">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="employee_code"/>
+                                <field name="branch_id"/>
+                                <field name="job_title"/>
+                                <field name="phone"/>
+                                <field name="address"/>
+                            </group>
+                            <group>
+                                <field name="hire_date"/>
+                                <field name="salary"/>
+                                <field name="currency_id"/>
+                                <field name="last_attendance"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                    </sheet>
 
-  <record id="action_employee" model="ir.actions.act_window">
-    <field name="name">Employees</field>
-    <field name="res_model">poultry.employee</field>
-    <field name="view_mode">tree,form</field>
-  </record>
+                    <!-- ✅ Chatter Section -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
 
-  <menuitem id="menu_poultry_employees" name="Employees" parent="menu_poultry_hr" action="action_employee"/>
+        <!-- ===========================
+             SEARCH VIEW: Employees
+        ============================ -->
+        <record id="view_employee_search" model="ir.ui.view">
+            <field name="name">poultry.employee.search</field>
+            <field name="model">poultry.employee</field>
+            <field name="arch" type="xml">
+                <search string="Search Employees">
+                    <!-- Top search bar -->
+                    <field name="name"/>
+                    <field name="employee_code"/>
+                    <field name="job_title"/>
+                    <field name="branch_id"/>
+                    <field name="hire_date"/>
+                    <field name="active"/>
+
+                    <!-- Group By options -->
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_branch" string="Branch" context="{'group_by': 'branch_id'}"/>
+                        <filter name="group_by_job" string="Job Title" context="{'group_by': 'job_title'}"/>
+                        <filter name="group_by_hire_date" string="Hire Date" context="{'group_by': 'hire_date'}"/>
+                        <filter name="group_by_active" string="Active" context="{'group_by': 'active'}"/>
+                    </group>
+
+                    <!-- Search Panel -->
+                    <searchpanel>
+                        <field name="branch_id" string="Branch"/>
+<!--                        <field name="job_title" string="Job Title"/>-->
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <!-- ===========================
+             PIVOT VIEW: Employees
+        ============================ -->
+        <record id="view_employee_pivot" model="ir.ui.view">
+            <field name="name">poultry.employee.pivot</field>
+            <field name="model">poultry.employee</field>
+            <field name="arch" type="xml">
+                <pivot string="Employee Analysis">
+                    <field name="salary" type="measure"/>
+                    <field name="branch_id" type="row"/>
+                    <field name="job_title" type="col"/>
+                    <field name="hire_date"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- ===========================
+             GRAPH VIEW: Employees
+        ============================ -->
+        <record id="view_employee_graph" model="ir.ui.view">
+            <field name="name">poultry.employee.graph</field>
+            <field name="model">poultry.employee</field>
+            <field name="arch" type="xml">
+                <graph string="Employee Graph" type="bar">
+                    <field name="salary" type="measure"/>
+                    <field name="branch_id" type="row"/>
+                    <field name="job_title"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- ===========================
+             ACTION: Employees
+        ============================ -->
+        <record id="action_employee" model="ir.actions.act_window">
+            <field name="name">Employees</field>
+            <field name="res_model">poultry.employee</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="search_view_id" ref="view_employee_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create and manage your farm employees.
+                </p>
+            </field>
+        </record>
+
+        <!-- ===========================
+             MENU ITEM: Employees
+        ============================ -->
+        <menuitem id="menu_poultry_employees"
+                  name="Employees"
+                  parent="menu_poultry_hr"
+                  action="action_employee"/>
+    </data>
 </odoo>
