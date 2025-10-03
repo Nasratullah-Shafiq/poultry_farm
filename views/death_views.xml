@@ -1,0 +1,221 @@
+<!--<odoo>-->
+<!--    <data>-->
+<!--        &lt;!&ndash; ===========================-->
+<!--             TREE VIEW: Dead Chickens-->
+<!--        ============================ &ndash;&gt;-->
+<!--        <record id="view_poultry_death_tree" model="ir.ui.view">-->
+<!--            <field name="name">poultry.death.tree</field>-->
+<!--            <field name="model">poultry.death</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <tree string="Dead Chickens" create="true" edit="true" delete="true">-->
+<!--                    <field name="date"/>-->
+<!--                    <field name="poultry_id"/>-->
+<!--                    <field name="branch_id"/>-->
+<!--                    <field name="quantity"/>-->
+<!--                    <field name="reason"/>-->
+<!--                    <field name="remaining_quantity"/>-->
+<!--                    <field name="notes"/>-->
+<!--                </tree>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash; ===========================-->
+<!--             FORM VIEW: Dead Chickens-->
+<!--        ============================ &ndash;&gt;-->
+<!--        <record id="view_poultry_death_form" model="ir.ui.view">-->
+<!--            <field name="name">poultry.death.form</field>-->
+<!--            <field name="model">poultry.death</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form string="Poultry Death Record">-->
+<!--                    <sheet>-->
+<!--                        <group>-->
+<!--                            <group>-->
+<!--                                <field name="poultry_id"/>-->
+<!--                                <field name="date"/>-->
+<!--                                <field name="quantity"/>-->
+<!--                                <field name="branch_id"/>-->
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="reason"/>-->
+<!--                                <field name="notes"/>-->
+<!--                                <field name="remaining_quantity" readonly="1"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                    </sheet>-->
+<!--                    <footer>-->
+<!--                        <button string="Save" type="object" class="btn-primary" special="save"/>-->
+<!--                        <button string="Discard" class="btn-secondary" special="cancel"/>-->
+<!--                    </footer>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash; ===========================-->
+<!--             ACTION: Dead Chickens-->
+<!--        ============================ &ndash;&gt;-->
+<!--        <record id="action_poultry_death" model="ir.actions.act_window">-->
+<!--            <field name="name">Poultry Deaths</field>-->
+<!--            <field name="res_model">poultry.death</field>-->
+<!--            <field name="view_mode">tree,form</field>-->
+<!--            <field name="help" type="html">-->
+<!--                <p class="o_view_nocontent_smiling_face">-->
+<!--                    Record poultry deaths to keep track of stock reduction and identify causes.-->
+<!--                </p>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash; ===========================-->
+<!--             MENU ITEM: Dead Chickens-->
+<!--        ============================ &ndash;&gt;-->
+<!--        <menuitem id="menu_poultry_death"-->
+<!--                  name="Dead Chickens"-->
+<!--                  parent="menu_poultry"-->
+<!--                  action="action_poultry_death"-->
+<!--                  sequence="3"/>-->
+<!--    </data>-->
+<!--</odoo>-->
+
+<odoo>
+    <data>
+        <!-- ===========================
+             TREE VIEW: Dead Chickens
+        ============================ -->
+        <record id="view_poultry_death_tree" model="ir.ui.view">
+            <field name="name">poultry.death.tree</field>
+            <field name="model">poultry.death</field>
+            <field name="arch" type="xml">
+                <tree string="Dead Chickens" create="true" edit="true" delete="true">
+                    <field name="date"/>
+                    <field name="poultry_id"/>
+                    <field name="branch_id"/>
+                    <field name="quantity"/>
+                    <field name="reason"/>
+                    <field name="remaining_quantity"/>
+                    <field name="notes"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ===========================
+     FORM VIEW: Dead Chickens (with chatter)
+============================ -->
+<record id="view_poultry_death_form" model="ir.ui.view">
+    <field name="name">poultry.death.form</field>
+    <field name="model">poultry.death</field>
+    <field name="arch" type="xml">
+        <form string="Poultry Death Record">
+            <sheet>
+                <group>
+                    <group>
+                        <field name="poultry_id"/>
+                        <field name="date"/>
+                        <field name="quantity"/>
+                        <field name="branch_id"/>
+                    </group>
+                    <group>
+                        <field name="reason"/>
+                        <field name="notes"/>
+                        <field name="remaining_quantity" readonly="1"/>
+                    </group>
+                </group>
+            </sheet>
+
+            <!-- ✅ Chatter section -->
+            <div class="oe_chatter">
+                <field name="message_follower_ids"/>
+                <field name="activity_ids"/>
+                <field name="message_ids"/>
+            </div>
+        </form>
+    </field>
+</record>
+
+
+        <!-- ===========================
+             SEARCH VIEW: Dead Chickens
+        ============================ -->
+        <record id="view_poultry_death_search" model="ir.ui.view">
+            <field name="name">poultry.death.search</field>
+            <field name="model">poultry.death</field>
+            <field name="arch" type="xml">
+                <search string="Search Dead Chickens">
+                    <!-- Top search bar -->
+                    <field name="poultry_id"/>
+                    <field name="branch_id"/>
+                    <field name="reason"/>
+                    <field name="date"/>
+
+                    <!-- Group By options -->
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_poultry" string="Poultry" context="{'group_by': 'poultry_id'}"/>
+                        <filter name="group_by_branch" string="Branch" context="{'group_by': 'branch_id'}"/>
+                        <filter name="group_by_reason" string="Reason" context="{'group_by': 'reason'}"/>
+                        <filter name="group_by_date" string="Date" context="{'group_by': 'date'}"/>
+                    </group>
+
+                    <!-- Search Panel -->
+                    <searchpanel>
+                        <field name="branch_id" string="Branch"/>
+                        <field name="poultry_id" string="Poultry"/>
+                        <field name="reason" string="Reason"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <!-- ===========================
+             PIVOT VIEW: Dead Chickens
+        ============================ -->
+        <record id="view_poultry_death_pivot" model="ir.ui.view">
+            <field name="name">poultry.death.pivot</field>
+            <field name="model">poultry.death</field>
+            <field name="arch" type="xml">
+                <pivot string="Poultry Death Analysis">
+                    <field name="quantity" type="measure"/>
+                    <field name="date" type="row"/>
+                    <field name="branch_id" type="col"/>
+                    <field name="reason"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- ===========================
+             GRAPH VIEW: Dead Chickens
+        ============================ -->
+        <record id="view_poultry_death_graph" model="ir.ui.view">
+            <field name="name">poultry.death.graph</field>
+            <field name="model">poultry.death</field>
+            <field name="arch" type="xml">
+                <graph string="Poultry Death Graph" type="bar">
+                    <field name="date" type="row"/>
+                    <field name="quantity" type="measure"/>
+                    <field name="reason"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- ===========================
+             ACTION: Dead Chickens
+        ============================ -->
+        <record id="action_poultry_death" model="ir.actions.act_window">
+            <field name="name">Poultry Deaths</field>
+            <field name="res_model">poultry.death</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="search_view_id" ref="view_poultry_death_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Record poultry deaths to keep track of stock reduction and identify causes.
+                </p>
+            </field>
+        </record>
+
+        <!-- ===========================
+             MENU ITEM: Dead Chickens
+        ============================ -->
+        <menuitem id="menu_poultry_death"
+                  name="Dead Chickens"
+                  parent="menu_poultry"
+                  action="action_poultry_death"
+                  sequence="3"/>
+    </data>
+</odoo>
