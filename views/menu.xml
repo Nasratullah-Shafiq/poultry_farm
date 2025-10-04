@@ -3,7 +3,7 @@
     <menuitem id="poultry_root_menu" name="Poultry Farm" sequence="1"/>
 
     <!-- Other menus as children of Farm -->
-    <menuitem id="menu_poultry_setup" name="Setup" parent="menu_poultry" sequence="1"/>
+    <menuitem id="menu_poultry_setup" name="Setup" parent="menu_poultry" sequence="25"/>
     <menuitem id="menu_poultry_hr" name="HR" parent="menu_poultry" sequence="5"/>
     <menuitem id="menu_poultry_finance" name="Finance" parent="menu_poultry" sequence="10"/>
 
