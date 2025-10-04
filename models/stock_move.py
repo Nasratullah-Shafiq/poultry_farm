@@ -18,7 +18,7 @@ class PoultryStockMove(models.Model):
     quantity = fields.Float(string="Quantity", required=True)
     branch_id = fields.Many2one('poultry.branch', string="Branch")
     reference = fields.Char(string="Reference")
-    # note = fields.Text(string="Notes")
+
     notes = fields.Text(string="Notes")
 
     @api.model
