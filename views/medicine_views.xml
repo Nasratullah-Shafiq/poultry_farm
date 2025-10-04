@@ -1,63 +1,63 @@
 <odoo>
 
-  <!-- Medicine -->
-  <record id="view_medicine_tree" model="ir.ui.view">
-    <field name="name">poultry.medicine.tree</field>
-    <field name="model">poultry.medicine</field>
-    <field name="arch" type="xml">
-      <tree>
-        <field name="name"/>
-        <field name="branch_id"/>
-        <field name="quantity"/>
-      </tree>
-    </field>
-  </record>
-  <record id="view_medicine_form" model="ir.ui.view">
-    <field name="name">poultry.medicine.form</field>
-    <field name="model">poultry.medicine</field>
-    <field name="arch" type="xml">
-      <form>
-        <sheet>
-          <group>
-            <field name="name"/>
-            <field name="branch_id"/>
-            <field name="quantity"/>
-            <field name="purchase_price"/>
-            <field name="currency_id"/>
-          </group>
-        </sheet>
-        <div class="oe_chatter">
-          <field name="message_follower_ids"/>
-          <field name="activity_ids"/>
-          <field name="message_ids"/>
-        </div>
-      </form>
-    </field>
-  </record>
-  <record id="action_medicine" model="ir.actions.act_window">
-    <field name="name">Medicine Inventory</field>
-    <field name="res_model">poultry.medicine</field>
-    <field name="view_mode">tree,form</field>
-  </record>
-  <menuitem id="menu_poultry_medicine" name="Medicine" parent="menu_poultry_farm" action="action_medicine"/>
-
-
-<!-- Medicine Search View -->
-<record id="view_medicine_search" model="ir.ui.view">
-    <field name="name">poultry.medicine.search</field>
-    <field name="model">poultry.medicine</field>
-    <field name="arch" type="xml">
-        <search string="Search Medicines">
-            <field name="name"/>
-            <field name="branch_id"/>
-            <group expand="0" string="Group By">
-                <filter name="group_by_branch" string="Branch" context="{'group_by':'branch_id'}"/>
-            </group>
-            <searchpanel>
+    <!-- Medicine -->
+    <record id="view_medicine_tree" model="ir.ui.view">
+        <field name="name">poultry.medicine.tree</field>
+        <field name="model">poultry.medicine</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
                 <field name="branch_id"/>
-            </searchpanel>
-        </search>
-    </field>
-</record>
+                <field name="quantity"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_medicine_form" model="ir.ui.view">
+        <field name="name">poultry.medicine.form</field>
+        <field name="model">poultry.medicine</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="branch_id"/>
+                        <field name="quantity"/>
+                        <field name="purchase_price"/>
+                        <field name="currency_id"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_medicine" model="ir.actions.act_window">
+        <field name="name">Medicine Inventory</field>
+        <field name="res_model">poultry.medicine</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem id="menu_poultry_medicine" name="Medicine" parent="menu_poultry_farm" action="action_medicine"/>
+
+
+    <!-- Medicine Search View -->
+    <record id="view_medicine_search" model="ir.ui.view">
+        <field name="name">poultry.medicine.search</field>
+        <field name="model">poultry.medicine</field>
+        <field name="arch" type="xml">
+            <search string="Search Medicines">
+                <field name="name"/>
+                <field name="branch_id"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_branch" string="Branch" context="{'group_by':'branch_id'}"/>
+                </group>
+                <searchpanel>
+                    <field name="branch_id"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
 
 </odoo>
