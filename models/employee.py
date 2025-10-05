@@ -5,6 +5,8 @@ from datetime import date
 class PoultryEmployee(models.Model):
     _name = 'poultry.employee'
     _description = 'Poultry Farm Employee'
+    _inherit = ['mail.thread', 'mail.activity.mixin']  # Enable chatter
+
 
     name = fields.Char(required=True)
     employee_code = fields.Char()
