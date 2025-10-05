@@ -31,6 +31,7 @@
         'views/poultry_purchase_report_wizard_views.xml',
         'views/poultry_item_views.xml',
         'views/poultry_stock_move_views.xml',
+        'views/death_views.xml',
 
         # Menus should load first
         'views/menu.xml',
