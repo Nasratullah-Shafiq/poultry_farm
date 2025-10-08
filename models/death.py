@@ -52,6 +52,7 @@ class PoultryDeath(models.Model):
         compute="_compute_death_count",
         store=True
     )
+    
     # # ✅ Related field to show remaining quantity from poultry farm
     # remaining_quantity = fields.Integer(
     #     string="Remaining Quantity",
