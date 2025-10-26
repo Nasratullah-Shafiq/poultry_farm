@@ -4,8 +4,8 @@ from datetime import date, timedelta
 
 
 class PoultryType(models.Model):
-    _name = 'poultry.type'
-    _description = 'Poultry Type'
+    _name = 'item.type'
+    _description = 'Item Type'
     _rec_name = 'name'
     _inherit = ['mail.thread', 'mail.activity.mixin']  # Enable chatter
 
