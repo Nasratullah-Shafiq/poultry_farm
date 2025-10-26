@@ -2,8 +2,8 @@
 from odoo import models, fields, api
 
 class PoultryType(models.Model):
-    _name = 'poultry.type'
-    _description = 'Poultry Type'
+    _name = 'item.type'
+    _description = 'Item Type'
 
     name = fields.Char(required=True)
     description = fields.Text()
