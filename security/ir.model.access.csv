@@ -3,7 +3,7 @@ access_poultry_branch,poultry.branch,model_poultry_branch,base.group_user,1,1,1,
 access_poultry_employee,poultry.employee,model_poultry_employee,base.group_user,1,1,1,1
 access_poultry_salary,poultry.salary,model_poultry_salary,base.group_user,1,1,1,1
 access_poultry_finance,poultry.finance,model_poultry_finance,base.group_user,1,1,1,1
-access_poultry_type,poultry.type,model_poultry_type,base.group_user,1,1,1,1
+access_item_type,item.type,model_item_type,base.group_user,1,1,1,1
 access_poultry_purchase,poultry.purchase,model_poultry_purchase,base.group_user,1,1,1,1
 access_poultry_sale,poultry.sale,model_poultry_sale,base.group_user,1,1,1,1
 access_poultry_feed,poultry.feed,model_poultry_feed,base.group_user,1,1,1,1
@@ -12,7 +12,7 @@ access_poultry_vaccination,poultry.vaccination,model_poultry_vaccination,base.gr
 
 access_poultry_finance_report,poultry.finance.report,model_poultry_finance_report,,1,1,1,1
 access_poultry_farm,poultry.farm,model_poultry_farm,,1,1,1,1
-access_poultry_type,poultry.type,model_poultry_type,,1,1,1,1
+access_item_type,item.type,model_item_type,,1,1,1,1
 
 access_poultry_sale_report_wizard,poultry.sale.report.wizard,model_poultry_sale_report_wizard,base.group_user,1,1,1,1
 
