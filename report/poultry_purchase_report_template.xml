@@ -46,7 +46,7 @@
                                 <tr>
                                     <td style="padding:8px; border:1px solid #ddd;"><t t-esc="line.date"/></td>
                                     <td style="padding:8px; border:1px solid #ddd;"><t t-esc="line.branch_id.name"/></td>
-                                    <td style="padding:8px; border:1px solid #ddd;"><t t-esc="line.poultry_type_id.name"/></td>
+                                    <td style="padding:8px; border:1px solid #ddd;"><t t-esc="line.item_type_id.name"/></td>
                                     <td style="padding:8px; border:1px solid #ddd;"><t t-esc="line.supplier"/></td>
                                     <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="line.quantity"/></td>
                                     <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="line.unit_price"/></td>
