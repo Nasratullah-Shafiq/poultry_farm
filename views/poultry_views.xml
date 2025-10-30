@@ -4,11 +4,11 @@
          =========================== -->
 
     <!-- Poultry Type Tree View -->
-    <record id="view_poultry_type_tree" model="ir.ui.view">
-        <field name="name">poultry.type.tree</field>
-        <field name="model">poultry.type</field>
+    <record id="view_item_type_tree" model="ir.ui.view">
+        <field name="name">item.type.tree</field>
+        <field name="model">item.type</field>
         <field name="arch" type="xml">
-            <tree string="Poultry Types">
+            <tree string="Item Types">
                 <field name="name"/>
                 <field name="description"/>
             </tree>
@@ -16,9 +16,9 @@
     </record>
 
     <!-- Poultry Type Form View -->
-    <record id="view_poultry_type_form" model="ir.ui.view">
-        <field name="name">poultry.type.form</field>
-        <field name="model">poultry.type</field>
+    <record id="view_item_type_form" model="ir.ui.view">
+        <field name="name">item.type.form</field>
+        <field name="model">item.type</field>
         <field name="arch" type="xml">
             <form string="Poultry Type">
                 <sheet>
@@ -38,9 +38,9 @@
     </record>
 
     <!-- Poultry Type Action -->
-    <record id="action_poultry_type" model="ir.actions.act_window">
-        <field name="name">Poultry Types</field>
-        <field name="res_model">poultry.type</field>
+    <record id="action_item_type" model="ir.actions.act_window">
+        <field name="name">Item Types</field>
+        <field name="res_model">item.type</field>
         <field name="view_mode">tree,form</field>
     </record>
 
