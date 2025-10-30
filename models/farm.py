@@ -15,7 +15,7 @@ class PoultryPurchase(models.Model):
 
     date = fields.Date(required=True)
     branch_id = fields.Many2one('poultry.branch', required=True)
-    poultry_type_id = fields.Many2one('poultry.type', string='Type', required=True)
+    item_type_id = fields.Many2one('item.type', string='Type', required=True)
     quantity = fields.Integer(default=1)
     unit_price = fields.Monetary(currency_field='currency_id', required=True)
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
@@ -35,7 +35,7 @@ class PoultrySale(models.Model):
 
     date = fields.Date(required=True)
     branch_id = fields.Many2one('poultry.branch', required=True)
-    poultry_type_id = fields.Many2one('poultry.type', string='Type', required=True)
+    item_type_id = fields.Many2one('item.type', string='Type', required=True)
     quantity = fields.Integer(default=1)
     unit_price = fields.Monetary(currency_field='currency_id', required=True)
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
@@ -78,7 +78,7 @@ class Vaccination(models.Model):
     _description = 'Vaccination Schedule'
 
     name = fields.Char(required=True)
-    poultry_type_id = fields.Many2one('poultry.type', string='Type')
+    item_type_id = fields.Many2one('item.type', string='Type')
     branch_id = fields.Many2one('poultry.branch')
     vaccine_name = fields.Char(required=True)
     vaccine_date = fields.Date(required=True)
