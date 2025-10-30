@@ -1,18 +1,18 @@
 <!-- poultry_farm_management/views/farm_views.xml -->
 <odoo>
     <!-- Poultry Type -->
-    <record id="view_poultry_type_tree" model="ir.ui.view">
-        <field name="name">poultry.type.tree</field>
-        <field name="model">poultry.type</field>
+    <record id="view_item_type_tree" model="ir.ui.view">
+        <field name="name">item.type.tree</field>
+        <field name="model">item.type</field>
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
             </tree>
         </field>
     </record>
-    <record id="view_poultry_type_form" model="ir.ui.view">
-        <field name="name">poultry.type.form</field>
-        <field name="model">poultry.type</field>
+    <record id="view_item_type_form" model="ir.ui.view">
+        <field name="name">item.type.form</field>
+        <field name="model">item.type</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
@@ -22,12 +22,12 @@
             </form>
         </field>
     </record>
-    <record id="action_poultry_type" model="ir.actions.act_window">
+    <record id="action_item_type" model="ir.actions.act_window">
         <field name="name">Item Types</field>
-        <field name="res_model">poultry.type</field>
+        <field name="res_model">item.type</field>
         <field name="view_mode">tree,form</field>
     </record>
-    <menuitem id="menu_poultry_types" name="Item Types" parent="menu_poultry_setup" action="action_poultry_type"/>
+    <menuitem id="menu_item_types" name="Item Types" parent="menu_poultry_setup" action="action_item_type"/>
 
     <!-- Purchases -->
     <record id="view_purchase_tree" model="ir.ui.view">
@@ -89,21 +89,21 @@
                 <!-- Search fields -->
                 <field name="date"/>
                 <field name="branch_id"/>
-                <field name="poultry_type_id"/>
+                <field name="item_type_id"/>
                 <field name="supplier"/>
 
                 <!-- Group By -->
                 <group expand="0" string="Group By">
                     <filter name="group_by_branch" string="Branch" context="{'group_by':'branch_id'}"/>
-                    <filter name="group_by_poultry_type" string="Poultry Type"
-                            context="{'group_by':'poultry_type_id'}"/>
+                    <filter name="group_by_item_type" string="Poultry Type"
+                            context="{'group_by':'item_type_id'}"/>
                     <filter name="group_by_buyer" string="Buyer" context="{'group_by':'supplier'}"/>
                 </group>
 
                 <!-- Search Panel -->
                 <searchpanel>
                     <field name="branch_id"/>
-                    <field name="poultry_type_id"/>
+                    <field name="item_type_id"/>
                 </searchpanel>
             </search>
         </field>
@@ -119,7 +119,7 @@
             <tree>
                 <field name="vaccine_date"/>
                 <field name="vaccine_name"/>
-                <field name="poultry_type_id"/>
+                <field name="item_type_id"/>
                 <field name="branch_id"/>
             </tree>
         </field>
@@ -133,7 +133,7 @@
                 <sheet>
                     <group>
                         <field name="name"/>
-                        <field name="poultry_type_id"/>
+                        <field name="item_type_id"/>
                         <field name="branch_id"/>
                         <field name="vaccine_name"/>
                         <field name="vaccine_date"/>
