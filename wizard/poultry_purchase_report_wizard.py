@@ -63,7 +63,7 @@ class PoultryPurchaseReport(models.TransientModel):
                 'wizard_id': self.id,
                 'date': purchase.date,
                 'branch_id': purchase.branch_id.id,
-                'poultry_type_id': purchase.poultry_type_id.id,
+                'item_type_id': purchase.item_type_id.id,
                 'quantity': purchase.quantity,
                 'unit_price': purchase.unit_price,
                 'total': purchase.total,
@@ -96,7 +96,7 @@ class PoultryPurchaseReportLine(models.TransientModel):
     wizard_id = fields.Many2one('poultry.purchase.report', ondelete='cascade')
     date = fields.Date(string="Date")
     branch_id = fields.Many2one('poultry.branch', string="Branch")
-    poultry_type_id = fields.Many2one('poultry.type', string="Poultry Type")
+    item_type_id = fields.Many2one('item.type', string="Poultry Type")
     quantity = fields.Float(string="Quantity")
     unit_price = fields.Monetary(string="Unit Price", currency_field='currency_id')
     total = fields.Monetary(string="Total", currency_field='currency_id')
