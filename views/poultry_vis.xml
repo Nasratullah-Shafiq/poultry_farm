@@ -4,11 +4,11 @@
          =========================== -->
 
     <!-- Poultry Type Tree View -->
-    <record id="view_poultry_type_tree" model="ir.ui.view">
-        <field name="name">poultry.type.tree</field>
-        <field name="model">poultry.type</field>
+    <record id="view_item_type_tree" model="ir.ui.view">
+        <field name="name">item.type.tree</field>
+        <field name="model">item.type</field>
         <field name="arch" type="xml">
-            <tree string="Poultry Types">
+            <tree string="Item Types">
                 <field name="name"/>
                 <field name="description"/>
             </tree>
@@ -16,9 +16,9 @@
     </record>
 
     <!-- Poultry Type Form View -->
-    <record id="view_poultry_type_form" model="ir.ui.view">
-        <field name="name">poultry.type.form</field>
-        <field name="model">poultry.type</field>
+    <record id="view_item_type_form" model="ir.ui.view">
+        <field name="name">item.type.form</field>
+        <field name="model">item.type</field>
         <field name="arch" type="xml">
             <form string="Poultry Type">
                 <sheet>
@@ -32,9 +32,9 @@
     </record>
 
     <!-- Poultry Type Action -->
-    <record id="action_poultry_type" model="ir.actions.act_window">
-        <field name="name">Poultry Types</field>
-        <field name="res_model">poultry.type</field>
+    <record id="action_item_type" model="ir.actions.act_window">
+        <field name="name"> Item Types </field>
+        <field name="res_model">item.type</field>
         <field name="view_mode">tree,form</field>
     </record>
 
@@ -53,7 +53,7 @@
                 <field name="gender"/>
                 <field name="quantity"/>
                 <field name="remaining_quantity"/>
-                <field name="poultry_type_id"/>
+                <field name="item_type_id"/>
                 <field name="branch_id"/>
                 <field name="date_added"/>
             </tree>
@@ -73,7 +73,7 @@
                             <field name="age"/>
                             <field name="gender"/>
                             <field name="quantity"/>
-                            <field name="poultry_type_id"/>
+                            <field name="item_type_id"/>
                             <field name="branch_id"/>
                         </group>
                         <group>
@@ -102,13 +102,13 @@
             <!-- Top search bar fields -->
             <field name="name" string="Poultry Name"/>
             <field name="branch_id"/>
-            <field name="poultry_type_id"/>
+            <field name="item_type_id"/>
             <field name="gender"/>
             <field name="date_added"/>
 
             <!-- Group By Options -->
             <group expand="0" string="Group By">
-                <filter name="group_by_type" string="Type" context="{'group_by': 'poultry_type_id'}"/>
+                <filter name="group_by_type" string="Type" context="{'group_by': 'item_type_id'}"/>
                 <filter name="group_by_gender" string="Gender" context="{'group_by': 'gender'}"/>
                 <filter name="group_by_branch" string="Branch" context="{'group_by': 'branch_id'}"/>
                 <filter name="group_by_date" string="Date Added" context="{'group_by': 'date_added'}"/>
@@ -117,7 +117,7 @@
             <!-- Search Panel (Correct placement) -->
             <searchpanel>
                 <field name="branch_id" string="Branch"/>
-                <field name="poultry_type_id" string="Poultry Type"/>
+                <field name="item_type_id" string="Poultry Type"/>
                 <field name="gender" string="Gender"/>
                 <field name="date_category" string="Date Category"/>
             </searchpanel>
