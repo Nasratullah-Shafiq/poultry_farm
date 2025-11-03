@@ -17,6 +17,9 @@
     'data': [
         'security/ir.model.access.csv',
 
+        # Menus should load first
+        'views/menu.xml',
+
         # Wizard and view files
         'views/finance_report_wizard_views.xml',
         'views/branch_views.xml',
@@ -32,9 +35,6 @@
         'views/poultry_item_views.xml',
         'views/poultry_stock_move_views.xml',
         'views/death_views.xml',
-
-        # Menus should load first
-        'views/menu.xml',
 
         # Reports - actions before templates
         'report/finance_report_action.xml',
