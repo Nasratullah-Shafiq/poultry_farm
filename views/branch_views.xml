@@ -45,4 +45,9 @@
     </record>
 
     <menuitem id="menu_poultry_branches" name="Branches" parent="menu_poultry_setup" action="action_branch"/>
+<!--    <menuitem id="menu_poultry_branches"-->
+<!--          name="Branches"-->
+<!--          parent="menu_poultry_setup"-->
+<!--          action="action_branch"-->
+<!--          sequence="10"/>-->
 </odoo>
