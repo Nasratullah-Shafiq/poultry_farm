@@ -1,5 +1,6 @@
 <!-- poultry_farm_management/views/menu.xml -->
 <odoo>
+    <menuitem id="menu_poultry" name="Poultry Farm"/>
     <menuitem id="poultry_root_menu" name="Poultry Farm" sequence="1"/>
 
     <!-- Other menus as children of Farm -->
@@ -29,14 +30,5 @@
               parent="menu_finance_reports"
               action="action_finance_report_wizard"
               sequence="5"/>
-
-<!--    <menuitem id="menu_poultry_root" name="Poultry Management"/>-->
-
-<!--    <menuitem id="menu_poultry_inventory" name="Inventory"-->
-<!--              parent="menu_poultry_root" sequence="1"/>-->
-
-<!--    <menuitem id="menu_poultry_items" name="Items"-->
-<!--              parent="menu_poultry_inventory"-->
-<!--              action="action_poultry_item" sequence="1"/>-->
 
 </odoo>
