@@ -140,9 +140,7 @@
         <!-- ===========================
              MENU ITEM: Employees
         ============================ -->
-        <menuitem id="menu_poultry_employees"
-                  name="Employees"
-                  parent="menu_poultry_hr"
-                  action="action_employee"/>
+        <menuitem id="menu_poultry_employees" name="Employees" parent="menu_poultry_hr" action="action_employee"/>
+
     </data>
 </odoo>
