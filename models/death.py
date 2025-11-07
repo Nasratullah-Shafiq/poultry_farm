@@ -47,6 +47,7 @@ class PoultryDeath(models.Model):
     description = fields.Text(string="Additional Notes")
     notes = fields.Text(string="Additional Notes")
 
+
     death_count = fields.Integer(
         string="Total Deaths in Batch",
         compute="_compute_death_count",
@@ -54,7 +55,7 @@ class PoultryDeath(models.Model):
     )
     
     
-    
+
     # # ✅ Related field to show remaining quantity from poultry farm
     # remaining_quantity = fields.Integer(
     #     string="Remaining Quantity",
