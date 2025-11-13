@@ -29,85 +29,207 @@
     </record>
     <menuitem id="menu_item_types" name="Item Types" parent="menu_poultry_setup" action="action_item_type"/>
 
-    <!-- Purchases -->
-    <record id="view_purchase_tree" model="ir.ui.view">
+       <!-- ============================
+         Tree View
+    ============================ -->
+    <record id="view_poultry_purchase_tree" model="ir.ui.view">
         <field name="name">poultry.purchase.tree</field>
         <field name="model">poultry.purchase</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree string="Poultry Purchase" create="true" edit="true">
                 <field name="date"/>
                 <field name="branch_id"/>
+                <field name="item_type_id"/>
                 <field name="quantity"/>
                 <field name="unit_price"/>
                 <field name="total"/>
+                <field name="supplier"/>
             </tree>
         </field>
     </record>
-    <record id="view_purchase_form" model="ir.ui.view">
+
+    <!-- ============================
+         Form View
+    ============================ -->
+    <record id="view_poultry_purchase_form" model="ir.ui.view">
         <field name="name">poultry.purchase.form</field>
         <field name="model">poultry.purchase</field>
         <field name="arch" type="xml">
-            <form>
+            <form string="Poultry Purchase" create="true" edit="true">
                 <sheet>
                     <group>
-                        <field name="date"/>
-                        <field name="branch_id"/>
-
-                        <field name="quantity"/>
-                        <field name="unit_price"/>
-                        <field name="total" readonly="1"/>
-                        <field name="supplier"/>
-                        <field name="source_details"/>
+                        <group>
+                            <field name="date"/>
+                            <field name="branch_id"/>
+                            <field name="item_type_id"/>
+                            <field name="quantity"/>
+                            <field name="unit_price"/>
+                            <field name="total" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="supplier"/>
+                            <!-- <field name="source_details"/> --> <!-- removed to prevent errors -->
+                            <field name="currency_id" invisible="1"/>
+                        </group>
                     </group>
-                </sheet>
-
-                <!-- ✅ Chatter placed inside the form correctly -->
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
+                    <!-- Chatter -->
+                    <field name="message_ids" widget="mail_thread"/>
                     <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
-
+                    <field name="message_follower_ids"/>
+                </sheet>
             </form>
         </field>
     </record>
 
+    <!-- ============================
+         Search View
+    ============================ -->
+<!--    <record id="view_poultry_search" model="ir.ui.view">-->
+<!--        <field name="name">poultry.purchase.search</field>-->
+<!--        <field name="model">poultry.purchase</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search string="Search Purchases">-->
+<!--                <field name="date"/>-->
+<!--                <field name="branch_id"/>-->
+<!--                <field name="item_type_id"/>-->
+<!--                <field name="supplier"/>-->
+
+<!--                <group expand="0" string="Group By">-->
+<!--                    <filter name="group_by_branch" string="Branch" context="{'group_by':'branch_id'}"/>-->
+<!--                    <filter name="group_by_item_type" string="Poultry Type" context="{'group_by':'item_type_id'}"/>-->
+<!--                    <filter name="group_by_supplier" string="Supplier" context="{'group_by':'supplier'}"/>-->
+<!--                </group>-->
+
+<!--                <searchpanel>-->
+<!--                    <field name="branch_id"/>-->
+<!--                    <field name="item_type_id"/>-->
+<!--                    <field name="supplier"/>-->
+<!--                </searchpanel>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <!-- ============================
+         Optional Pivot / Graph Views
+    ============================ -->
+    <record id="view_poultry_purchase_pivot" model="ir.ui.view">
+        <field name="name">poultry.purchase.pivot</field>
+        <field name="model">poultry.purchase</field>
+        <field name="arch" type="xml">
+            <pivot string="Purchases Pivot">
+                <field name="quantity" type="measure"/>
+                <field name="unit_price" type="measure"/>
+                <field name="branch_id" type="row"/>
+                <field name="item_type_id" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_poultry_purchase_graph" model="ir.ui.view">
+        <field name="name">poultry.purchase.graph</field>
+        <field name="model">poultry.purchase</field>
+        <field name="arch" type="xml">
+            <graph string="Purchases Graph" type="bar">
+                <field name="branch_id" type="row"/>
+                <field name="quantity" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- ============================
+         Action (Keep old ID)
+    ============================ -->
     <record id="action_purchase" model="ir.actions.act_window">
         <field name="name">Poultry Purchases</field>
         <field name="res_model">poultry.purchase</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
     </record>
-    <menuitem id="menu_poultry_purchases" name="Purchases" parent="menu_poultry_farm" action="action_purchase"/>
+
+    <!-- ============================
+         Menu Item (Keep old ID)
+    ============================ -->
+    <menuitem id="menu_poultry_purchases"
+              name="Purchases"
+              parent="menu_poultry_farm"
+              action="action_purchase"/>
+<!--    <record id="view_purchase_tree" model="ir.ui.view">-->
+<!--        <field name="name">poultry.purchase.tree</field>-->
+<!--        <field name="model">poultry.purchase</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <tree>-->
+<!--                <field name="date"/>-->
+<!--                <field name="branch_id"/>-->
+<!--                <field name="quantity"/>-->
+<!--                <field name="unit_price"/>-->
+<!--                <field name="total"/>-->
+<!--            </tree>-->
+<!--        </field>-->
+<!--    </record>-->
+<!--    <record id="view_purchase_form" model="ir.ui.view">-->
+<!--        <field name="name">poultry.purchase.form</field>-->
+<!--        <field name="model">poultry.purchase</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <form>-->
+<!--                <sheet>-->
+<!--                    <group>-->
+<!--                        <field name="date"/>-->
+<!--                        <field name="branch_id"/>-->
+
+<!--                        <field name="quantity"/>-->
+<!--                        <field name="unit_price"/>-->
+<!--                        <field name="total" readonly="1"/>-->
+<!--                        <field name="supplier"/>-->
+<!--                        <field name="source_details"/>-->
+<!--                    </group>-->
+<!--                </sheet>-->
+
+<!--                &lt;!&ndash; ✅ Chatter placed inside the form correctly &ndash;&gt;-->
+<!--                <div class="oe_chatter">-->
+<!--                    <field name="message_follower_ids"/>-->
+<!--                    <field name="activity_ids"/>-->
+<!--                    <field name="message_ids"/>-->
+<!--                </div>-->
+
+<!--            </form>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    <record id="action_purchase" model="ir.actions.act_window">-->
+<!--        <field name="name">Poultry Purchases</field>-->
+<!--        <field name="res_model">poultry.purchase</field>-->
+<!--        <field name="view_mode">tree,form</field>-->
+<!--    </record>-->
+<!--    <menuitem id="menu_poultry_purchases" name="Purchases" parent="menu_poultry_farm" action="action_purchase"/>-->
 
 
-    <!-- Poultry Purchase Search View -->
-    <record id="view_purchase_search" model="ir.ui.view">
-        <field name="name">poultry.purchase.search</field>
-        <field name="model">poultry.purchase</field>
-        <field name="arch" type="xml">
-            <search string="Search Purchase">
-                <!-- Search fields -->
-                <field name="date"/>
-                <field name="branch_id"/>
-                <field name="item_type_id"/>
-                <field name="supplier"/>
+<!--    &lt;!&ndash; Poultry Purchase Search View &ndash;&gt;-->
+<!--    <record id="view_purchase_search" model="ir.ui.view">-->
+<!--        <field name="name">poultry.purchase.search</field>-->
+<!--        <field name="model">poultry.purchase</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search string="Search Purchase">-->
+<!--                &lt;!&ndash; Search fields &ndash;&gt;-->
+<!--                <field name="date"/>-->
+<!--                <field name="branch_id"/>-->
+<!--                <field name="item_type_id"/>-->
+<!--                <field name="supplier"/>-->
 
-                <!-- Group By -->
-                <group expand="0" string="Group By">
-                    <filter name="group_by_branch" string="Branch" context="{'group_by':'branch_id'}"/>
-                    <filter name="group_by_item_type" string="Poultry Type"
-                            context="{'group_by':'item_type_id'}"/>
-                    <filter name="group_by_buyer" string="Buyer" context="{'group_by':'supplier'}"/>
-                </group>
+<!--                &lt;!&ndash; Group By &ndash;&gt;-->
+<!--                <group expand="0" string="Group By">-->
+<!--                    <filter name="group_by_branch" string="Branch" context="{'group_by':'branch_id'}"/>-->
+<!--                    <filter name="group_by_item_type" string="Poultry Type"-->
+<!--                            context="{'group_by':'item_type_id'}"/>-->
+<!--                    <filter name="group_by_buyer" string="Buyer" context="{'group_by':'supplier'}"/>-->
+<!--                </group>-->
 
-                <!-- Search Panel -->
-                <searchpanel>
-                    <field name="branch_id"/>
-                    <field name="item_type_id"/>
-                </searchpanel>
-            </search>
-        </field>
-    </record>
+<!--                &lt;!&ndash; Search Panel &ndash;&gt;-->
+<!--                <searchpanel>-->
+<!--                    <field name="branch_id"/>-->
+<!--                    <field name="item_type_id"/>-->
+<!--                </searchpanel>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
     <!-- purchase -->
 
 
