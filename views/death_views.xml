@@ -86,7 +86,7 @@
             <field name="arch" type="xml">
                 <tree string="Dead Chickens" create="true" edit="true" delete="true">
                     <field name="date"/>
-                    <field name="poultry_id"/>
+<!--                    <field name="poultry_id"/>-->
                     <field name="branch_id"/>
                     <field name="quantity"/>
                     <field name="reason"/>
@@ -107,10 +107,11 @@
             <sheet>
                 <group>
                     <group>
-                        <field name="poultry_id"/>
+<!--                        <field name="poultry_id"/>-->
+                        <field name="branch_id"/>
                         <field name="date"/>
                         <field name="quantity"/>
-                        <field name="branch_id"/>
+
                     </group>
                     <group>
                         <field name="reason"/>
@@ -140,14 +141,14 @@
             <field name="arch" type="xml">
                 <search string="Search Dead Chickens">
                     <!-- Top search bar -->
-                    <field name="poultry_id"/>
+<!--                    <field name="poultry_id"/>-->
                     <field name="branch_id"/>
                     <field name="reason"/>
                     <field name="date"/>
 
                     <!-- Group By options -->
                     <group expand="0" string="Group By">
-                        <filter name="group_by_poultry" string="Poultry" context="{'group_by': 'poultry_id'}"/>
+<!--                        <filter name="group_by_poultry" string="Poultry" context="{'group_by': 'poultry_id'}"/>-->
                         <filter name="group_by_branch" string="Branch" context="{'group_by': 'branch_id'}"/>
                         <filter name="group_by_reason" string="Reason" context="{'group_by': 'reason'}"/>
                         <filter name="group_by_date" string="Date" context="{'group_by': 'date'}"/>
@@ -156,7 +157,7 @@
                     <!-- Search Panel -->
                     <searchpanel>
                         <field name="branch_id" string="Branch"/>
-                        <field name="poultry_id" string="Poultry"/>
+<!--                        <field name="poultry_id" string="Poultry"/>-->
                         <field name="reason" string="Reason"/>
                     </searchpanel>
                 </search>
