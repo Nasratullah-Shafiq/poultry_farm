@@ -41,7 +41,7 @@ class PoultrySale(models.Model):
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
     buyer = fields.Char()
     revenue = fields.Monetary(currency_field='currency_id', compute='_compute_revenue', store=True)
-    poultry_id = fields.Many2one('poultry.farm', string="Poultry Farm", required=True)
+    # poultry_id = fields.Many2one('poultry.farm', string="Poultry Farm", required=True)
 
     @api.depends('quantity','unit_price')
     def _compute_revenue(self):
