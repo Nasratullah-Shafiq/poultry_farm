@@ -8,12 +8,12 @@ class PoultryDeath(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'date'
 
-    poultry_id = fields.Many2one(
-        'poultry.farm',
-        string="Poultry Batch",
-        required=True,
-        ondelete='cascade'
-    )
+    # poultry_id = fields.Many2one(
+    #     'poultry.farm',
+    #     string="Poultry Batch",
+    #     required=True,
+    #     ondelete='cascade'
+    # )
     branch_id = fields.Many2one(
         'poultry.branch',
         string="Branch",
@@ -76,23 +76,23 @@ class PoultryDeath(models.Model):
     # ✅ Computed remaining quantity based on poultry type AND branch
     remaining_quantity = fields.Integer(
         string="Remaining Quantity",
-        compute='_compute_remaining_quantity',
+        # compute='_compute_remaining_quantity',
         store=False,
         readonly=True
     )
 
-    @api.depends('poultry_id', 'branch_id')
-    def _compute_remaining_quantity(self):
-        for record in self:
-            if record.poultry_id and record.branch_id:
-                # Get all deaths for this poultry and branch
-                total_deaths = self.env['poultry.death'].search([
-                    ('poultry_id', '=', record.poultry_id.id),
-                    ('branch_id', '=', record.branch_id.id)
-                ])
-                dead_qty = sum(total_deaths.mapped('quantity'))
-
-                # Calculate remaining quantity for this poultry in this branch
-                record.remaining_quantity = max(record.poultry_id.quantity - dead_qty, 0)
-            else:
-                record.remaining_quantity = 0
+    # @api.depends('branch_id')
+    # def _compute_remaining_quantity(self):
+    #     for record in self:
+    #         if record.poultry_id and record.branch_id:
+    #             # Get all deaths for this poultry and branch
+    #             total_deaths = self.env['poultry.death'].search([
+    #                 ('poultry_id', '=', record.poultry_id.id),
+    #                 ('branch_id', '=', record.branch_id.id)
+    #             ])
+    #             dead_qty = sum(total_deaths.mapped('quantity'))
+    #
+    #             # Calculate remaining quantity for this poultry in this branch
+    #             record.remaining_quantity = max(record.poultry_id.quantity - dead_qty, 0)
+    #         else:
+    #             record.remaining_quantity = 0
