@@ -1,75 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<odoo>-->
+<!--&lt;!&ndash; Poultry Sale Search View &ndash;&gt;-->
+<!--<record id="view_sale_search" model="ir.ui.view">-->
+<!--    <field name="name">poultry.sale.search</field>-->
+<!--    <field name="model">poultry.sale</field>-->
+<!--    <field name="arch" type="xml">-->
+<!--        <search string="Search Sales">-->
+<!--            &lt;!&ndash; Search fields &ndash;&gt;-->
+<!--            <field name="date"/>-->
+<!--            <field name="branch_id"/>-->
+<!--            <field name="item_type_id"/>-->
+<!--            <field name="buyer"/>-->
+
+<!--            &lt;!&ndash; Group By &ndash;&gt;-->
+<!--            <group expand="0" string="Group By">-->
+<!--                <filter name="group_by_branch" string="Branch" context="{'group_by':'branch_id'}"/>-->
+<!--                <filter name="group_by_item_type" string="Poultry Type" context="{'group_by':'item_type_id'}"/>-->
+<!--                <filter name="group_by_buyer" string="Buyer" context="{'group_by':'buyer'}"/>-->
+<!--            </group>-->
+
+<!--            &lt;!&ndash; Search Panel &ndash;&gt;-->
+<!--            <searchpanel>-->
+<!--                <field name="branch_id"/>-->
+<!--                <field name="item_type_id"/>-->
+<!--            </searchpanel>-->
+<!--        </search>-->
+<!--    </field>-->
+<!--</record>-->
+<!--&lt;!&ndash; Sales &ndash;&gt;-->
+<!-- <record id="view_sale_tree" model="ir.ui.view">-->
+<!--    <field name="name">poultry.sale.tree</field>-->
+<!--    <field name="model">poultry.sale</field>-->
+<!--    <field name="arch" type="xml">-->
+<!--      <tree>-->
+<!--        <field name="date"/>-->
+<!--        <field name="branch_id"/>-->
+<!--        <field name="item_type_id"/>-->
+<!--        <field name="quantity"/>-->
+<!--        <field name="unit_price"/>-->
+<!--        <field name="revenue"/>-->
+<!--      </tree>-->
+<!--    </field>-->
+<!--  </record>-->
+<!--  <record id="view_sale_form" model="ir.ui.view">-->
+<!--    <field name="name">poultry.sale.form</field>-->
+<!--    <field name="model">poultry.sale</field>-->
+<!--    <field name="arch" type="xml">-->
+<!--      <form>-->
+<!--        <sheet>-->
+<!--          <group>-->
+<!--            <field name="date"/>-->
+<!--            <field name="branch_id"/>-->
+<!--            <field name="item_type_id"/>-->
+<!--            <field name="quantity"/>-->
+<!--            <field name="unit_price"/>-->
+<!--            <field name="revenue" readonly="1"/>-->
+<!--            <field name="buyer"/>-->
+<!--          </group>-->
+<!--        </sheet>-->
+<!--        <div class="oe_chatter">-->
+<!--          <field name="message_follower_ids"/>-->
+<!--          <field name="activity_ids"/>-->
+<!--          <field name="message_ids"/>-->
+<!--        </div>-->
+<!--      </form>-->
+<!--    </field>-->
+<!--  </record>-->
+<!--  <record id="action_sale" model="ir.actions.act_window">-->
+<!--    <field name="name">Poultry Sales</field>-->
+<!--    <field name="res_model">poultry.sale</field>-->
+<!--    <field name="view_mode">tree,form</field>-->
+<!--  </record>-->
+<!--  <menuitem id="menu_poultry_sales" name="Sales" parent="menu_poultry_farm" action="action_sale"/>-->
+
+<!--</odoo> &lt;!&ndash; Sales &ndash;&gt;-->
+
 <odoo>
-<!-- Poultry Sale Search View -->
-<record id="view_sale_search" model="ir.ui.view">
-    <field name="name">poultry.sale.search</field>
-    <field name="model">poultry.sale</field>
-    <field name="arch" type="xml">
-        <search string="Search Sales">
-            <!-- Search fields -->
-            <field name="date"/>
-            <field name="branch_id"/>
-            <field name="item_type_id"/>
-            <field name="buyer"/>
-
-            <!-- Group By -->
-            <group expand="0" string="Group By">
-                <filter name="group_by_branch" string="Branch" context="{'group_by':'branch_id'}"/>
-                <filter name="group_by_item_type" string="Poultry Type" context="{'group_by':'item_type_id'}"/>
-                <filter name="group_by_buyer" string="Buyer" context="{'group_by':'buyer'}"/>
-            </group>
-
-            <!-- Search Panel -->
-            <searchpanel>
+    <!-- ============================
+         TREE VIEW
+    ============================ -->
+    <record id="view_poultry_sale_tree" model="ir.ui.view">
+        <field name="name">poultry.sale.tree</field>
+        <field name="model">poultry.sale</field>
+        <field name="arch" type="xml">
+            <tree string="Poultry Sales" create="true" edit="true">
+                <field name="date"/>
                 <field name="branch_id"/>
                 <field name="item_type_id"/>
-            </searchpanel>
-        </search>
-    </field>
-</record>
-<!-- Sales -->
- <record id="view_sale_tree" model="ir.ui.view">
-    <field name="name">poultry.sale.tree</field>
-    <field name="model">poultry.sale</field>
-    <field name="arch" type="xml">
-      <tree>
-        <field name="date"/>
-        <field name="branch_id"/>
-        <field name="item_type_id"/>
-        <field name="quantity"/>
-        <field name="unit_price"/>
-        <field name="revenue"/>
-      </tree>
-    </field>
-  </record>
-  <record id="view_sale_form" model="ir.ui.view">
-    <field name="name">poultry.sale.form</field>
-    <field name="model">poultry.sale</field>
-    <field name="arch" type="xml">
-      <form>
-        <sheet>
-          <group>
-            <field name="date"/>
-            <field name="branch_id"/>
-            <field name="item_type_id"/>
-            <field name="quantity"/>
-            <field name="unit_price"/>
-            <field name="revenue" readonly="1"/>
-            <field name="buyer"/>
-          </group>
-        </sheet>
-        <div class="oe_chatter">
-          <field name="message_follower_ids"/>
-          <field name="activity_ids"/>
-          <field name="message_ids"/>
-        </div>
-      </form>
-    </field>
-  </record>
-  <record id="action_sale" model="ir.actions.act_window">
-    <field name="name">Poultry Sales</field>
-    <field name="res_model">poultry.sale</field>
-    <field name="view_mode">tree,form</field>
-  </record>
-  <menuitem id="menu_poultry_sales" name="Sales" parent="menu_poultry_farm" action="action_sale"/>
+                <field name="quantity"/>
+                <field name="unit_price"/>
+                <field name="revenue"/>
+                <field name="buyer"/>
+            </tree>
+        </field>
+    </record>
 
-</odoo> <!-- Sales -->
+    <!-- ============================
+         FORM VIEW
+    ============================ -->
+    <record id="view_poultry_sale_form" model="ir.ui.view">
+        <field name="name">poultry.sale.form</field>
+        <field name="model">poultry.sale</field>
+        <field name="arch" type="xml">
+            <form string="Poultry Sale">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="branch_id"/>
+                            <field name="item_type_id"/>
+                            <field name="buyer"/>
+                        </group>
+                        <group>
+                            <field name="quantity"/>
+                            <field name="unit_price"/>
+                            <field name="revenue" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================
+         SEARCH VIEW
+    ============================ -->
+    <record id="view_poultry_sale_search" model="ir.ui.view">
+        <field name="name">poultry.sale.search</field>
+        <field name="model">poultry.sale</field>
+        <field name="arch" type="xml">
+            <search string="Search Sales">
+                <field name="date"/>
+                <field name="branch_id"/>
+                <field name="item_type_id"/>
+                <field name="buyer"/>
+                <filter string="Today" name="today" domain="[('date', '=', context_today())]"/>
+                <filter string="This Month" name="this_month" domain="[('date', '&gt;=', (context_today() - datetime.timedelta(days=30)).strftime('%%Y-%%m-%%d'))]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- ============================
+         ACTION
+    ============================ -->
+    <record id="action_poultry_sale" model="ir.actions.act_window">
+        <field name="name">Poultry Sales</field>
+        <field name="res_model">poultry.sale</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first poultry sale record
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================
+         MENU ITEM
+    ============================ -->
+    <!-- Adjust parent to your actual menu -->
+    <menuitem id="menu_poultry_sale_root"
+              name="Sales"
+              parent="menu_poultry_root"
+              action="action_poultry_sale"
+              sequence="20"/>
+</odoo>
