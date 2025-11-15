@@ -1,5 +1,6 @@
 # poultry_farm_management/models/farm.py
 from odoo import models, fields, api
+from odoo.exceptions import UserError
 
 class PoultryType(models.Model):
     _name = 'item.type'
