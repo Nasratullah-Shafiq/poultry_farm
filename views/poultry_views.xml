@@ -77,61 +77,60 @@
 
 
     <!-- Poultry Form View -->
- <!-- Tree View -->
-    <record id="view_poultry_farm_tree" model="ir.ui.view">
-        <field name="name">poultry.farm.tree</field>
-        <field name="model">poultry.farm</field>
-        <field name="arch" type="xml">
-            <tree string="Poultry Stock" create="false" edit="false">
-                <field name="branch_id"/>
-                <field name="item_type_id"/>
-                <field name="total_quantity"/>
-                <field name="last_updated"/>
-            </tree>
-        </field>
-    </record>
+ <record id="view_poultry_farm_tree" model="ir.ui.view">
+    <field name="name">poultry.farm.tree</field>
+    <field name="model">poultry.farm</field>
+    <field name="arch" type="xml">
+        <tree string="Poultry Stock" create="false" edit="false">
+            <field name="branch_id"/>
+            <field name="item_type_id"/>
+            <field name="total_quantity"/>
+            <field name="last_updated"/>
+        </tree>
+    </field>
+</record>
 
-    <!-- Form View -->
-    <record id="view_poultry_farm_form" model="ir.ui.view">
-        <field name="name">poultry.farm.form</field>
-        <field name="model">poultry.farm</field>
-        <field name="arch" type="xml">
-            <form string="Poultry Stock">
-                <sheet>
-                    <group>
-                        <field name="branch_id" readonly="1"/>
-                        <field name="item_type_id" readonly="1"/>
-                        <field name="total_quantity" readonly="1"/>
-                        <field name="last_updated" readonly="1"/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
+<record id="view_poultry_farm_form" model="ir.ui.view">
+    <field name="name">poultry.farm.form</field>
+    <field name="model">poultry.farm</field>
+    <field name="arch" type="xml">
+        <form string="Poultry Stock">
+            <sheet>
+                <group>
+                    <field name="branch_id" readonly="1"/>
+                    <field name="item_type_id" readonly="1"/>
+                    <field name="total_quantity" readonly="1"/>
+                    <field name="last_updated" readonly="1"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
 
-    <!-- Optional Search View -->
-    <record id="view_poultry_farm_search" model="ir.ui.view">
-        <field name="name">poultry.farm.search</field>
-        <field name="model">poultry.farm</field>
-        <field name="arch" type="xml">
-            <search string="Search Stock">
-                <field name="branch_id"/>
-                <field name="item_type_id"/>
-            </search>
-        </field>
-    </record>
+<!-- Search View -->
+<record id="view_poultry_farm_search" model="ir.ui.view">
+    <field name="name">poultry.farm.search</field>
+    <field name="model">poultry.farm</field>
+    <field name="arch" type="xml">
+        <search string="Search Stock">
+            <field name="branch_id"/>
+            <field name="item_type_id"/>
+        </search>
+    </field>
+</record>
 
-    <record id="action_poultry" model="ir.actions.act_window">
-        <field name="name">Poultry Records</field>
-        <field name="res_model">poultry.farm</field>
-        <field name="view_mode">tree,form</field>
-        <field name="search_view_id" ref="view_poultry_search"/>
-    </record>
+<record id="action_poultry" model="ir.actions.act_window">
+    <field name="name">Poultry Records</field>
+    <field name="res_model">poultry.farm</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="view_poultry_farm_search"/>
+</record>
 
-    <!-- Medicine Menu -->
-    <menuitem id="menu_farm" name="Farm" parent="menu_poultry"/>
+<!-- MENUS -->
+<menuitem id="menu_poultry" name="Poultry Farm"/>
 
-    <menuitem id="menu_poultry" name="Poultry Farm" action="action_poultry"/>
+<menuitem id="menu_farm" name="Farm" parent="menu_poultry" action="action_poultry"/>
+
 
 
 </odoo>
