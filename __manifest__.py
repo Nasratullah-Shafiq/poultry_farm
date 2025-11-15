@@ -3,7 +3,7 @@
     'name': 'Poultry Farm Management',
     'version': '17.0.1.0.0',
     'category': 'Agriculture',
-    # 'sequence': -200,
+    'sequence': -200,
     'summary': 'Manage poultry purchases, sales, feed, medicine, HR and finance for multi-branch farms',
     'description': """
         Poultry Farm Management system:
@@ -25,11 +25,11 @@
         'views/branch_views.xml',
         'views/employee_views.xml',
         'views/finance_views.xml',
-        'views/farm_views.xml',
+        # 'views/farm_views.xml',
         'views/feed_views.xml',
         'views/sales_views.xml',
         'views/medicine_views.xml',
-        'views/poultry_views.xml',
+        # 'views/poultry_views.xml',
         'views/poultry_sale_report_wizard_views.xml',
         'views/poultry_purchase_report_wizard_views.xml',
         'views/poultry_item_views.xml',
