@@ -152,6 +152,7 @@
               name="Purchases"
               parent="menu_poultry_farm"
               action="action_purchase"/>
+
 <!--    <record id="view_purchase_tree" model="ir.ui.view">-->
 <!--        <field name="name">poultry.purchase.tree</field>-->
 <!--        <field name="model">poultry.purchase</field>-->
@@ -295,5 +296,5 @@
     <!--  </record>-->
     <!--  <menuitem id="menu_poultry_vaccination" name="Vaccination" parent="menu_poultry_farm" action="action_vaccination"/>-->
 
-    <menuitem id="menu_farm_root" name="Farm" sequence="15" parent=""/>
+    <menuitem id="menu_farm_root" name="Farm" sequence="15"/>
 </odoo>
