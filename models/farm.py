@@ -20,6 +20,8 @@ class PoultryPurchase(models.Model):
     branch_id = fields.Many2one('poultry.branch', required=True)
     item_type_id = fields.Many2one('item.type', string='Type', required=True)
     quantity = fields.Integer(default=1)
+    uom_id = fields.Many2one('uom.uom', string='Unit of Measure', required=True,
+                             default=lambda self: self.env.ref('uom.product_uom_unit'))
     unit_price = fields.Monetary(currency_field='currency_id', required=True)
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
     supplier = fields.Char()
@@ -53,49 +55,18 @@ class PoultryPurchase(models.Model):
                 self.env['poultry.farm'].create({
                     'branch_id': rec.branch_id.id,
                     'item_type_id': rec.item_type_id.id,
-                    'total_quantity': rec.quantity
+                    'total_quantity': rec.quantity,
+                    'uom_id': rec.uom_id.id,
                 })
 
 
-# class PoultryPurchase(models.Model):
-#     _name = 'poultry.purchase'
-#     _description = 'Poultry Purchase'
-#     _inherit = ['mail.thread', 'mail.activity.mixin']  # <-- Add chatter support
-#
-#     date = fields.Date(required=True)
-#     branch_id = fields.Many2one('poultry.branch', required=True)
-#     item_type_id = fields.Many2one('item.type', string='Type', required=True)
-#     quantity = fields.Integer(default=1)
-#     unit_price = fields.Monetary(currency_field='currency_id', required=True)
-#     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
-#     supplier = fields.Char()
-#     source_details = fields.Text()
-#     total = fields.Monetary(currency_field='currency_id', compute='_compute_total', store=True)
-#
-#     @api.depends('quantity','unit_price')
-#     def _compute_total(self):
-#         for rec in self:
-#             rec.total = rec.quantity * (rec.unit_price or 0.0)
 
-# class PoultrySale(models.Model):
-#     _name = 'poultry.sale'
-#     _description = 'Poultry Sale'
-#     _inherit = ['mail.thread', 'mail.activity.mixin']  # <-- Add chatter support
-#
-#     date = fields.Date(required=True)
-#     branch_id = fields.Many2one('poultry.branch', required=True)
-#     item_type_id = fields.Many2one('item.type', string='Type', required=True)
-#     quantity = fields.Integer(default=1)
-#     unit_price = fields.Monetary(currency_field='currency_id', required=True)
-#     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
-#     buyer = fields.Char()
-#     revenue = fields.Monetary(currency_field='currency_id', compute='_compute_revenue', store=True)
-#     # poultry_id = fields.Many2one('poultry.farm', string="Poultry Farm", required=True)
-#
-#     @api.depends('quantity','unit_price')
-#     def _compute_revenue(self):
-#         for rec in self:
-#             rec.revenue = rec.quantity * (rec.unit_price or 0.0)
+
+
+
+
+
+
 class PoultrySale(models.Model):
     _name = 'poultry.sale'
     _description = 'Poultry Sale'
@@ -104,11 +75,33 @@ class PoultrySale(models.Model):
     date = fields.Date(required=True)
     branch_id = fields.Many2one('poultry.branch', required=True)
     item_type_id = fields.Many2one('item.type', string='Type', required=True)
-    quantity = fields.Integer(default=1)
+    quantity = fields.Integer(string = "Quantity for Sale", default=1)
     unit_price = fields.Monetary(currency_field='currency_id', required=True)
+    uom_id = fields.Many2one('uom.uom', string='Unit of Measure', required=True,
+                             default=lambda self: self.env.ref('uom.product_uom_unit'))
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
     buyer = fields.Char()
     revenue = fields.Monetary(currency_field='currency_id', compute='_compute_revenue', store=True)
+
+    available_quantity = fields.Integer(
+        string="Available Quantity",
+        compute='_compute_available_quantity',
+        store=False
+    )
+
+    @api.depends('branch_id', 'item_type_id')
+    def _compute_available_quantity(self):
+        """Compute available quantity based on branch and type"""
+        for rec in self:
+            if rec.branch_id and rec.item_type_id:
+                stock = self.env['poultry.farm'].search([
+                    ('branch_id', '=', rec.branch_id.id),
+                    ('item_type_id', '=', rec.item_type_id.id)
+                ], limit=1)
+                rec.available_quantity = stock.total_quantity if stock else 0
+            else:
+                rec.available_quantity = 0
+
 
     @api.depends('quantity', 'unit_price')
     def _compute_revenue(self):
@@ -138,6 +131,10 @@ class PoultrySale(models.Model):
                     stock.total_quantity = 0  # prevent negative stock
             else:
                 raise UserError("No stock found for this branch and item type!")
+
+
+
+
 
 class Feed(models.Model):
     _name = 'poultry.feed'
