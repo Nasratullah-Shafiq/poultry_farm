@@ -1,84 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--<odoo>-->
-<!--&lt;!&ndash; Poultry Sale Search View &ndash;&gt;-->
-<!--<record id="view_sale_search" model="ir.ui.view">-->
-<!--    <field name="name">poultry.sale.search</field>-->
-<!--    <field name="model">poultry.sale</field>-->
-<!--    <field name="arch" type="xml">-->
-<!--        <search string="Search Sales">-->
-<!--            &lt;!&ndash; Search fields &ndash;&gt;-->
-<!--            <field name="date"/>-->
-<!--            <field name="branch_id"/>-->
-<!--            <field name="item_type_id"/>-->
-<!--            <field name="buyer"/>-->
-
-<!--            &lt;!&ndash; Group By &ndash;&gt;-->
-<!--            <group expand="0" string="Group By">-->
-<!--                <filter name="group_by_branch" string="Branch" context="{'group_by':'branch_id'}"/>-->
-<!--                <filter name="group_by_item_type" string="Poultry Type" context="{'group_by':'item_type_id'}"/>-->
-<!--                <filter name="group_by_buyer" string="Buyer" context="{'group_by':'buyer'}"/>-->
-<!--            </group>-->
-
-<!--            &lt;!&ndash; Search Panel &ndash;&gt;-->
-<!--            <searchpanel>-->
-<!--                <field name="branch_id"/>-->
-<!--                <field name="item_type_id"/>-->
-<!--            </searchpanel>-->
-<!--        </search>-->
-<!--    </field>-->
-<!--</record>-->
-<!--&lt;!&ndash; Sales &ndash;&gt;-->
-<!-- <record id="view_sale_tree" model="ir.ui.view">-->
-<!--    <field name="name">poultry.sale.tree</field>-->
-<!--    <field name="model">poultry.sale</field>-->
-<!--    <field name="arch" type="xml">-->
-<!--      <tree>-->
-<!--        <field name="date"/>-->
-<!--        <field name="branch_id"/>-->
-<!--        <field name="item_type_id"/>-->
-<!--        <field name="quantity"/>-->
-<!--        <field name="unit_price"/>-->
-<!--        <field name="revenue"/>-->
-<!--      </tree>-->
-<!--    </field>-->
-<!--  </record>-->
-<!--  <record id="view_sale_form" model="ir.ui.view">-->
-<!--    <field name="name">poultry.sale.form</field>-->
-<!--    <field name="model">poultry.sale</field>-->
-<!--    <field name="arch" type="xml">-->
-<!--      <form>-->
-<!--        <sheet>-->
-<!--          <group>-->
-<!--            <field name="date"/>-->
-<!--            <field name="branch_id"/>-->
-<!--            <field name="item_type_id"/>-->
-<!--            <field name="quantity"/>-->
-<!--            <field name="unit_price"/>-->
-<!--            <field name="revenue" readonly="1"/>-->
-<!--            <field name="buyer"/>-->
-<!--          </group>-->
-<!--        </sheet>-->
-<!--        <div class="oe_chatter">-->
-<!--          <field name="message_follower_ids"/>-->
-<!--          <field name="activity_ids"/>-->
-<!--          <field name="message_ids"/>-->
-<!--        </div>-->
-<!--      </form>-->
-<!--    </field>-->
-<!--  </record>-->
-<!--  <record id="action_sale" model="ir.actions.act_window">-->
-<!--    <field name="name">Poultry Sales</field>-->
-<!--    <field name="res_model">poultry.sale</field>-->
-<!--    <field name="view_mode">tree,form</field>-->
-<!--  </record>-->
-<!--  <menuitem id="menu_poultry_sales" name="Sales" parent="menu_poultry_farm" action="action_sale"/>-->
-
-<!--</odoo> &lt;!&ndash; Sales &ndash;&gt;-->
-
 <odoo>
-    <!-- ============================
-         TREE VIEW
-    ============================ -->
+    <!-- =========================
+         POULTRY SALES - TREE VIEW
+         Displays all sales records with details such as date, branch, type, quantity, revenue, and buyer
+         Users can create and edit records from this view
+    ========================== -->
     <record id="view_poultry_sale_tree" model="ir.ui.view">
         <field name="name">poultry.sale.tree</field>
         <field name="model">poultry.sale</field>
@@ -95,9 +21,12 @@
         </field>
     </record>
 
-    <!-- ============================
-         FORM VIEW
-    ============================ -->
+    <!-- =========================
+         POULTRY SALES - FORM VIEW
+         Displays details for a single sale record
+         Revenue is readonly and currency_id is hidden
+         Includes chatter for messages and activities
+    ========================== -->
     <record id="view_poultry_sale_form" model="ir.ui.view">
         <field name="name">poultry.sale.form</field>
         <field name="model">poultry.sale</field>
@@ -112,23 +41,30 @@
                             <field name="buyer"/>
                         </group>
                         <group>
+                            <field name="available_quantity"/>
                             <field name="quantity"/>
+                            <field name="uom_id"/>
                             <field name="unit_price"/>
                             <field name="revenue" readonly="1"/>
                             <field name="currency_id" invisible="1"/>
                         </group>
                     </group>
-                    <group>
-                        <field name="message_ids" widget="mail_thread"/>
-                    </group>
                 </sheet>
+                <!-- Chatter for messages and activities -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
             </form>
         </field>
     </record>
 
-    <!-- ============================
-         SEARCH VIEW
-    ============================ -->
+    <!-- =========================
+         POULTRY SALES - SEARCH VIEW
+         Allows filtering by date, branch, type, and buyer
+         Includes search panel for quick filtering by branch and type
+    ========================== -->
     <record id="view_poultry_sale_search" model="ir.ui.view">
         <field name="name">poultry.sale.search</field>
         <field name="model">poultry.sale</field>
@@ -138,19 +74,25 @@
                 <field name="branch_id"/>
                 <field name="item_type_id"/>
                 <field name="buyer"/>
-                <filter string="Today" name="today" domain="[('date', '=', context_today())]"/>
-                <filter string="This Month" name="this_month" domain="[('date', '&gt;=', (context_today() - datetime.timedelta(days=30)).strftime('%%Y-%%m-%%d'))]"/>
+
+                <!-- Quick filter search panel -->
+                <searchpanel>
+                    <field name="branch_id" string="Branch"/>
+                    <field name="item_type_id" string="Poultry Type"/>
+                </searchpanel>
             </search>
         </field>
     </record>
 
-    <!-- ============================
-         ACTION
-    ============================ -->
+    <!-- =========================
+         POULTRY SALES - ACTION WINDOW
+         Links tree and form views and attaches search view
+    ========================== -->
     <record id="action_poultry_sale" model="ir.actions.act_window">
         <field name="name">Poultry Sales</field>
         <field name="res_model">poultry.sale</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="search_view_id" ref="view_poultry_sale_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first poultry sale record
@@ -158,13 +100,47 @@
         </field>
     </record>
 
-    <!-- ============================
-         MENU ITEM
-    ============================ -->
-    <!-- Adjust parent to your actual menu -->
+    <!-- =========================
+         POULTRY SALES - PIVOT VIEW
+         Aggregates quantity and revenue by branch and poultry type
+    ========================== -->
+    <record id="view_poultry_sale_pivot" model="ir.ui.view">
+        <field name="name">poultry.sale.pivot</field>
+        <field name="model">poultry.sale</field>
+        <field name="arch" type="xml">
+            <pivot string="Poultry Sales Pivot">
+                <field name="quantity" type="measure"/>
+                <field name="revenue" type="measure"/>
+                <field name="branch_id" type="row"/>
+                <field name="item_type_id" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- =========================
+         POULTRY SALES - GRAPH VIEW
+         Displays sales quantity per branch
+         Users can easily visualize sales data
+    ========================== -->
+    <record id="view_poultry_sale_graph" model="ir.ui.view">
+        <field name="name">poultry.sale.graph</field>
+        <field name="model">poultry.sale</field>
+        <field name="arch" type="xml">
+            <graph string="Sales Graph" type="bar">
+                <field name="branch_id" type="row"/>
+                <field name="quantity" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- =========================
+         POULTRY SALES - MENU ITEMS
+         Root menu: Poultry Farm
+         Submenu: Sales opens the Poultry Sales action window
+    ========================== -->
     <menuitem id="menu_poultry_sale_root"
               name="Sales"
-              parent="menu_poultry_root"
+              parent="menu_poultry_farm"
               action="action_poultry_sale"
               sequence="20"/>
 </odoo>
