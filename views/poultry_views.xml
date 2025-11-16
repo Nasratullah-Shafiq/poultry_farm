@@ -76,7 +76,15 @@
     <!--    </record>-->
 
 
-    <!-- Poultry Form View -->
+    <!-- =========================
+         Poultry Stock Views and Menus
+    ========================= -->
+
+    <!-- =========================
+         Tree View for Poultry Stock
+         Displays branch, poultry type, total quantity, and last updated
+         Read-only: Users cannot create or edit records from the tree view
+    ========================= -->
     <record id="view_poultry_farm_tree" model="ir.ui.view">
         <field name="name">poultry.farm.tree</field>
         <field name="model">poultry.farm</field>
@@ -85,11 +93,39 @@
                 <field name="branch_id"/>
                 <field name="item_type_id"/>
                 <field name="total_quantity"/>
+                <field name="uom_id"/>
                 <field name="last_updated"/>
             </tree>
         </field>
     </record>
 
+    <!-- =========================
+         Search View for Poultry Stock
+         Allows filtering by branch and poultry type
+         Includes a search panel for easy filtering by type
+    ========================= -->
+    <record id="view_poultry_farm_search" model="ir.ui.view">
+        <field name="name">poultry.farm.search</field>
+        <field name="model">poultry.farm</field>
+        <field name="arch" type="xml">
+            <search string="Search Stock">
+                <field name="branch_id"/>
+                <field name="item_type_id"/>
+
+                <!-- Search panel for quick filtering by poultry type -->
+                <searchpanel>
+                    <field name="branch_id" string="Branch"/>
+                    <field name="item_type_id" string="Type"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <!-- =========================
+         Form View for Poultry Stock
+         Displays details of a single stock record
+         All fields are read-only to prevent accidental changes
+    ========================= -->
     <record id="view_poultry_farm_form" model="ir.ui.view">
         <field name="name">poultry.farm.form</field>
         <field name="model">poultry.farm</field>
@@ -107,18 +143,11 @@
         </field>
     </record>
 
-    <!-- Search View -->
-    <record id="view_poultry_farm_search" model="ir.ui.view">
-        <field name="name">poultry.farm.search</field>
-        <field name="model">poultry.farm</field>
-        <field name="arch" type="xml">
-            <search string="Search Stock">
-                <field name="branch_id"/>
-                <field name="item_type_id"/>
-            </search>
-        </field>
-    </record>
-
+    <!-- =========================
+         Action Window for Poultry Stock
+         Links tree and form views
+         Associates with the search view for filtering
+    ========================= -->
     <record id="action_poultry" model="ir.actions.act_window">
         <field name="name">Poultry Records</field>
         <field name="res_model">poultry.farm</field>
@@ -126,10 +155,11 @@
         <field name="search_view_id" ref="view_poultry_farm_search"/>
     </record>
 
-    <!-- MENUS -->
+    <!-- =========================
+         Menu Items
+         Root menu: Poultry Farm
+         Submenu: Farm, opens Poultry Records action
+    ========================= -->
     <menuitem id="menu_poultry" name="Poultry Farm"/>
-
     <menuitem id="menu_farm" name="Farm" parent="menu_poultry" action="action_poultry"/>
-
-
 </odoo>
