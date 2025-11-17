@@ -119,18 +119,48 @@ class PoultrySale(models.Model):
         rec._update_stock()
         return rec
 
-    def _update_stock(self):
+    # def _update_stock(self):
+    #     for rec in self:
+    #         stock = self.env['poultry.farm'].search([
+    #             ('branch_id', '=', rec.branch_id.id),
+    #             ('item_type_id', '=', rec.item_type_id.id)
+    #         ], limit=1)
+    #         if stock:
+    #             stock.total_quantity -= rec.quantity
+    #             if stock.total_quantity < 0:
+    #                 stock.total_quantity = 0  # prevent negative stock
+    #         else:
+    #             raise UserError("No stock found for this branch and item type!")
+    def _update_stock(self, old_qty=0, old_branch=None, old_type=None):
         for rec in self:
+
+            # 1️⃣ Restore old quantity when editing
+            if old_branch:
+                old_stock = self.env['poultry.farm'].search([
+                    ('branch_id', '=', old_branch.id),
+                    ('item_type_id', '=', old_type.id)
+                ], limit=1)
+                if old_stock:
+                    old_stock.total_quantity += old_qty
+
+            # 2️⃣ Fetch current stock
             stock = self.env['poultry.farm'].search([
                 ('branch_id', '=', rec.branch_id.id),
                 ('item_type_id', '=', rec.item_type_id.id)
             ], limit=1)
-            if stock:
-                stock.total_quantity -= rec.quantity
-                if stock.total_quantity < 0:
-                    stock.total_quantity = 0  # prevent negative stock
-            else:
+
+            if not stock:
                 raise UserError("No stock found for this branch and item type!")
+
+            # 3️⃣ VALIDATION – Sale cannot exceed available stock
+            if rec.quantity > stock.total_quantity:
+                raise UserError(
+                    f"Sale quantity ({rec.quantity}) cannot be greater "
+                    f"than available stock ({stock.total_quantity})!"
+                )
+
+            # 4️⃣ Apply stock subtraction
+            stock.total_quantity -= rec.quantity
 
 
 
