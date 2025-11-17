@@ -7,3 +7,4 @@ from . import poultry
 from . import stock_move
 from . import item
 from . import death
+from . import item_type_dynamic_menu
