@@ -15,6 +15,7 @@ class PoultryType(models.Model):
 
 
 
+
 class PoultryFarm(models.Model):
     _name = 'poultry.farm'
     _description = 'Poultry Stock Overview'
