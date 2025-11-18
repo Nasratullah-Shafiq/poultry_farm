@@ -1,6 +1,8 @@
 # poultry_farm_management/models/farm.py
 from odoo import models, fields, api
 from odoo.exceptions import UserError
+from odoo.exceptions import ValidationError
+
 
 class PoultryType(models.Model):
     _name = 'item.type'
@@ -88,6 +90,73 @@ class PoultrySale(models.Model):
         compute='_compute_available_quantity',
         store=False
     )
+    payment_type = fields.Selection([
+        ('cash', 'Cash'),
+        ('credit', 'Credit'),
+    ], string="Payment Type", default='cash', required=True)
+
+    amount_received = fields.Monetary(
+        currency_field='currency_id',
+        string="Amount Received",
+        default=0.0,
+        help="Amount paid by the customer at the time of sale."
+    )
+
+    amount_due = fields.Monetary(
+        currency_field='currency_id',
+        string="Amount Due",
+        compute="_compute_amount_due",
+        store=True
+    )
+
+    due_date = fields.Date(
+        string="Due Date",
+        help="Payment deadline if payment type is credit."
+    )
+
+    payment_status = fields.Selection([
+        ('not_paid', 'Not Paid'),
+        ('partial', 'Partially Paid'),
+        ('paid', 'Fully Paid'),
+    ], string="Payment Status", compute="_compute_payment_status", store=True)
+
+    payment_note = fields.Text(string="Payment Notes")
+
+    @api.constrains('unit_price')
+    def _check_unit_price(self):
+        for rec in self:
+            if rec.unit_price <= 0:
+                raise ValidationError("Unit Price must be greater than zero.")
+
+    @api.depends('revenue', 'amount_received')
+    def _compute_amount_due(self):
+        for rec in self:
+            rec.amount_due = rec.revenue - rec.amount_received
+
+    @api.depends('amount_received', 'revenue')
+    def _compute_payment_status(self):
+        for rec in self:
+            if rec.amount_received <= 0:
+                rec.payment_status = 'not_paid'
+            elif rec.amount_received < rec.revenue:
+                rec.payment_status = 'partial'
+            else:
+                rec.payment_status = 'paid'
+
+    @api.onchange('payment_type')
+    def _onchange_payment_type(self):
+        if self.payment_type == 'cash':
+            self.due_date = False
+            self.amount_received = self.revenue
+        else:
+            self.amount_received = 0
+
+
+
+
+
+
+
 
     @api.depends('branch_id', 'item_type_id')
     def _compute_available_quantity(self):
