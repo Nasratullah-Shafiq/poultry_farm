@@ -26,4 +26,4 @@ access_poultry_death_manager,Poultry Death Manager,model_poultry_death,base.grou
 access_poultry_sale_report_wizard,access wizard,model_poultry_sale_report_wizard,base.group_user,1,1,1,0
 
 access_poultry_sale_report_line_user,poultry.sale.report.line user,model_poultry_sale_report_line,base.group_user,1,1,1,1
-
+access_poultry_cashier,poultry.cashier,model_poultry_cashier,,1,1,1,1
