@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 class PoultryCashier(models.Model):
     _name = 'poultry.cashier'
@@ -14,3 +14,19 @@ class PoultryCashier(models.Model):
     afn_balance = fields.Float("AFN Balance", default=0, digits=(16,2), tracking=True)
 
     active = fields.Boolean(default=True)
+
+    @api.model
+    def action_reconcile_cash(self):
+        # Example logic for reconciliation
+        for rec in self:
+            # you can put reconciliation logic here
+            # for now we just log a message
+            rec.message_post(body="Reconciliation done")
+
+    @api.model
+    def action_reset_balances(self):
+        for rec in self:
+            rec.usd_balance = 0
+            rec.kaldar_balance = 0
+            rec.afn_balance = 0
+            rec.message_post(body="Balances reset to 0")
