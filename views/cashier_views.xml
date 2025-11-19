@@ -33,12 +33,12 @@
             </search>
 
               <!-- Left Sidebar Search Panel -->
-        <searchpanel>
-            <field name="active" select="1"/>
-            <field name="afn_balance" string="AFN Balance" select="1"/>
-            <field name="usd_balance" string="USD Balance" select="1"/>
-            <field name="kaldar_balance" string="Kaldar Balance" select="1"/>
-        </searchpanel>
+<!--        <searchpanel>-->
+<!--            <field name="active" select="1"/>-->
+<!--            <field name="afn_balance" string="AFN Balance" select="1"/>-->
+<!--            <field name="usd_balance" string="USD Balance" select="1"/>-->
+<!--            <field name="kaldar_balance" string="Kaldar Balance" select="1"/>-->
+<!--        </searchpanel>-->
         </field>
     </record>
 
