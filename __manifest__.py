@@ -33,7 +33,7 @@
         'views/poultry_sale_report_wizard_views.xml',
         'views/poultry_purchase_report_wizard_views.xml',
         'views/poultry_item_views.xml',
-        # 'views/poultry_stock_move_views.xml',
+        'views/cashier_views.xml',
         'views/death_views.xml',
 
         # Reports - actions before templates
