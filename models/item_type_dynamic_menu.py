@@ -28,14 +28,6 @@ class ItemType(models.Model):
         IrActWindow = self.env['ir.actions.act_window']
         IrUiView = self.env['ir.ui.view']
 
-        # # 1️⃣ Create parent menu if it doesn't exist
-        # parent_menu = IrUiMenu.search([('name', '=', 'Stock Balance')], limit=1)
-        # if not parent_menu:
-        #     parent_menu = IrUiMenu.create({
-        #         'name': 'Stock Balance',
-        #         'sequence': 10,
-        #         'parent_id': False,
-        #     })
 
         # 1️⃣ Get parent menu by XML ID
         parent_main_menu = self.env.ref('poultry_farm.menu_poultry_farm', raise_if_not_found=False)
