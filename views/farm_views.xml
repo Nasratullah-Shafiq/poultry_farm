@@ -60,7 +60,7 @@
                 <field name="unit_price" widget="monetary" sum="Total Unit Price"/>
                 <field name="total" widget="monetary" sum="Grand Total"/>
 
-                <field name="supplier"/>
+                <field name="supplier_id"/>
             </tree>
         </field>
     </record>
@@ -77,7 +77,7 @@
                             <field name="date"/>
                             <field name="branch_id"/>
                             <field name="item_type_id"/>
-                            <field name="supplier"/>
+                            <field name="supplier_id"/>
                             <field name="currency_id" invisible="1"/>
                         </group>
                         <group>
@@ -133,7 +133,7 @@
                 <field name="date"/>
                 <field name="branch_id"/>
                 <field name="item_type_id"/>
-                <field name="supplier"/>
+                <field name="supplier_id"/>
 
                 <!-- Search Panel for Branch and Type -->
                 <searchpanel>
