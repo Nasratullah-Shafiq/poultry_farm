@@ -27,3 +27,7 @@ access_poultry_sale_report_wizard,access wizard,model_poultry_sale_report_wizard
 
 access_poultry_sale_report_line_user,poultry.sale.report.line user,model_poultry_sale_report_line,base.group_user,1,1,1,1
 access_poultry_cashier,poultry.cashier,model_poultry_cashier,,1,1,1,1
+
+access_poultry_customer_user,Poultry Customer,model_poultry_customer,,1,1,1,1
+access_poultry_supplier_user,Poultry Supplier,model_poultry_supplier,,1,1,1,1
+access_poultry_payment_user,poultry.payment user,model_poultry_payment,base.group_user,1,1,1,1
