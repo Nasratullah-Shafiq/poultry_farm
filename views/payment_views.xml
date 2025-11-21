@@ -1,0 +1,46 @@
+<odoo>
+    <!-- Payment Tree View -->
+    <record id="view_poultry_payment_tree" model="ir.ui.view">
+        <field name="name">poultry.payment.tree</field>
+        <field name="model">poultry.payment</field>
+        <field name="arch" type="xml">
+            <tree string="Customer Payments">
+                <field name="customer_id"/>
+                <field name="sale_id"/>
+                <field name="date"/>
+                <field name="amount"/>
+                <field name="payment_note"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Payment Form View -->
+    <record id="view_poultry_payment_form" model="ir.ui.view">
+        <field name="name">poultry.payment.form</field>
+        <field name="model">poultry.payment</field>
+        <field name="arch" type="xml">
+            <form string="Customer Payment">
+                <sheet>
+                    <group>
+                        <field name="customer_id"/>
+                        <field name="sale_id"/>
+                        <field name="date"/>
+                        <field name="amount"/>
+                        <field name="payment_note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Payment Action -->
+    <record id="action_poultry_payment" model="ir.actions.act_window">
+        <field name="name">Payments</field>
+        <field name="res_model">poultry.payment</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Payment Menu -->
+    <menuitem id="menu_poultry_payment_root" name="Payments" parent="menu_poultry_customer_root" sequence="30"/>
+    <menuitem id="menu_poultry_payment" name="Customer Payments" parent="menu_poultry_payment_root" action="action_poultry_payment"/>
+</odoo>
