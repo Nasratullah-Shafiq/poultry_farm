@@ -21,7 +21,7 @@
         'views/menu.xml',
 
         # Wizard and view files
-        'views/finance_report_wizard_views.xml',
+        'wizard/finance_report_wizard_views.xml',
         'views/branch_views.xml',
         'views/employee_views.xml',
         'views/finance_views.xml',
@@ -30,11 +30,13 @@
         'views/sales_views.xml',
         'views/medicine_views.xml',
         'views/poultry_views.xml',
-        'views/poultry_sale_report_wizard_views.xml',
-        'views/poultry_purchase_report_wizard_views.xml',
+        'wizard/poultry_sale_report_wizard_views.xml',
+        'wizard/poultry_purchase_report_wizard_views.xml',
         'views/poultry_item_views.xml',
         'views/cashier_views.xml',
         'views/death_views.xml',
+        'views/customer_views.xml',
+        'views/payment_views.xml',
 
         # Reports - actions before templates
         'report/finance_report_action.xml',
