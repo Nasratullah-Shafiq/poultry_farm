@@ -16,7 +16,7 @@
                 <field name="quantity"/>
                 <field name="unit_price"/>
                 <field name="revenue"/>
-                <field name="buyer"/>
+                <field name="customer_id"/>
             </tree>
         </field>
     </record>
@@ -38,7 +38,7 @@
                             <field name="date"/>
                             <field name="branch_id"/>
                             <field name="item_type_id"/>
-                            <field name="buyer"/>
+                            <field name="customer_id"/>
                         </group>
                         <group>
                             <field name="available_quantity"/>
@@ -46,7 +46,7 @@
                             <field name="uom_id"/>
                             <field name="unit_price"/>
                             <field name="payment_type"/>
-                            <field name="amount_received"/>
+                            <field name="amount_paid"/>
                             <field name="amount_due"/>
                             <field name="due_date"/>
                             <field name="payment_status"/>
@@ -79,7 +79,7 @@
                 <field name="date"/>
                 <field name="branch_id"/>
                 <field name="item_type_id"/>
-                <field name="buyer"/>
+                <field name="customer_id"/>
 
                 <!-- Quick filter search panel -->
                 <searchpanel>
