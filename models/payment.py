@@ -13,6 +13,29 @@ class PoultryPayment(models.Model):
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
     payment_note = fields.Text(string="Notes")
 
+    amount_due = fields.Monetary(
+        string="Customer Total Due",
+        currency_field='currency_id',
+        compute="_compute_amount_due",
+        store=False
+    )
+
+    @api.depends('customer_id')
+    def _compute_amount_due(self):
+        for rec in self:
+            if rec.customer_id:
+                # Get all unpaid sales of this customer
+                sales = self.env['poultry.sale'].search([
+                    ('customer_id', '=', rec.customer_id.id)
+                ])
+
+                # Sum total due
+                total_due = sum(sale.amount_due for sale in sales)
+
+                rec.amount_due = total_due
+            else:
+                rec.amount_due = 0
+
     @api.model
     def create(self, vals):
         payment = super(PoultryPayment, self).create(vals)
