@@ -10,7 +10,7 @@
                 <field name="email"/>
                 <field name="total_sale"/>
                 <field name="total_paid"/>
-                <field name="balance"/>
+                <field name="debt"/>
 
             </tree>
         </field>
@@ -157,7 +157,7 @@
                 <field name="name" type="row"/>
                 <field name="total_sale" type="measure"/>
                 <field name="total_paid" type="measure"/>
-                <field name="balance" type="measure"/>
+                <field name="debt" type="measure"/>
             </graph>
         </field>
     </record>
