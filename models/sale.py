@@ -48,11 +48,17 @@ class PoultrySale(models.Model):
         ('credit', 'Credit'),
     ], string="Payment Type", default='cash', required=True)  # Type of payment
 
+    # amount_paid = fields.Monetary(
+    #     currency_field='currency_id',
+    #     string="Amount Paid",
+    #     default=0.0,
+    #     help="Amount paid by the customer at the time of sale."
+    # )
     amount_paid = fields.Monetary(
-        currency_field='currency_id',
         string="Amount Paid",
-        default=0.0,
-        help="Amount paid by the customer at the time of sale."
+        currency_field='currency_id',
+        compute="_compute_amount_paid",
+        store=True
     )
 
     amount_due = fields.Monetary(
@@ -66,6 +72,12 @@ class PoultrySale(models.Model):
         help="Payment deadline if payment type is credit."
     )
 
+    payment_ids = fields.One2many(
+        'poultry.payment',
+        'sale_id',
+        string="Payments"
+    )
+
     payment_status = fields.Selection([
         ('not_paid', 'Not Paid'),
         ('partial', 'Partially Paid'),
@@ -74,9 +86,28 @@ class PoultrySale(models.Model):
 
     payment_note = fields.Text(string="Payment Notes")  # Optional notes about payment
 
+    @api.depends('payment_ids.amount')
+    def _compute_amount_paid(self):
+        for rec in self:
+            total = sum(rec.payment_ids.mapped('amount'))
+            rec.amount_paid = total
+
+    @api.model
+    def create(self, vals):
+        payment = super(PoultryPayment, self).create(vals)
+
+        # Trigger compute fields on sale
+        if payment.sale_id:
+            payment.sale_id._compute_amount_paid()
+            payment.sale_id._compute_amount_due()
+            payment.sale_id._compute_payment_status()
+
+        return payment
+
     # ---------------------------
     # Constraints & Validations
     # ---------------------------
+
     @api.constrains('unit_price')
     def _check_unit_price(self):
         """Ensure unit price is greater than zero."""
