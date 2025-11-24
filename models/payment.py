@@ -56,41 +56,56 @@ class PoultryPayment(models.Model):
     def _compute_amount_due(self):
         for rec in self:
             if rec.customer_id:
-                # Get all sales of this customer
-                sales = self.env['poultry.sale'].search([
-                    ('customer_id', '=', rec.customer_id.id)
-                ])
-                total_sales = sum(sale.amount for sale in sales)
-
-                # Get all payments made by this customer
-                payments = self.env['poultry.payment'].search([
-                    ('customer_id', '=', rec.customer_id.id)
-                ])
-                total_paid = sum(payment.amount for payment in payments)
-
-                # Compute total due
-                rec.amount_due = total_sales - total_paid
+                sales = self.env['poultry.sale'].search([('customer_id', '=', rec.customer_id.id)])
+                total_due = sum(sale.revenue - sale.amount_paid for sale in sales)
+                rec.amount_due = total_due
             else:
                 rec.amount_due = 0
 
     @api.model
     def create(self, vals):
         payment = super(PoultryPayment, self).create(vals)
-        sale = payment.sale_id
-        if sale:
-            # Optional: Update sale's amount_received field if you have it
-            if hasattr(sale, 'amount_received'):
-                sale.amount_received = sum(
-                    self.env['poultry.payment'].search([('sale_id', '=', sale.id)]).mapped('amount')
-                )
-
-            # Optional: Update payment status if you have a field
-            if hasattr(sale, 'payment_status') and hasattr(sale, 'revenue'):
-                if sale.amount_received >= sale.revenue:
-                    sale.payment_status = 'paid'
-                elif sale.amount_received > 0:
-                    sale.payment_status = 'partial'
-                else:
-                    sale.payment_status = 'not_paid'
-
+        if payment.sale_id:
+            sale = payment.sale_id
+            sale._compute_amount_paid()
+            sale._compute_amount_due()
+            sale._compute_payment_status()
         return payment
+
+    def write(self, vals):
+        res = super(PoultryPayment, self).write(vals)
+        for rec in self:
+            if rec.sale_id:
+                rec.sale_id._compute_amount_paid()
+                rec.sale_id._compute_amount_due()
+                rec.sale_id._compute_payment_status()
+        return res
+
+    def unlink(self):
+        sales_to_update = self.mapped('sale_id')
+        res = super(PoultryPayment, self).unlink()
+        for sale in sales_to_update:
+            sale._compute_amount_paid()
+            sale._compute_amount_due()
+            sale._compute_payment_status()
+        return res
+
+    @api.constrains('amount')
+    def _check_amount(self):
+        for rec in self:
+            if rec.amount <= 0:
+                raise ValidationError("Payment amount must be greater than zero.")
+            # Prevent overpayment
+            if rec.sale_id:
+                remaining_due = rec.sale_id.revenue - rec.sale_id.amount_paid
+                if rec.amount > remaining_due:
+                    raise ValidationError(
+                        f"Payment amount cannot exceed remaining due for this sale ({remaining_due})."
+                    )
+            else:
+                # If sale_id not selected, check against total customer due
+                total_due = rec.amount_due
+                if rec.amount > total_due:
+                    raise ValidationError(
+                        f"Payment amount cannot exceed total customer due ({total_due})."
+                    )
