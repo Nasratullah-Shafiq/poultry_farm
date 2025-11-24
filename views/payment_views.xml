@@ -9,6 +9,7 @@
                 <field name="sale_id"/>
                 <field name="date"/>
                 <field name="amount"/>
+                <field name="amount_due"/>
                 <field name="payment_note"/>
             </tree>
         </field>
