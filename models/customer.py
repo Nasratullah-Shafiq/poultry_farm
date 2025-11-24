@@ -15,7 +15,7 @@ class PoultryCustomer(models.Model):
     # Computed fields
     total_sale = fields.Monetary(string='Total Sale', currency_field='currency_id', compute='_compute_totals', store=True)
     total_paid = fields.Monetary(string='Total Paid', currency_field='currency_id', compute='_compute_totals', store=True)
-    balance = fields.Monetary(string='Balance', currency_field='currency_id', compute='_compute_totals', store=True)
+    debt = fields.Monetary(string='Total Debt', currency_field='currency_id', compute='_compute_totals', store=True)
     currency_id = fields.Many2one('res.currency', string='Currency', default=lambda self: self.env.company.currency_id)
 
     payment_ids = fields.One2many('poultry.payment', 'customer_id', string='Payments')
@@ -25,7 +25,7 @@ class PoultryCustomer(models.Model):
         for customer in self:
             customer.total_sale = sum(customer.sale_ids.mapped('revenue'))
             customer.total_paid = sum(customer.sale_ids.mapped('amount_paid'))
-            customer.balance = sum(customer.sale_ids.mapped('amount_due'))
+            customer.debt = sum(customer.sale_ids.mapped('amount_due'))
 
     def action_register_payment(self):
         return {
