@@ -17,6 +17,7 @@
     'data': [
         'security/ir.model.access.csv',
         'security/security.xml',
+        'data/poultry_default_users.xml',
 
         # Menus should load first
         'views/menu.xml',
