@@ -20,12 +20,37 @@ class PoultryCustomer(models.Model):
 
     payment_ids = fields.One2many('poultry.payment', 'customer_id', string='Payments')
 
-    @api.depends('sale_ids', 'sale_ids.amount_paid', 'sale_ids.amount_due')
+    # @api.depends('sale_ids', 'sale_ids.amount_paid', 'sale_ids.amount_due')
+    # def _compute_totals(self):
+    #     for customer in self:
+    #         customer.total_sale = sum(customer.sale_ids.mapped('revenue'))
+    #         customer.total_paid = sum(customer.sale_ids.mapped('amount_paid'))
+    #         customer.debt = sum(customer.sale_ids.mapped('amount_due'))
+    #
+    # def action_register_payment(self):
+    #     return {
+    #         'name': 'Register Payment',
+    #         'type': 'ir.actions.act_window',
+    #         'res_model': 'poultry.payment',
+    #         'view_mode': 'form',
+    #         'target': 'new',
+    #         'context': {
+    #             'default_customer_id': self.id,
+    #         }
+    #     }
+    @api.depends('sale_ids.revenue', 'sale_ids.payment_ids.amount')
     def _compute_totals(self):
         for customer in self:
-            customer.total_sale = sum(customer.sale_ids.mapped('revenue'))
-            customer.total_paid = sum(customer.sale_ids.mapped('amount_paid'))
-            customer.debt = sum(customer.sale_ids.mapped('amount_due'))
+            total_sale = 0.0
+            total_paid = 0.0
+            debt = 0.0
+            for sale in customer.sale_ids:
+                total_sale += sale.revenue
+                total_paid += sum(sale.payment_ids.mapped('amount'))
+                debt += sale.revenue - sum(sale.payment_ids.mapped('amount'))
+            customer.total_sale = total_sale
+            customer.total_paid = total_paid
+            customer.debt = debt
 
     def action_register_payment(self):
         return {
