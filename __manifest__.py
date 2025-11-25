@@ -16,6 +16,7 @@
     'depends': ['base', 'hr', 'account'],
     'data': [
         'security/ir.model.access.csv',
+        'security/security.xml',
 
         # Menus should load first
         'views/menu.xml',
