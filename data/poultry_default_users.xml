@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===================== -->
+    <!-- Poultry Manager Users -->
+    <!-- ===================== -->
+
+    <record id="user_sultan_manager" model="res.users">
+        <field name="name">Sultan</field>
+        <field name="login">sultan</field>
+        <field name="email">sultan@example.com</field>
+        <field name="groups_id" eval="[(4, ref('your_module_name.group_poultry_manager'))]"/>
+    </record>
+
+    <record id="user_obaid_manager" model="res.users">
+        <field name="name">Obaidullah Momand</field>
+        <field name="login">obaidullah</field>
+        <field name="email">obaidullah@example.com</field>
+        <field name="groups_id" eval="[(4, ref('your_module_name.group_poultry_manager'))]"/>
+    </record>
+
+    <!-- ============================ -->
+    <!-- Poultry Record Officer Users -->
+    <!-- ============================ -->
+
+    <record id="user_najib_officer" model="res.users">
+        <field name="name">Najib</field>
+        <field name="login">najib</field>
+        <field name="email">najib@example.com</field>
+        <field name="groups_id" eval="[(4, ref('your_module_name.group_poultry_record_officer'))]"/>
+    </record>
+
+    <record id="user_rasheed_officer" model="res.users">
+        <field name="name">Rasheed</field>
+        <field name="login">rasheed</field>
+        <field name="email">rasheed@example.com</field>
+        <field name="groups_id" eval="[(4, ref('your_module_name.group_poultry_record_officer'))]"/>
+    </record>
+
+</odoo>
