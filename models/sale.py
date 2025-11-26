@@ -48,18 +48,18 @@ class PoultrySale(models.Model):
         ('credit', 'Credit'),
     ], string="Payment Type", default='cash', required=True)  # Type of payment
 
-    # amount_paid = fields.Monetary(
-    #     currency_field='currency_id',
-    #     string="Amount Paid",
-    #     default=0.0,
-    #     help="Amount paid by the customer at the time of sale."
-    # )
     amount_paid = fields.Monetary(
-        string="Amount Paid",
         currency_field='currency_id',
-        compute="_compute_amount_paid",
-        store=True
+        string="Amount Paid",
+        default=0.0,
+        help="Amount paid by the customer at the time of sale."
     )
+    # amount_paid = fields.Monetary(
+    #     string="Amount Paid",
+    #     currency_field='currency_id',
+    #     compute="_compute_amount_paid",
+    #     store=True
+    # )
 
     amount_due = fields.Monetary(
         currency_field='currency_id',
@@ -86,23 +86,23 @@ class PoultrySale(models.Model):
 
     payment_note = fields.Text(string="Payment Notes")  # Optional notes about payment
 
-    @api.depends('payment_ids.amount')
-    def _compute_amount_paid(self):
-        for rec in self:
-            total = sum(rec.payment_ids.mapped('amount'))
-            rec.amount_paid = total
-
-    @api.model
-    def create(self, vals):
-        payment = super(PoultryPayment, self).create(vals)
-
-        # Trigger compute fields on sale
-        if payment.sale_id:
-            payment.sale_id._compute_amount_paid()
-            payment.sale_id._compute_amount_due()
-            payment.sale_id._compute_payment_status()
-
-        return payment
+    # @api.depends('payment_ids.amount')
+    # def _compute_amount_paid(self):
+    #     for rec in self:
+    #         total = sum(rec.payment_ids.mapped('amount'))
+    #         rec.amount_paid = total
+    #
+    # @api.model
+    # def create(self, vals):
+    #     payment = super(PoultryPayment, self).create(vals)
+    #
+    #     # Trigger compute fields on sale
+    #     if payment.sale_id:
+    #         payment.sale_id._compute_amount_paid()
+    #         payment.sale_id._compute_amount_due()
+    #         payment.sale_id._compute_payment_status()
+    #
+    #     return payment
 
     # ---------------------------
     # Constraints & Validations
@@ -120,7 +120,6 @@ class PoultrySale(models.Model):
     # ---------------------------
     @api.depends('revenue', 'amount_paid')
     def _compute_amount_due(self):
-        """Compute remaining amount due from customer."""
         for rec in self:
             rec.amount_due = rec.revenue - rec.amount_paid
 
@@ -135,14 +134,14 @@ class PoultrySale(models.Model):
             else:
                 rec.payment_status = 'paid'
 
-    @api.onchange('payment_type')
-    def _onchange_payment_type(self):
-        """Auto-update fields based on payment type selection."""
-        if self.payment_type == 'cash':
-            self.due_date = False  # No due date for cash payments
-            self.amount_paid = self.revenue  # Full payment assumed
-        else:
-            self.amount_paid = 0  # Reset for credit payments
+    # @api.onchange('payment_type')
+    # def _onchange_payment_type(self):
+    #     """Auto-update fields based on payment type selection."""
+    #     if self.payment_type == 'cash':
+    #         self.due_date = False  # No due date for cash payments
+    #         self.amount_paid = self.revenue  # Full payment assumed
+    #     else:
+    #         self.amount_paid = 0  # Reset for credit payments
 
     @api.depends('branch_id', 'item_type_id')
     def _compute_available_quantity(self):
