@@ -1,6 +1,6 @@
 <!-- poultry_farm_management/views/menu.xml -->
 <odoo>
-    <menuitem id="menu_poultry" name="Poultry Farm"/>
+    <menuitem id="menu_poultry" name="Poultry Farm" action="action_poultry"/>
     <menuitem id="poultry_root_menu" name="Poultry Farm" sequence="1"/>
 
     <!-- Other menus as children of Farm -->
