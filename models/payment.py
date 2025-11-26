@@ -1,10 +1,11 @@
 from odoo import models, fields, api
-
+from odoo.exceptions import ValidationError
 
 
 class PoultryPayment(models.Model):
     _name = 'poultry.payment'
     _description = 'Customer Payment'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     customer_id = fields.Many2one('poultry.customer', string="Customer", required=True)
     sale_id = fields.Many2one('poultry.sale', string="Sale")
