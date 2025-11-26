@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- Custom Category for Poultry Farm -->
+    <record id="module_category_poultry" model="ir.module.category">
+        <field name="name">Poultry Farm System</field>
+        <field name="sequence" eval="10"/>
+    </record>
+
     <!-- Manager Group -->
     <record id="group_poultry_manager" model="res.groups">
         <field name="name">Poultry Manager</field>
-        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="category_id" ref="poultry_farm.module_category_poultry"/>
     </record>
 
     <!-- Record Officer Group -->
     <record id="group_poultry_record_officer" model="res.groups">
         <field name="name">Poultry Record Officer</field>
-        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="category_id" ref="poultry_farm.module_category_poultry"/>
     </record>
 
 </odoo>
-
