@@ -1,5 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<odoo>-->
+<!--    &lt;!&ndash; Payment Tree View &ndash;&gt;-->
+<!--    <record id="view_poultry_payment_tree" model="ir.ui.view">-->
+<!--        <field name="name">poultry.payment.tree</field>-->
+<!--        <field name="model">poultry.payment</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <tree string="Customer Payments">-->
+<!--                <field name="customer_id"/>-->
+<!--                <field name="sale_id"/>-->
+<!--                <field name="date"/>-->
+<!--                <field name="amount"/>-->
+<!--                <field name="amount_due"/>-->
+<!--                <field name="payment_note"/>-->
+<!--            </tree>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    &lt;!&ndash; Payment Form View &ndash;&gt;-->
+<!--    <record id="view_poultry_payment_form" model="ir.ui.view">-->
+<!--        <field name="name">poultry.payment.form</field>-->
+<!--        <field name="model">poultry.payment</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <form string="Customer Payment">-->
+<!--                <sheet>-->
+<!--                    <group>-->
+<!--                        <field name="customer_id"/>-->
+<!--                        <field name="sale_id"/>-->
+<!--                        <field name="date"/>-->
+<!--                        <field name="amount"/>-->
+<!--                        <field name="amount_due"/>-->
+<!--                        <field name="payment_note"/>-->
+<!--                    </group>-->
+<!--                </sheet>-->
+<!--            </form>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    &lt;!&ndash; Payment Action &ndash;&gt;-->
+<!--    <record id="action_poultry_payment" model="ir.actions.act_window">-->
+<!--        <field name="name">Payments</field>-->
+<!--        <field name="res_model">poultry.payment</field>-->
+<!--        <field name="view_mode">tree,form</field>-->
+<!--    </record>-->
+
+<!--    &lt;!&ndash; Payment Menu &ndash;&gt;-->
+<!--    <menuitem id="menu_poultry_payment_root" name="Payments" parent="menu_poultry_customer_root" sequence="30"/>-->
+<!--    <menuitem id="menu_poultry_payment" name="Customer Payments" parent="menu_poultry_payment_root" action="action_poultry_payment"/>-->
+<!--</odoo>-->
+
 <odoo>
-    <!-- Payment Tree View -->
+
+    <!-- =======================
+         PAYMENT TREE VIEW
+    ======================== -->
     <record id="view_poultry_payment_tree" model="ir.ui.view">
         <field name="name">poultry.payment.tree</field>
         <field name="model">poultry.payment</field>
@@ -15,7 +68,10 @@
         </field>
     </record>
 
-    <!-- Payment Form View -->
+
+    <!-- =======================
+         PAYMENT FORM VIEW
+    ======================== -->
     <record id="view_poultry_payment_form" model="ir.ui.view">
         <field name="name">poultry.payment.form</field>
         <field name="model">poultry.payment</field>
@@ -31,18 +87,108 @@
                         <field name="payment_note"/>
                     </group>
                 </sheet>
+
+                <!-- Chatter -->
+                <div class="oe_chatter">
+                    <field name="message_ids" widget="mail_thread"/>
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                </div>
             </form>
         </field>
     </record>
 
-    <!-- Payment Action -->
+
+
+    <!-- =======================
+         GRAPH VIEW
+    ======================== -->
+    <record id="view_poultry_payment_graph" model="ir.ui.view">
+        <field name="name">poultry.payment.graph</field>
+        <field name="model">poultry.payment</field>
+        <field name="arch" type="xml">
+            <graph string="Payments Graph" type="bar">
+                <field name="date" type="row"/>
+                <field name="amount" type="measure"/>
+                <field name="customer_id" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+
+    <!-- =======================
+         PIVOT VIEW
+    ======================== -->
+    <record id="view_poultry_payment_pivot" model="ir.ui.view">
+        <field name="name">poultry.payment.pivot</field>
+        <field name="model">poultry.payment</field>
+        <field name="arch" type="xml">
+            <pivot string="Payments Pivot">
+                <field name="customer_id" type="row"/>
+                <field name="sale_id" type="row"/>
+                <field name="date" type="col"/>
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+
+
+    <!-- =======================
+         SEARCH VIEW + SEARCH PANEL
+    ======================== -->
+    <record id="view_poultry_payment_search" model="ir.ui.view">
+        <field name="name">poultry.payment.search</field>
+        <field name="model">poultry.payment</field>
+        <field name="arch" type="xml">
+            <search string="Search Payments">
+
+                <!-- Quick Search Fields -->
+                <field name="customer_id" string="Customer"/>
+                <field name="sale_id"/>
+                <field name="date"/>
+
+                <!-- Filters -->
+<!--                <filter string="Paid" domain="[('amount', '>', 0)]"/>-->
+<!--                <filter string="Zero Amount" domain="[('amount', '=', 0)]"/>-->
+<!--                <filter string="Has Due" domain="[('amount_due', '>', 0)]"/>-->
+
+                <!-- ======================
+                     SEARCH PANEL (Odoo 17)
+                ======================= -->
+                <searchpanel>
+                    <field name="customer_id"/>
+                    <field name="sale_id"/>
+                </searchpanel>
+
+            </search>
+        </field>
+    </record>
+
+
+
+    <!-- =======================
+         ACTION
+    ======================== -->
     <record id="action_poultry_payment" model="ir.actions.act_window">
         <field name="name">Payments</field>
         <field name="res_model">poultry.payment</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,graph,pivot</field>
+        <field name="search_view_id" ref="view_poultry_payment_search"/>
     </record>
 
-    <!-- Payment Menu -->
-    <menuitem id="menu_poultry_payment_root" name="Payments" parent="menu_poultry_customer_root" sequence="30"/>
-    <menuitem id="menu_poultry_payment" name="Customer Payments" parent="menu_poultry_payment_root" action="action_poultry_payment"/>
+
+
+    <!-- =======================
+         MENU ITEMS
+    ======================== -->
+    <menuitem id="menu_poultry_payment_root"
+              name="Payments"
+              parent="menu_poultry_customer_root"
+              sequence="30"/>
+
+    <menuitem id="menu_poultry_payment"
+              name="Customer Payments"
+              parent="menu_poultry_payment_root"
+              action="action_poultry_payment"/>
+
 </odoo>
