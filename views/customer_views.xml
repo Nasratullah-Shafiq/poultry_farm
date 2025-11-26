@@ -1,20 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Customer Tree View -->
-    <record id="view_poultry_customer_tree" model="ir.ui.view">
-        <field name="name">poultry.customer.tree</field>
-        <field name="model">poultry.customer</field>
-        <field name="arch" type="xml">
-            <tree string="Customers">
-                <field name="name"/>
-                <field name="phone"/>
-                <field name="email"/>
-                <field name="total_sale"/>
-                <field name="total_paid"/>
-                <field name="debt"/>
+    <!--    <record id="view_poultry_customer_tree" model="ir.ui.view">-->
+    <!--        <field name="name">poultry.customer.tree</field>-->
+    <!--        <field name="model">poultry.customer</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <tree string="Customers">-->
+    <!--                <field name="name"/>-->
+    <!--                <field name="phone"/>-->
+    <!--                <field name="email"/>-->
+    <!--                <field name="total_sale"/>-->
+    <!--                <field name="total_paid"/>-->
+    <!--                <field name="debt"/>-->
 
-            </tree>
-        </field>
-    </record>
+    <!--            </tree>-->
+    <!--        </field>-->
+    <!--    </record>-->
 
     <!-- Customer Form View -->
     <!--    <record id="view_poultry_customer_form" model="ir.ui.view">-->
@@ -87,11 +88,127 @@
     <!--        </field>-->
     <!--    </record>-->
 
+    <!--    <record id="view_poultry_customer_form" model="ir.ui.view">-->
+    <!--        <field name="name">poultry.customer.form</field>-->
+    <!--        <field name="model">poultry.customer</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <form>-->
+    <!--                <sheet>-->
+    <!--                    <group>-->
+    <!--                        <field name="name"/>-->
+    <!--                        <field name="phone"/>-->
+    <!--                        <field name="email"/>-->
+    <!--                    </group>-->
+
+    <!--                    <group>-->
+    <!--                        <field name="total_sale" readonly="1"/>-->
+    <!--                        <field name="total_paid" readonly="1"/>-->
+    <!--                        &lt;!&ndash;                        <field name="remaining_amount" readonly="1"&ndash;&gt;-->
+    <!--                        &lt;!&ndash;                               attrs="{'invisible': [('remaining_amount', '=', 0)]}"/>&ndash;&gt;-->
+    <!--                    </group>-->
+
+    <!--                    <button name="action_register_payment" type="object"-->
+    <!--                            string="Register Payment" class="oe_highlight"/>-->
+
+    <!--                    <notebook>-->
+    <!--                        <page string="Sales">-->
+    <!--                            <field name="sale_ids">-->
+    <!--                                <tree string="Sales of Customer">-->
+    <!--                                    <field name="date"/>-->
+    <!--                                    <field name="item_type_id"/>-->
+    <!--                                    <field name="quantity"/>-->
+    <!--                                    <field name="unit_price"/>-->
+    <!--                                    <field name="revenue"/>-->
+    <!--                                    <field name="amount_paid"/>-->
+    <!--                                    <field name="amount_due"/>-->
+    <!--                                    <field name="payment_status"/>-->
+    <!--                                    <field name="payment_type"/>-->
+    <!--                                    <field name="due_date"/>-->
+    <!--                                </tree>-->
+    <!--                            </field>-->
+
+    <!--                        </page>-->
+
+    <!--                        <page string="Payments">-->
+    <!--                            <field name="payment_ids">-->
+    <!--                                <tree>-->
+    <!--                                    <field name="date"/>-->
+    <!--                                    <field name="amount"/>-->
+    <!--                                    <field name="payment_note"/>-->
+    <!--                                </tree>-->
+    <!--                            </field>-->
+    <!--                        </page>-->
+    <!--                    </notebook>-->
+    <!--                </sheet>-->
+
+    <!--                <div class="oe_chatter">-->
+    <!--                    <field name="message_follower_ids" widget="mail_followers"/>-->
+    <!--                    <field name="message_ids" widget="mail_thread"/>-->
+    <!--                </div>-->
+    <!--            </form>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+    <!--    &lt;!&ndash; Graph View for Customer Payments &ndash;&gt;-->
+    <!--    <record id="view_poultry_customer_graph" model="ir.ui.view">-->
+    <!--        <field name="name">poultry.customer.graph</field>-->
+    <!--        <field name="model">poultry.customer</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <graph string="Customer Payments" type="bar">-->
+    <!--                <field name="name" type="row"/>-->
+    <!--                <field name="total_sale" type="measure"/>-->
+    <!--                <field name="total_paid" type="measure"/>-->
+    <!--                <field name="debt" type="measure"/>-->
+    <!--            </graph>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+    <!--    &lt;!&ndash; Action &ndash;&gt;-->
+    <!--    <record id="action_poultry_customer" model="ir.actions.act_window">-->
+    <!--        <field name="name">Customers</field>-->
+    <!--        <field name="res_model">poultry.customer</field>-->
+    <!--        <field name="view_mode">tree,form,graph</field>-->
+    <!--        <field name="help" type="html">-->
+    <!--            <p class="oe_view_nocontent_create">-->
+    <!--                Create new customers here.-->
+    <!--            </p>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+    <!--    &lt;!&ndash; Menu &ndash;&gt;-->
+    <!--    <menuitem id="menu_poultry_customer_root" name="Customers" parent="menu_poultry_farm" sequence="20"/>-->
+    <!--    <menuitem id="menu_poultry_customer" name="Customers" parent="menu_poultry_customer_root"-->
+    <!--              action="action_poultry_customer" sequence="10"/>-->
+    <!--</odoo>-->
+
+
+    <!-- =======================
+         TREE VIEW
+    ======================== -->
+    <record id="view_poultry_customer_tree" model="ir.ui.view">
+        <field name="name">poultry.customer.tree</field>
+        <field name="model">poultry.customer</field>
+        <field name="arch" type="xml">
+            <tree string="Customers">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="total_sale"/>
+                <field name="total_paid"/>
+                <field name="debt"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- =======================
+         FORM VIEW + CHATTER
+    ======================== -->
     <record id="view_poultry_customer_form" model="ir.ui.view">
         <field name="name">poultry.customer.form</field>
         <field name="model">poultry.customer</field>
         <field name="arch" type="xml">
-            <form>
+            <form string="Customer">
                 <sheet>
                     <group>
                         <field name="name"/>
@@ -102,17 +219,20 @@
                     <group>
                         <field name="total_sale" readonly="1"/>
                         <field name="total_paid" readonly="1"/>
-                        <!--                        <field name="remaining_amount" readonly="1"-->
-                        <!--                               attrs="{'invisible': [('remaining_amount', '=', 0)]}"/>-->
+                        <field name="debt" readonly="1"/>
                     </group>
 
-                    <button name="action_register_payment" type="object"
-                            string="Register Payment" class="oe_highlight"/>
+                    <button name="action_register_payment"
+                            type="object"
+                            string="Register Payment"
+                            class="oe_highlight"/>
 
                     <notebook>
+
+                        <!-- SALES PAGE -->
                         <page string="Sales">
                             <field name="sale_ids">
-                                <tree string="Sales of Customer">
+                                <tree string="Sales Records">
                                     <field name="date"/>
                                     <field name="item_type_id"/>
                                     <field name="quantity"/>
@@ -125,9 +245,9 @@
                                     <field name="due_date"/>
                                 </tree>
                             </field>
-
                         </page>
 
+                        <!-- PAYMENTS PAGE -->
                         <page string="Payments">
                             <field name="payment_ids">
                                 <tree>
@@ -137,9 +257,11 @@
                                 </tree>
                             </field>
                         </page>
+
                     </notebook>
                 </sheet>
 
+                <!-- Chatter -->
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"/>
                     <field name="message_ids" widget="mail_thread"/>
@@ -148,12 +270,15 @@
         </field>
     </record>
 
-    <!-- Graph View for Customer Payments -->
+
+    <!-- =======================
+         GRAPH VIEW
+    ======================== -->
     <record id="view_poultry_customer_graph" model="ir.ui.view">
         <field name="name">poultry.customer.graph</field>
         <field name="model">poultry.customer</field>
         <field name="arch" type="xml">
-            <graph string="Customer Payments" type="bar">
+            <graph string="Customer Statistics" type="bar">
                 <field name="name" type="row"/>
                 <field name="total_sale" type="measure"/>
                 <field name="total_paid" type="measure"/>
@@ -162,20 +287,70 @@
         </field>
     </record>
 
-    <!-- Action -->
-    <record id="action_poultry_customer" model="ir.actions.act_window">
-        <field name="name">Customers</field>
-        <field name="res_model">poultry.customer</field>
-        <field name="view_mode">tree,form,graph</field>
-        <field name="help" type="html">
-            <p class="oe_view_nocontent_create">
-                Create new customers here.
-            </p>
+
+    <!-- =======================
+         PIVOT VIEW
+    ======================== -->
+    <record id="view_poultry_customer_pivot" model="ir.ui.view">
+        <field name="name">poultry.customer.pivot</field>
+        <field name="model">poultry.customer</field>
+        <field name="arch" type="xml">
+            <pivot string="Customer Pivot">
+                <field name="name" type="row"/>
+                <field name="total_sale" type="measure"/>
+                <field name="total_paid" type="measure"/>
+                <field name="debt" type="measure"/>
+            </pivot>
         </field>
     </record>
 
-    <!-- Menu -->
-    <menuitem id="menu_poultry_customer_root" name="Customers" parent="menu_poultry_farm" sequence="20"/>
-    <menuitem id="menu_poultry_customer" name="Customers" parent="menu_poultry_customer_root"
-              action="action_poultry_customer" sequence="10"/>
+
+    <!-- =======================
+         SEARCH VIEW + SEARCH PANEL
+    ======================== -->
+    <record id="view_poultry_customer_search" model="ir.ui.view">
+        <field name="name">poultry.customer.search</field>
+        <field name="model">poultry.customer</field>
+        <field name="arch" type="xml">
+            <search string="Search Customers">
+
+                <!-- Quick search -->
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+
+                <!-- Filters -->
+<!--                <filter string="Has Debt" domain="[('debt','>',0)]"/>-->
+<!--                <filter string="Fully Paid" domain="[('debt','=',0)]"/>-->
+
+            </search>
+        </field>
+    </record>
+
+
+    <!-- =======================
+         ACTION
+    ======================== -->
+    <record id="action_poultry_customer" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">poultry.customer</field>
+        <field name="view_mode">tree,form,graph,pivot</field>
+        <field name="search_view_id" ref="view_poultry_customer_search"/>
+    </record>
+
+
+    <!-- =======================
+         MENU ITEMS
+    ======================== -->
+    <menuitem id="menu_poultry_customer_root"
+              name="Customers"
+              parent="menu_poultry_farm"
+              sequence="20"/>
+
+    <menuitem id="menu_poultry_customer"
+              name="Customers"
+              parent="menu_poultry_customer_root"
+              action="action_poultry_customer"
+              sequence="10"/>
+
 </odoo>
