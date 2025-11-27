@@ -8,18 +8,68 @@ class PoultryPayment(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     customer_id = fields.Many2one('poultry.customer', string="Customer", required=True)
-    sale_id = fields.Many2one('poultry.sale', string="Sale")
+    sale_id = fields.Many2one('poultry.sale', string='Sale', required=True)
+
     date = fields.Date(string="Payment Date", default=fields.Date.today(), required=True)
     amount = fields.Monetary(string="Amount Paid", required=True, currency_field='currency_id')
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
     payment_note = fields.Text(string="Notes")
 
+    # amount_due = fields.Monetary(
+    #     string="Customer Total Due",
+    #     currency_field='currency_id',
+    #     compute="_compute_amount_due",
+    #     store=False
+    # )
+    # -------------------------
+    # Additional Fields
+    # -------------------------
+    payment_type = fields.Selection([
+        ('cash', 'Cash'),
+        ('credit', 'Credit')
+    ], string="Payment Type", default='cash')
+
+    # Amount due for this sale
     amount_due = fields.Monetary(
-        string="Customer Total Due",
+        string="Amount Due",
         currency_field='currency_id',
         compute="_compute_amount_due",
-        store=False
+        store=True
     )
+
+    # Payment status for this sale
+    payment_status = fields.Selection([
+        ('not_paid', 'Not Paid'),
+        ('partial', 'Partially Paid'),
+        ('paid', 'Fully Paid')
+    ], string="Payment Status", compute="_compute_payment_status", store=True)
+
+    # -------------------------
+    # Computed Fields
+    # -------------------------
+    @api.depends('sale_id.revenue', 'sale_id.payment_ids.amount')
+    def _compute_amount_due(self):
+        for rec in self:
+            if rec.sale_id:
+                # Total sale amount minus total payments for this sale
+                total_paid = sum(rec.sale_id.payment_ids.mapped('amount'))
+                rec.amount_due = rec.sale_id.revenue - total_paid
+            else:
+                rec.amount_due = 0.0
+
+    @api.depends('sale_id.revenue', 'sale_id.payment_ids.amount')
+    def _compute_payment_status(self):
+        for rec in self:
+            if rec.sale_id:
+                total_paid = sum(rec.sale_id.payment_ids.mapped('amount'))
+                if total_paid <= 0:
+                    rec.payment_status = 'not_paid'
+                elif total_paid < rec.sale_id.revenue:
+                    rec.payment_status = 'partial'
+                else:
+                    rec.payment_status = 'paid'
+            else:
+                rec.payment_status = 'not_paid'
 
     # @api.depends('customer_id')
     # def _compute_amount_due(self):
