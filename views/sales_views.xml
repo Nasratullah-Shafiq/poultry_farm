@@ -47,14 +47,30 @@
                             <field name="unit_price"/>
                             <field name="payment_type"/>
                             <field name="amount_paid"/>
-                            <field name="amount_due"/>
-                            <field name="due_date"/>
-                            <field name="payment_status"/>
-                            <field name="payment_note"/>
+<!--                            <field name="amount_due"/>-->
+<!--                            <field name="due_date"/>-->
+<!--                            <field name="payment_status"/>-->
+<!--                            <field name="payment_note"/>-->
                             <field name="revenue" readonly="1"/>
                             <field name="currency_id" invisible="1"/>
                         </group>
                     </group>
+                    <!-- PASTE NOTEBOOK HERE -->
+        <notebook>
+            <page string="Payments">
+                <field name="payment_ids">
+                    <tree editable="bottom">
+                        <field name="date"/>
+                        <field name="amount"/>
+                        <field name="payment_type"/>
+                        <field name="amount_due" readonly="1"/>
+                        <field name="payment_status" readonly="1"/>
+                        <field name="payment_note"/>
+                    </tree>
+                </field>
+            </page>
+        </notebook>
+        <!-- END NOTEBOOK -->
                 </sheet>
                 <!-- Chatter for messages and activities -->
                 <div class="oe_chatter">
