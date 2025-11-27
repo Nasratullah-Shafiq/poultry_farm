@@ -40,37 +40,37 @@ class PoultrySale(models.Model):
         store=False
     )
 
-    # ---------------------------
-    # Payment Fields
-    # ---------------------------
-    payment_type = fields.Selection([
-        ('cash', 'Cash'),
-        ('credit', 'Credit'),
-    ], string="Payment Type", default='cash', required=True)  # Type of payment
-
-    amount_paid = fields.Monetary(
-        currency_field='currency_id',
-        string="Amount Paid",
-        default=0.0,
-        help="Amount paid by the customer at the time of sale."
-    )
+    # # ---------------------------
+    # # Payment Fields
+    # # ---------------------------
+    # payment_type = fields.Selection([
+    #     ('cash', 'Cash'),
+    #     ('credit', 'Credit'),
+    # ], string="Payment Type", default='cash', required=True)  # Type of payment
+    #
     # amount_paid = fields.Monetary(
-    #     string="Amount Paid",
     #     currency_field='currency_id',
-    #     compute="_compute_amount_paid",
-    #     store=True
+    #     string="Amount Paid",
+    #     default=0.0,
+    #     help="Amount paid by the customer at the time of sale."
     # )
-
-    amount_due = fields.Monetary(
-        currency_field='currency_id',
-        string="Amount Due",
-        compute="_compute_amount_due", store=True
-    )  # Computed as revenue - amount_received
-
-    due_date = fields.Date(
-        string="Due Date",
-        help="Payment deadline if payment type is credit."
-    )
+    # # amount_paid = fields.Monetary(
+    # #     string="Amount Paid",
+    # #     currency_field='currency_id',
+    # #     compute="_compute_amount_paid",
+    # #     store=True
+    # # )
+    #
+    # amount_due = fields.Monetary(
+    #     currency_field='currency_id',
+    #     string="Amount Due",
+    #     compute="_compute_amount_due", store=True
+    # )  # Computed as revenue - amount_received
+    #
+    # due_date = fields.Date(
+    #     string="Due Date",
+    #     help="Payment deadline if payment type is credit."
+    # )
 
     payment_ids = fields.One2many(
         'poultry.payment',
@@ -78,13 +78,13 @@ class PoultrySale(models.Model):
         string="Payments"
     )
 
-    payment_status = fields.Selection([
-        ('not_paid', 'Not Paid'),
-        ('partial', 'Partially Paid'),
-        ('paid', 'Fully Paid'),
-    ], string="Payment Status", compute="_compute_payment_status", store=True)  # Tracks payment status
-
-    payment_note = fields.Text(string="Payment Notes")  # Optional notes about payment
+    # payment_status = fields.Selection([
+    #     ('not_paid', 'Not Paid'),
+    #     ('partial', 'Partially Paid'),
+    #     ('paid', 'Fully Paid'),
+    # ], string="Payment Status", compute="_compute_payment_status", store=True)  # Tracks payment status
+    #
+    # payment_note = fields.Text(string="Payment Notes")  # Optional notes about payment
 
     # @api.depends('payment_ids.amount')
     # def _compute_amount_paid(self):
@@ -118,21 +118,21 @@ class PoultrySale(models.Model):
     # ---------------------------
     # Computation Methods
     # ---------------------------
-    @api.depends('revenue', 'amount_paid')
-    def _compute_amount_due(self):
-        for rec in self:
-            rec.amount_due = rec.revenue - rec.amount_paid
-
-    @api.depends('amount_paid', 'revenue')
-    def _compute_payment_status(self):
-        """Determine the payment status based on amount received."""
-        for rec in self:
-            if rec.amount_paid <= 0:
-                rec.payment_status = 'not_paid'
-            elif rec.amount_paid < rec.revenue:
-                rec.payment_status = 'partial'
-            else:
-                rec.payment_status = 'paid'
+    # @api.depends('revenue', 'amount_paid')
+    # def _compute_amount_due(self):
+    #     for rec in self:
+    #         rec.amount_due = rec.revenue - rec.amount_paid
+    #
+    # @api.depends('amount_paid', 'revenue')
+    # def _compute_payment_status(self):
+    #     """Determine the payment status based on amount received."""
+    #     for rec in self:
+    #         if rec.amount_paid <= 0:
+    #             rec.payment_status = 'not_paid'
+    #         elif rec.amount_paid < rec.revenue:
+    #             rec.payment_status = 'partial'
+    #         else:
+    #             rec.payment_status = 'paid'
 
     # @api.onchange('payment_type')
     # def _onchange_payment_type(self):
