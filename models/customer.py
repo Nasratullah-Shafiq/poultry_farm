@@ -65,6 +65,7 @@ from odoo import models, fields, api
     #         customer.debt = debt
 
 
+
 class PoultryCustomer(models.Model):
     _name = 'poultry.customer'
     _description = 'Poultry Customer'
@@ -109,40 +110,25 @@ class PoultryCustomer(models.Model):
     # Compute Totals
     @api.depends(
         'sale_ids',
-        'sale_ids.revenue',
-        'sale_ids.payment_ids',
-        'sale_ids.payment_ids.amount',
+        'sale_ids.amount_paid',
         'payment_ids',
         'payment_ids.amount',
     )
     def _compute_totals(self):
         for customer in self:
-
-            # ---- TOTAL SALE (from sales revenue) ----
+            # Total sale revenue
             customer.total_sale = sum(customer.sale_ids.mapped('revenue')) or 0.0
 
-            # ---- COLLECT ALL PAYMENTS ----
-            direct_payments = customer.payment_ids
+            # ----- A: PAID directly inside sale model -----
+            sale_model_paid = sum(customer.sale_ids.mapped('amount_paid'))
 
-            # payments attached to sales
-            sale_payments = self.env['poultry.payment']
-            for sale in customer.sale_ids:
-                if hasattr(sale, "payment_ids"):
-                    sale_payments |= sale.payment_ids
+            # ----- B: PAID from payment model -----
+            payment_model_paid = sum(customer.payment_ids.mapped('amount'))
 
-            # Merge payments & avoid double counting
-            all_payments = (direct_payments | sale_payments)
+            # ----- TOTAL PAID -----
+            customer.total_paid = sale_model_paid + payment_model_paid
 
-            seen = set()
-            total_paid = 0.0
-            for pay in all_payments:
-                if pay.id not in seen:
-                    seen.add(pay.id)
-                    total_paid += pay.amount or 0.0
-
-            customer.total_paid = total_paid
-
-            # ---- DEBT ----
+            # ----- DEBT -----
             customer.debt = customer.total_sale - customer.total_paid
 
     # Wizard for Register Payment
