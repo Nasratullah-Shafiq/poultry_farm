@@ -95,10 +95,17 @@
                     </div>
 
                     <div style="margin-bottom:15px; font-size:14px; color:#333;">
-                        <p><strong>From:</strong> <t t-esc="o.start_date"/>
-                        <span style="margin-left:20px;"></span>
-                        <strong>To:</strong> <t t-esc="o.end_date"/></p>
-                        <p><strong>Branch:</strong> <t t-esc="o.branch_id.name if o.branch_id else 'All Branches'"/></p>
+                        <p>
+                            <strong>From:</strong>
+                            <t t-esc="o.start_date"/>
+                            <span style="margin-left:20px;"></span>
+                            <strong>To:</strong>
+                            <t t-esc="o.end_date"/>
+                        </p>
+                        <p>
+                            <strong>Branch:</strong>
+                            <t t-esc="o.branch_id.name if o.branch_id else 'All Branches'"/>
+                        </p>
                     </div>
 
                     <h3 style="color:#4CAF50; border-bottom:1px solid #ddd; padding-bottom:5px; margin-top:20px;">
@@ -111,23 +118,49 @@
                                 <th style="padding:8px;">Branch</th>
                                 <th style="padding:8px;">Type</th>
                                 <th style="padding:8px;">Buyer</th>
-                                <th style="padding:8px; text-align:right;">Quantity</th>
-                                <th style="padding:8px; text-align:right;">Unit Price</th>
-                                <th style="padding:8px; text-align:right;">Revenue</th>
+                                <th style="padding:8px; text-align:right;"> Quantity </th>
+                                <th style="padding:8px; text-align:right;"> Unit Price </th>
+                                <th style="padding:8px; text-align:right;"> Total </th>
                             </tr>
                         </thead>
                         <tbody>
                             <t t-foreach="o.sale_lines" t-as="line">
                                 <tr>
-                                    <td style="padding:8px; border:1px solid #ddd;"><t t-esc="line.date"/></td>
-                                    <td style="padding:8px; border:1px solid #ddd;"><t t-esc="line.branch_id.name"/></td>
-                                    <td style="padding:8px; border:1px solid #ddd;"><t t-esc="line.item_type_id.name"/></td>
-                                    <td style="padding:8px; border:1px solid #ddd;"><t t-esc="line.buyer"/></td>
-                                    <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="line.quantity"/></td>
-                                    <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="line.unit_price"/></td>
-                                    <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="line.revenue"/></td>
+                                    <td style="padding:8px; border:1px solid #ddd;">
+                                        <t t-esc="line.date"/>
+                                    </td>
+                                    <td style="padding:8px; border:1px solid #ddd;">
+                                        <t t-esc="line.branch_id.name"/>
+                                    </td>
+                                    <td style="padding:8px; border:1px solid #ddd;">
+                                        <t t-esc="line.item_type_id.name"/>
+                                    </td>
+                                    <td style="padding:8px; border:1px solid #ddd;">
+                                        <t t-esc="line.customer_id.name if line.customer_id else ''"/>
+                                    </td>
+                                    <td style="padding:8px; border:1px solid #ddd; text-align:right;">
+                                        <t t-esc="line.quantity"/>
+                                    </td>
+                                    <td style="padding:8px; border:1px solid #ddd; text-align:right;">
+                                        <t t-esc="line.unit_price"/>
+                                    </td>
+                                    <td style="padding:8px; border:1px solid #ddd; text-align:right;">
+                                        <t t-esc="line.total"/>
+                                    </td>
                                 </tr>
                             </t>
+
+                            <!--                            <t t-foreach="o.sale_lines" t-as="line">-->
+                            <!--                                <tr>-->
+                            <!--                                    <td style="padding:8px; border:1px solid #ddd;"><t t-esc="line.date"/></td>-->
+                            <!--                                    <td style="padding:8px; border:1px solid #ddd;"><t t-esc="line.branch_id.name"/></td>-->
+                            <!--                                    <td style="padding:8px; border:1px solid #ddd;"><t t-esc="line.item_type_id.name"/></td>-->
+                            <!--                                    <td style="padding:8px; border:1px solid #ddd;"><t t-esc="line.buyer"/></td>-->
+                            <!--                                    <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="line.quantity"/></td>-->
+                            <!--                                    <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="line.unit_price"/></td>-->
+                            <!--                                    <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="line.revenue"/></td>-->
+                            <!--                                </tr>-->
+                            <!--                            </t>-->
                         </tbody>
                     </table>
 
@@ -138,17 +171,23 @@
                         <tbody>
                             <tr>
                                 <td style="padding:8px; border:1px solid #ddd;">Total Quantity</td>
-                                <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_quantity"/></td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:right;">
+                                    <t t-esc="o.total_quantity"/>
+                                </td>
                             </tr>
                             <tr>
-                                <td style="padding:8px; border:1px solid #ddd;">Total Revenue</td>
-                                <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_revenue"/></td>
+                                <td style="padding:8px; border:1px solid #ddd;">Total Sales</td>
+                                <td style="padding:8px; border:1px solid #ddd; text-align:right;">
+                                    <t t-esc="o.total_revenue"/>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
 
                     <div style="margin-top:30px; text-align:center; color:#888; font-size:12px;">
-                        <p>Generated on <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/></p>
+                        <p>Generated on
+                            <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
+                        </p>
                         <p>Powered by Poultry Farm Management System</p>
                     </div>
 
