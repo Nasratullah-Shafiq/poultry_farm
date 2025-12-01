@@ -184,60 +184,110 @@ class PoultryFinanceReport(models.TransientModel):
     # -------------------------------
     # Calculation Methods
     # -------------------------------
+    # def _calculate_income(self):
+    #     domain = self._get_domain('date') + [('entry_type', '=', 'income')]
+    #     return self._sum_model('poultry.finance', domain, 'amount')
     def _calculate_income(self):
-        domain = self._get_domain('date') + [('entry_type', '=', 'income')]
-        return self._sum_model('poultry.finance', domain, 'amount')
+        total_sale = self._calculate_sales()
+        total_expenses = self._calculate_expenses()
+        return total_sale - total_expenses
 
+    # def _calculate_expenses(self):
+    #     domain = self._get_domain('date') + [('entry_type', '=', 'expense')]
+    #     return self._sum_model('poultry.finance', domain, 'amount')
     def _calculate_expenses(self):
-        domain = self._get_domain('date') + [('entry_type', '=', 'expense')]
-        return self._sum_model('poultry.finance', domain, 'amount')
+        """
+        Calculate total expenses as:
+            total_purchases (from poultry.purchase) + total_salaries (from salary.payment)
+
+        Uses the date domain returned by self._get_domain('date') for purchases
+        and a translated domain (date -> salary_date) for salary.payment.
+        """
+
+        # base domain for purchases (assumes purchases use field 'date')
+        base_domain = self._get_domain('date') or []
+
+        # 1) Purchases: assume model poultry.purchase and monetary field usually 'total' or 'amount'
+        purchases = self.env['poultry.purchase'].search(base_domain)
+        total_purchases = 0.0
+        for p in purchases:
+            # try common field names in order
+            total_purchases += float(getattr(p, 'total', 0.0) or getattr(p, 'amount', 0.0) or 0.0)
+
+        # 2) Salaries: translate the date field in the domain from 'date' -> 'salary_date'
+        salary_domain = []
+        for item in base_domain:
+            # domain item typical form: (field, operator, value)
+            if isinstance(item, (list, tuple)) and len(item) >= 3:
+                field_name, operator, value = item[0], item[1], item[2]
+                if field_name == 'date':
+                    field_name = 'salary_date'
+                salary_domain.append((field_name, operator, value))
+            else:
+                # keep other domain clauses as-is (e.g. ('employee_id','=',id))
+                salary_domain.append(item)
+
+        salaries = self.env['salary.payment'].search(salary_domain)
+        total_salaries = sum(float(r.amount or 0.0) for r in salaries)
+
+        return total_purchases + total_salaries
 
     def _calculate_sales(self):
-        return self._sum_model('poultry.sale', self._get_domain('date'), 'revenue')
+        return self._sum_model('poultry.sale', self._get_domain('date'), 'total')
 
     def _calculate_purchases(self):
         return self._sum_model('poultry.purchase', self._get_domain('date'), 'total')
 
+    # def _calculate_salaries(self):
+    #     """
+    #     Calculate total salaries based on active employees within the branch,
+    #     multiplied by the number of months in the selected date range.
+    #     """
+    #     self._validate_dates()
+    #
+    #     # Calculate number of months between start_date and end_date
+    #     delta = relativedelta(self.end_date, self.start_date)
+    #     months = (delta.years * 12) + delta.months + 1  # Inclusive
+    #
+    #     # Filter employees
+    #     domain = [('active', '=', True)]
+    #     if self.branch_id:
+    #         domain.append(('branch_id', '=', self.branch_id.id))
+    #
+    #     employees = self.env['salary.payment'].search(domain)
+    #
+    #     # Sum all salaries
+    #     total_monthly_salaries = sum(employees.mapped('salary'))
+    #
+    #     # Multiply by number of months
+    #     total_salaries = total_monthly_salaries * months
+    #
+    #     return total_salaries
+
     def _calculate_salaries(self):
         """
-        Calculate total salaries based on active employees within the branch,
-        multiplied by the number of months in the selected date range.
+        Calculate total salaries from salary.payment model
+        based on selected date range and optional branch filter.
         """
         self._validate_dates()
 
-        # Calculate number of months between start_date and end_date
-        delta = relativedelta(self.end_date, self.start_date)
-        months = (delta.years * 12) + delta.months + 1  # Inclusive
+        # Build domain for salary.payment
+        domain = [
+            ('salary_date', '>=', self.start_date),
+            ('salary_date', '<=', self.end_date),
+        ]
 
-        # Filter employees
-        domain = [('active', '=', True)]
+        # If branch filter is applied → filter by employee branch
         if self.branch_id:
-            domain.append(('branch_id', '=', self.branch_id.id))
+            domain.append(('employee_id.branch_id', '=', self.branch_id.id))
 
-        employees = self.env['poultry.employee'].search(domain)
+        # Search salary payments within date range
+        payments = self.env['salary.payment'].search(domain)
 
-        # Sum all salaries
-        total_monthly_salaries = sum(employees.mapped('salary'))
-
-        # Multiply by number of months
-        total_salaries = total_monthly_salaries * months
+        # Sum salary amounts
+        total_salaries = sum(payments.mapped('amount'))
 
         return total_salaries
-
-    #     domain = [
-    #         ('payment_date', '>=', self.start_date),
-    #         ('payment_date', '<=', self.end_date)
-    #     ]
-    #     salary_records = self.env['poultry.salary'].search(domain)
-    #
-    #     if self.branch_id:
-    #         salary_records = salary_records.filtered(
-    #             lambda rec: rec.employee_id.branch_id.id == self.branch_id.id
-    #         )
-    #
-    #     return sum(salary_records.mapped('amount'))
-
-    # Build domain for employees
 
 
     def _calculate_feed_cost(self):
