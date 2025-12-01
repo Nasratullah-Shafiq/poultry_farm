@@ -24,14 +24,18 @@ class PoultrySale(models.Model):
     currency_id = fields.Many2one(
         'res.currency', default=lambda self: self.env.company.currency_id
     )  # Currency for the sale, defaults to company currency
-    customer_id = fields.Many2one('poultry.customer', string='Customer',
-                                  required=True)  # Customer purchasing the poultry
+    customer_id = fields.Many2one(
+        'poultry.customer',
+        string='Customer',
+        required=False,
+        ondelete='cascade'
+    )
 
     # ---------------------------
     # Computed Fields
     # ---------------------------
-    revenue = fields.Monetary(
-        currency_field='currency_id', compute='_compute_revenue', store=True
+    total = fields.Monetary(
+        currency_field='currency_id', compute='_compute_total', String="Total", store=True
     )  # Total sale revenue = quantity * unit_price, stored in DB
 
     available_quantity = fields.Integer(
@@ -157,10 +161,10 @@ class PoultrySale(models.Model):
                 rec.available_quantity = 0
 
     @api.depends('quantity', 'unit_price')
-    def _compute_revenue(self):
+    def _compute_total(self):
         """Compute total revenue for the sale."""
         for rec in self:
-            rec.revenue = rec.quantity * rec.unit_price
+            rec.total = rec.quantity * rec.unit_price
 
     # ---------------------------
     # Overridden ORM Methods
