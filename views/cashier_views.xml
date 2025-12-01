@@ -15,7 +15,7 @@
 
 
     <menuitem id="menu_poultry_cash" parent="menu_poultry" name="Cash Management" sequence="15"/>
-    <menuitem id="menu_poultry_cashier" parent="menu_poultry_cash" action="action_poultry_cashier" name="Cashiers" sequence="10"/>
+<!--    <menuitem id="menu_poultry_cashier" parent="menu_poultry_cash" action="action_poultry_cashier" name="Cashiers" sequence="10"/>-->
 
     <!-- Search View -->
     <record id="view_poultry_cashier_search" model="ir.ui.view">
