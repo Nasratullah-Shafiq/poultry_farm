@@ -1,0 +1,61 @@
+<odoo>
+    <template id="report_salary_payment_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <div class="page">
+
+                    <!-- Header -->
+                    <div style="text-align:center; border-bottom:2px solid #4CAF50; padding-bottom:10px;">
+                        <h1 style="color:#4CAF50; font-size:26px;">Salary Payment Report</h1>
+                        <p>Detailed record of salary payments</p>
+                    </div>
+
+                    <!-- Date Range -->
+                    <p>
+                        <strong>From:</strong> <t t-esc="o.start_date"/>
+                        &nbsp;&nbsp;
+                        <strong>To:</strong> <t t-esc="o.end_date"/>
+                    </p>
+
+                    <p>
+                        <strong>Branch:</strong>
+                        <t t-esc="o.branch_id.name if o.branch_id else 'All Branches'"/>
+                    </p>
+
+                    <!-- Details Table -->
+                    <h3 style="color:#4CAF50;">Salary Details</h3>
+                    <table style="width:100%; border-collapse:collapse;">
+                        <thead>
+                            <tr style="background:#f5f5f5;">
+                                <th>Date</th>
+                                <th>Employee</th>
+                                <th>Branch</th>
+                                <th style="text-align:right;">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="o.salary_lines" t-as="l">
+                                <tr>
+                                    <td><t t-esc="l.salary_date"/></td>
+                                    <td><t t-esc="l.employee_id.name"/></td>
+                                    <td><t t-esc="l.branch_id.name"/></td>
+                                    <td style="text-align:right;"><t t-esc="l.amount"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <!-- Summary -->
+                    <h3 style="color:#4CAF50; margin-top:15px;">Summary</h3>
+                    <table style="width:40%; border-collapse:collapse;">
+                        <tr>
+                            <td>Total Paid Salary</td>
+                            <td style="text-align:right;"><t t-esc="o.total_paid_amount"/></td>
+                        </tr>
+                    </table>
+
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
