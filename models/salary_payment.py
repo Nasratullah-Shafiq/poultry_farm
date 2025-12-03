@@ -13,4 +13,21 @@ class PoultrySalary(models.Model):
     currency_id = fields.Many2one(
         'res.currency', default=lambda self: self.env.company.currency_id.id
     )
+    payment_status = fields.Selection(
+        [
+            ('paid', 'Paid'),
+            ('unpaid', 'Unpaid'),
+        ],
+        string='Payment Status',
+        compute='_compute_payment_status',
+        store=True
+    )
     notes = fields.Text(string='Notes')
+
+    @api.depends('amount', 'amount')
+    def _compute_payment_status(self):
+        for record in self:
+            if record.amount and record.amount > 0:
+                record.payment_status = 'paid'
+            else:
+                record.payment_status = 'unpaid'
