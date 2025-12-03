@@ -192,9 +192,9 @@ class PoultryFinanceReport(models.TransientModel):
         total_expenses = self._calculate_expenses()
         return total_sale - total_expenses
 
-    # def _calculate_expenses(self):
-    #     domain = self._get_domain('date') + [('entry_type', '=', 'expense')]
-    #     return self._sum_model('poultry.finance', domain, 'amount')
+    def _calculate_purchases(self):
+        return self._sum_model('poultry.purchase', self._get_domain('date'), 'total')
+
     def _calculate_expenses(self):
         """
         Calculate total expenses as:
@@ -235,34 +235,7 @@ class PoultryFinanceReport(models.TransientModel):
     def _calculate_sales(self):
         return self._sum_model('poultry.sale', self._get_domain('date'), 'total')
 
-    def _calculate_purchases(self):
-        return self._sum_model('poultry.purchase', self._get_domain('date'), 'total')
 
-    # def _calculate_salaries(self):
-    #     """
-    #     Calculate total salaries based on active employees within the branch,
-    #     multiplied by the number of months in the selected date range.
-    #     """
-    #     self._validate_dates()
-    #
-    #     # Calculate number of months between start_date and end_date
-    #     delta = relativedelta(self.end_date, self.start_date)
-    #     months = (delta.years * 12) + delta.months + 1  # Inclusive
-    #
-    #     # Filter employees
-    #     domain = [('active', '=', True)]
-    #     if self.branch_id:
-    #         domain.append(('branch_id', '=', self.branch_id.id))
-    #
-    #     employees = self.env['salary.payment'].search(domain)
-    #
-    #     # Sum all salaries
-    #     total_monthly_salaries = sum(employees.mapped('salary'))
-    #
-    #     # Multiply by number of months
-    #     total_salaries = total_monthly_salaries * months
-    #
-    #     return total_salaries
 
     def _calculate_salaries(self):
         """
@@ -293,6 +266,20 @@ class PoultryFinanceReport(models.TransientModel):
     def _calculate_feed_cost(self):
         feed_records = self.env['poultry.feed'].search(self._get_domain('date'))
         return sum(f.quantity * (f.purchase_price or 0.0) for f in feed_records)
+
+    # def _calculate_feed_cost(self):
+    #     """
+    #     Calculate total feed cost from poultry.purchase
+    #     where purchase_type = 'feed'.
+    #     """
+    #     domain = self._get_domain('date') + [
+    #         ('purchase_type', '=', 'feed')
+    #     ]
+    #
+    #     purchases = self.env['poultry.purchase'].search(domain)
+    #
+    #     # Total = quantity * price
+    #     return sum(p.quantity * (p.unit_price or 0.0) for p in purchases)
 
     def _calculate_medicine_cost(self):
         medicine_records = self.env['poultry.medicine'].search(self._get_domain('date'))
