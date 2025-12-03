@@ -42,34 +42,32 @@ class PoultryCustomer(models.Model):
         store=True
     )
     payment_status = fields.Selection(
-        [('not_paid', 'Not Paid'), ('partial', 'Partially Paid'), ('paid', 'Fully Paid')],
+        [
+            ('not_paid', 'Not Paid'),
+            ('partial', 'Partially Paid'),
+            ('paid', 'Fully Paid')
+        ],
         string='Payment Status',
         compute='_compute_totals',
-        store=True
+        store=True,
+        tracking=True
     )
 
 
-    @api.depends('sale_ids.total', 'payment_ids.amount')
-    def _compute_totals(self):
-        for customer in self:
-            # Total sale for this customer
-            total_sale = sum(sale.total for sale in customer.sale_ids)
-            customer.total_sale = total_sale
-
-            # Total paid by this customer
-            total_paid = sum(payment.amount for payment in customer.payment_ids)
-            customer.total_paid = total_paid
-
-            # Debt
-            customer.debt = total_sale - total_paid
-
-            # Payment status based on debt
-            if customer.total_paid <= 0:
-                customer.payment_status = 'not_paid'
-            elif customer.debt == 0:
-                customer.payment_status = 'paid'
+    # --------------------------------------------------------
+    # COMPUTE METHOD FOR TOTALS AND PAYMENT STATUS
+    # --------------------------------------------------------
+    @api.depends('total_paid', 'debt')
+    def _compute_payment_status(self):
+        for record in self:
+            if record.debt > 0 and record.total_paid > 0:
+                record.payment_status = 'partially_paid'
+            elif record.debt > 0 and record.total_paid == 0:
+                record.payment_status = 'not_paid'
+            elif record.debt == 0:
+                record.payment_status = 'fully_paid'
             else:
-                customer.payment_status = 'partial'
+                record.payment_status = 'not_paid'  # fallback
 
     @api.depends('sale_ids.total', 'payment_ids.amount')
     def _compute_totals(self):
