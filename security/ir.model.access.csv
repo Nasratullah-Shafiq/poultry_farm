@@ -1,33 +1,28 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_poultry_branch,poultry.branch,model_poultry_branch,base.group_user,1,1,1,1
-access_poultry_employee,poultry.employee,model_poultry_employee,base.group_user,1,1,1,1
-access_poultry_salary,poultry.salary,model_poultry_salary,base.group_user,1,1,1,1
-access_poultry_finance,poultry.finance,model_poultry_finance,base.group_user,1,1,1,1
-access_item_type,item.type,model_item_type,base.group_user,1,1,1,1
-access_poultry_purchase,poultry.purchase,model_poultry_purchase,base.group_user,1,1,1,1
-access_poultry_sale,poultry.sale,model_poultry_sale,base.group_user,1,1,1,1
-access_poultry_feed,poultry.feed,model_poultry_feed,base.group_user,1,1,1,1
-access_poultry_medicine,poultry.medicine,model_poultry_medicine,base.group_user,1,1,1,1
-access_poultry_vaccination,poultry.vaccination,model_poultry_vaccination,base.group_user,1,1,1,1
+access_poultry_branch,Poultry Branch,poultry_farm.model_poultry_branch,base.group_user,1,1,1,1
+access_poultry_employee,Poultry Employee,poultry_farm.model_poultry_employee,base.group_user,1,1,1,1
+access_poultry_salary,Poultry Salary,poultry_farm.model_poultry_salary,base.group_user,1,1,1,1
+access_poultry_finance,Poultry Finance,poultry_farm.model_poultry_finance,base.group_user,1,1,1,1
+access_item_type,Item Type,poultry_farm.model_item_type,base.group_user,1,1,1,1
+access_poultry_purchase,Poultry Purchase,poultry_farm.model_poultry_purchase,base.group_user,1,1,1,1
+access_poultry_sale,Poultry Sale,poultry_farm.model_poultry_sale,base.group_user,1,1,1,1
+access_poultry_feed,Poultry Feed,poultry_farm.model_poultry_feed,base.group_user,1,1,1,1
+access_poultry_medicine,Poultry Medicine,poultry_farm.model_poultry_medicine,base.group_user,1,1,1,1
+access_poultry_vaccination,Poultry Vaccination,poultry_farm.model_poultry_vaccination,base.group_user,1,1,1,1
 
-access_poultry_finance_report,poultry.finance.report,model_poultry_finance_report,,1,1,1,1
-access_poultry_farm,poultry.farm,model_poultry_farm,,1,1,1,1
-access_item_type,item.type,model_item_type,,1,1,1,1
+access_poultry_finance_report,Poultry Finance Report,poultry_farm.model_poultry_finance_report,,1,1,1,1
+access_poultry_farm,Poultry Farm,poultry_farm.model_poultry_farm,,1,1,1,1
 
-access_poultry_sale_report_wizard,poultry.sale.report.wizard,model_poultry_sale_report_wizard,base.group_user,1,1,1,1
+access_purchase_report_wizard,Purchase Report Wizard,poultry_farm.model_poultry_purchase_report,base.group_user,1,0,1,0
+access_purchase_report_line,Purchase Report Line,poultry_farm.model_poultry_purchase_report_line,base.group_user,1,0,1,0
 
-access_poultry_purchase_report,poultry.purchase.report,model_poultry_purchase_report,,1,1,1,1
-access_poultry_purchase_report_line,poultry.purchase.report.line,model_poultry_purchase_report_line,,1,1,1,1
+access_sale_report_wizard,Sale Report Wizard,poultry_farm.model_poultry_sale_report_wizard,base.group_user,1,0,1,0
 
-access_poultry_sale_report_wizard,poultry.sale.report.wizard,model_poultry_sale_report_wizard,,1,0,1,0
-access_poultry_sale_report_line,poultry.sale.report.line,model_poultry_sale_report_line,,1,0,1,0
+access_sale_report_line,Sale Report Line,poultry_farm.model_poultry_sale_report_line,base.group_user,1,0,1,0
 
-access_poultry_death_manager,Poultry Death Manager,model_poultry_death,base.group_system,1,1,1,1
-access_poultry_sale_report_wizard,access wizard,model_poultry_sale_report_wizard,base.group_user,1,1,1,0
 
-access_poultry_sale_report_line_user,poultry.sale.report.line user,model_poultry_sale_report_line,base.group_user,1,1,1,1
-access_poultry_cashier,poultry.cashier,model_poultry_cashier,,1,1,1,1
-
-access_poultry_customer_user,Poultry Customer,model_poultry_customer,,1,1,1,1
-access_poultry_supplier_user,Poultry Supplier,model_poultry_supplier,,1,1,1,1
-access_poultry_payment_user,poultry.payment user,model_poultry_payment,base.group_user,1,1,1,1
+access_poultry_death_manager,Poultry Death Manager,poultry_farm.model_poultry_death,base.group_system,1,1,1,1
+access_poultry_cashier,Poultry Cashier,poultry_farm.model_poultry_cashier,base.group_system,1,1,1,1
+access_poultry_customer_user,Poultry Customer,poultry_farm.model_poultry_customer,base.group_system,1,1,1,1
+access_poultry_supplier_user,Poultry Supplier,poultry_farm.model_poultry_supplier,base.group_system,1,1,1,1
+access_salary_payment,Salary Payment,poultry_farm.model_salary_payment,base.group_user,1,1,1,1
