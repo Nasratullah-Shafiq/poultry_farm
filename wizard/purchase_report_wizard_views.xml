@@ -1,0 +1,54 @@
+<odoo>
+    <record id="view_poultry_purchase_report_wizard" model="ir.ui.view">
+        <field name="name">poultry.purchase.report.wizard.form</field>
+        <field name="model">poultry.purchase.report</field>
+        <field name="arch" type="xml">
+            <form string="Poultry Purchase Report">
+                <group>
+                    <field name="branch_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </group>
+
+                <group string="Summary Totals">
+                    <field name="total_quantity" readonly="1"/>
+                    <field name="total_amount" readonly="1"/>
+                </group>
+
+                <group string="Purchase Details">
+                    <field name="purchase_lines" string="" readonly="1">
+                        <tree>
+                            <field name="date"/>
+                            <field name="branch_id"/>
+                            <field name="item_type_id"/>
+                            <field name="supplier_id"/>
+                            <field name="quantity"/>
+                            <field name="unit_price"/>
+                            <field name="total"/>
+                        </tree>
+                    </field>
+                </group>
+
+                <footer>
+                    <button string="Generate Report" type="object" name="generate_report" class="btn-primary"/>
+                    <button string="Print PDF" type="object" name="print_pdf_report" class="btn-secondary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_poultry_purchase_report_wizard" model="ir.actions.act_window">
+        <field name="name">Poultry Purchase Report</field>
+        <field name="res_model">poultry.purchase.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_poultry_purchase_report"
+              name="Purchase Report"
+              parent="menu_finance_reports"
+              action="action_poultry_purchase_report_wizard"
+              sequence="15"/>
+
+</odoo>
