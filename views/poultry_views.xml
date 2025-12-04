@@ -84,5 +84,6 @@
          Submenu: Farm, opens Poultry Records action
     ========================= -->
     <menuitem id="menu_poultry" name="Poultry Farm"/>
+    <menuitem id="menu_poultry" name="Poultry Farm" action="action_poultry"/>
 
 </odoo>
