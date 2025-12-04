@@ -69,7 +69,7 @@ class SalaryPaymentReport(models.TransientModel):
 
         return {
             'type': 'ir.actions.act_window',
-            'res_model': 'salary.payment.report.wizard',
+            'res_model': 'salary.payment.wizard',
             'view_mode': 'form',
             'res_id': self.id,
             'target': 'new',
