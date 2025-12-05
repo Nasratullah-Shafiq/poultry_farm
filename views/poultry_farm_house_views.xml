@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ============================= -->
+    <!--     ACTION WINDOW             -->
+    <!-- ============================= -->
+    <record id="action_poultry_farm_house" model="ir.actions.act_window">
+        <field name="name">Farms</field>
+        <field name="res_model">poultry.farm.house</field>
+        <field name="view_mode">tree,form,kanban,pivot,graph</field>
+        <field name="help">Manage all poultry farms under each branch.</field>
+    </record>
+
+    <!-- ============================= -->
+    <!--     MENU ITEM                 -->
+    <!-- ============================= -->
+    <menuitem id="menu_poultry_farm_house"
+              name="Farms"
+              parent="menu_poultry_setup"
+              action="action_poultry_farm_house"
+              sequence="20"/>
+
+    <!-- ============================= -->
+    <!--     TREE VIEW                  -->
+    <!-- ============================= -->
+    <record id="view_poultry_farm_house_tree" model="ir.ui.view">
+        <field name="name">poultry.farm.house.tree</field>
+        <field name="model">poultry.farm.house</field>
+        <field name="arch" type="xml">
+            <tree string="Farms">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="branch_id"/>
+                <field name="capacity"/>
+                <field name="current_stock"/>
+                <field name="state"/>
+                <field name="manager_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ============================= -->
+    <!--     FORM VIEW                 -->
+    <!-- ============================= -->
+    <record id="view_poultry_farm_house_form" model="ir.ui.view">
+        <field name="name">poultry.farm.house.form</field>
+        <field name="model">poultry.farm.house</field>
+        <field name="arch" type="xml">
+
+            <form string="Farm" class="o_form_with_chatter">
+
+                <sheet>
+
+                    <div class="oe_button_box" name="button_box">
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-archive"
+                                    modifiers="{'invisible': [('active', '=', True)]}">
+                                <div class="o_stat_info">Archived</div>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code" readonly="1"/>
+                            <field name="branch_id"/>
+                            <field name="manager_id"/>
+
+                        </group>
+
+                        <group>
+                            <field name="location"/>
+                            <field name="capacity"/>
+                            <field name="current_stock" readonly="1"/>
+                            <field name="state"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                    <field name="activity_ids"/>
+                </div>
+
+            </form>
+
+        </field>
+    </record>
+
+    <!-- ============================= -->
+    <!--     SEARCH VIEW               -->
+    <!-- ============================= -->
+    <record id="view_poultry_farm_house_search" model="ir.ui.view">
+        <field name="name">poultry.farm.house.search</field>
+        <field name="model">poultry.farm.house</field>
+        <field name="arch" type="xml">
+            <search string="Search Farms">
+
+                <field name="name"/>
+                <field name="code"/>
+                <field name="branch_id"/>
+                <field name="manager_id"/>
+
+                <filter name="state_operational"
+                        string="Operational"
+                        domain="[('state','=','operational')]"/>
+
+                <filter name="state_maintenance"
+                        string="Maintenance"
+                        domain="[('state','=','maintenance')]"/>
+
+                <filter name="state_closed"
+                        string="Closed"
+                        domain="[('state','=','closed')]"/>
+
+                <group expand="0" string="Group By">
+                    <filter name="group_branch"
+                            string="Branch"
+                            context="{'group_by': 'branch_id'}"/>
+
+                    <filter name="group_manager"
+                            string="Manager"
+                            context="{'group_by': 'manager_id'}"/>
+
+                    <filter name="group_state"
+                            string="State"
+                            context="{'group_by': 'state'}"/>
+                </group>
+                <!-- ============================= -->
+                <!--         SEARCH PANEL          -->
+                <!-- ============================= -->
+                <searchpanel>
+                    <!-- Branch filter (hierarchy) -->
+                    <field name="branch_id" string="Branch" icon="fa-sitemap"/>
+
+                    <!-- Manager filter -->
+
+                    <field name="manager_id" string="Manager" select="multi" icon="fa-user"/>
+
+
+                </searchpanel>
+
+            </search>
+        </field>
+    </record>
+
+
+    <!-- ============================= -->
+    <!--     KANBAN VIEW               -->
+    <!-- ============================= -->
+    <record id="view_poultry_farm_house_kanban" model="ir.ui.view">
+        <field name="name">poultry.farm.house.kanban</field>
+        <field name="model">poultry.farm.house</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <strong>
+                                <field name="name"/>
+                            </strong>
+                            <div>Code:
+                                <field name="code"/>
+                            </div>
+                            <div>Branch:
+                                <field name="branch_id"/>
+                            </div>
+                            <div>Capacity:
+                                <field name="capacity"/>
+                            </div>
+                            <div>Stock:
+                                <field name="current_stock"/>
+                            </div>
+                            <div>Status:
+                                <field name="state"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+</odoo>
