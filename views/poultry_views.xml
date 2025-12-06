@@ -14,6 +14,7 @@
         <field name="arch" type="xml">
             <tree string="Poultry Stock" create="false" edit="false">
                 <field name="branch_id"/>
+                <field name="farm_id"/>
                 <field name="item_type_id"/>
                 <field name="total_quantity"/>
                 <field name="uom_id"/>
@@ -37,8 +38,10 @@
 
                 <!-- Search panel for quick filtering by poultry type -->
                 <searchpanel>
-                    <field name="branch_id" string="Branch"/>
-                    <field name="item_type_id" string="Type"/>
+                    <field name="branch_id" string="Branch" icon="fa-sitemap"/>
+                    <field name="farm_id" string="Farm House" icon="fa-building"/>
+                    <field name="item_type_id" string="Type" icon="fa-tags"/>
+
                 </searchpanel>
             </search>
         </field>
@@ -66,6 +69,121 @@
         </field>
     </record>
 
+
+    <record id="view_poultry_farm_kanban" model="ir.ui.view">
+        <field name="name">poultry.farm.kanban</field>
+        <field name="model">poultry.farm</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_with_small_column">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_card shadow-sm"
+                             style="border-radius: 10px; overflow: hidden;">
+
+                            <!-- Header -->
+                            <div style="background:#4CAF50; padding:10px; color:white; font-size:16px;">
+                                <i class="fa fa-home"></i>
+                                <strong>
+                                    <field name="farm_id"/>
+                                </strong>
+                            </div>
+
+                            <div style="padding:12px;">
+
+                                <!-- Poultry Type -->
+                                <div style="margin-bottom:8px;">
+                                    <i class="fa fa-dove text-primary"></i>
+                                    <strong>Poultry Type:</strong>
+                                    <field name="item_type_id"/>
+                                </div>
+
+                                <!-- Branch -->
+                                <div style="margin-bottom:8px;">
+                                    <i class="fa fa-code-branch text-warning"></i>
+                                    <strong>Branch:</strong>
+                                    <field name="branch_id"/>
+                                </div>
+
+                                <!-- Farm -->
+                                <div style="margin-bottom:8px;">
+                                    <i class="fa fa-warehouse text-info"></i>
+                                    <strong>Farm House:</strong>
+                                    <field name="farm_id"/>
+                                </div>
+
+                                <!-- Total Quantity -->
+                                <div style="margin-top:12px;">
+                                    <i class="fa fa-boxes text-success"></i>
+                                    <strong>Total Quantity:</strong>
+                                    <field name="total_quantity"/>
+                                </div>
+
+                                <!-- Progress bar (Optional visual enhancement) -->
+                                <div class="progress" style="height:6px; margin-top:5px;">
+                                    <div class="progress-bar bg-success" role="progressbar"
+                                         t-att-style="'width:' + (record.total_quantity.value > 0 ? record.total_quantity.value : 1) + '%;'">
+                                    </div>
+                                </div>
+
+                                <!-- Last Updated -->
+                                <div style="margin-top:12px; font-size:13px;">
+                                    <i class="fa fa-clock text-muted"></i>
+                                    <strong>Updated:</strong>
+                                    <field name="last_updated"/>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+
+    <!--    <record id="view_poultry_farm_kanban" model="ir.ui.view">-->
+    <!--        <field name="name">poultry.farm.kanban</field>-->
+    <!--        <field name="model">poultry.farm</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <kanban>-->
+    <!--                <templates>-->
+    <!--                    <t t-name="kanban-box">-->
+    <!--                        <div class="oe_kanban_global_click o_kanban_card">-->
+
+    <!--                            <strong>-->
+    <!--                                <strong> Type: </strong>-->
+    <!--                                <field name="item_type_id"/>-->
+    <!--                            </strong>-->
+
+    <!--                            <div>-->
+    <!--                                <strong> Branch: </strong>-->
+    <!--                                <field name="branch_id"/>-->
+    <!--                            </div>-->
+
+    <!--                            <div>-->
+    <!--                                <strong> Farm House: </strong>-->
+    <!--                                <field name="farm_id"/>-->
+    <!--                            </div>-->
+
+    <!--                            <div>-->
+    <!--                                <strong> Total Quantity: </strong>-->
+    <!--                                <field name="total_quantity"/>-->
+    <!--                            </div>-->
+
+    <!--                            <div>-->
+    <!--                                <strong> Last Updated: </strong>-->
+    <!--                                <field name="last_updated"/>-->
+    <!--                            </div>-->
+
+    <!--                        </div>-->
+    <!--                    </t>-->
+    <!--                </templates>-->
+    <!--            </kanban>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+
     <!-- =========================
          Action Window for Poultry Stock
          Links tree and form views
@@ -74,7 +192,7 @@
     <record id="action_poultry" model="ir.actions.act_window">
         <field name="name">Poultry Records</field>
         <field name="res_model">poultry.farm</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,kanban</field>
         <field name="search_view_id" ref="view_poultry_farm_search"/>
     </record>
 
