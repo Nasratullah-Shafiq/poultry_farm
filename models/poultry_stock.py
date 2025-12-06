@@ -24,7 +24,7 @@ class PoultryFarm(models.Model):
     branch_id = fields.Many2one('poultry.branch', string='Branch', required=True)
     item_type_id = fields.Many2one('item.type', string='Type', required=True)
 
-    # farm_id = fields.Many2one('poultry.farm.house', string='Farm', required=True)
+    farm_id = fields.Many2one('poultry.farm.house', string='Farm', required=True)
 
     total_quantity = fields.Integer(string="Total Quantity", default=0, tracking=True)
     uom_id = fields.Many2one('uom.uom', string='Unit of Measure', required=True,
