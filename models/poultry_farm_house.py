@@ -15,13 +15,23 @@ class PoultryFarmHouse(models.Model):
     branch_id = fields.Many2one('poultry.branch', string='Branch', required=True, tracking=True, ondelete='cascade')
     location = fields.Char(string='Location / Address')
     capacity = fields.Integer(string='Capacity (birds)')
-    # current_stock = fields.Integer(string='Current Stock (birds)', readonly=True)
-    current_stock = fields.Integer(
-        string='Current Stock (birds)',
-        # related='sale_id.total_quantity',
-        store=True,
-        readonly=True
-    )
+    # current_stock = fields.Integer(string='Current Stock (birds)' ,computed="_compute_available_quantity", readonly=True)
+    # current_stock = fields.Integer(
+    #     string='Current Stock (birds)',
+    #     # related='sale_id.total_quantity',
+    #     store=True,
+    #     readonly=True
+    # )
+    # current_stock = fields.Integer(related="sale_id.available_quantity", store=True)
+
+    farm_id = fields.Many2one('poultry.farm', string='Farm', required=True)
+
+    # current_stock = fields.Integer(
+    #     string='Current Stock (birds)',
+    #     related='farm_id.total_quantity',
+    #     store=True,
+    #     readonly=True
+    # )
 
     manager_id = fields.Many2one('res.partner', string='Manager')
 
@@ -32,6 +42,22 @@ class PoultryFarmHouse(models.Model):
     ], default='operational', tracking=True)
     active = fields.Boolean(default=True)
     note = fields.Text()
+
+    current_stock = fields.Integer(
+        string="Total Chickens",
+        compute="_compute_total_chickens",
+        store=True
+    )
+
+    farm_stock_ids = fields.One2many(
+        "poultry.farm", "farm_id",
+        string="Farm Stock"
+    )
+
+    @api.depends('farm_stock_ids.total_quantity')
+    def _compute_total_chickens(self):
+        for house in self:
+            house.current_stock = sum(house.farm_stock_ids.mapped('total_quantity'))
 
     # Auto-generate farm code using sequence
     @api.model
