@@ -54,6 +54,7 @@
             <tree string="Poultry Purchase" create="true" edit="true">
                 <field name="date"/>
                 <field name="branch_id"/>
+                <field name="farm_id"/>
                 <field name="item_type_id"/>
                 <field name="uom_id"/>
                 <field name="quantity"/>
@@ -138,9 +139,11 @@
 
                 <!-- Search Panel for Branch and Type -->
                 <searchpanel>
-                    <field name="branch_id" string="Branch"/>
-                    <field name="item_type_id" string="Poultry Type"/>
+                    <field name="branch_id" string="Branch" icon="fa-building"/>
+                    <field name="item_type_id" string="Poultry Type" icon="fa-tags"/>
+                    <field name="farm_id" string="Farm House" icon="fa-home"/>
                 </searchpanel>
+
             </search>
         </field>
     </record>
