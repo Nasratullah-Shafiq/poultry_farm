@@ -1,118 +1,328 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<odoo>-->
+<!--    <data>-->
+<!--        &lt;!&ndash; TREE VIEW &ndash;&gt;-->
+<!--        <record id="view_salary_payment_tree" model="ir.ui.view">-->
+<!--            <field name="name">salary.payment.tree</field>-->
+<!--            <field name="model">salary.payment</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <tree string="Salary Payments" create="true" edit="true" delete="true">-->
+<!--                    <field name="employee_id"/>-->
+<!--                    <field name="salary_date"/>-->
+<!--                    <field name="amount"/>-->
+<!--                    <field name="payment_status" widget="badge"-->
+<!--                           decoration-success="payment_status == 'paid'"-->
+<!--                           decoration-danger="payment_status == 'unpaid'"/>-->
+
+<!--                    <field name="notes"/>-->
+<!--                </tree>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash; FORM VIEW (with chatter) &ndash;&gt;-->
+<!--        <record id="view_salary_payment_form" model="ir.ui.view">-->
+<!--            <field name="name">salary.payment.form</field>-->
+<!--            <field name="model">salary.payment</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form string="Salary Payment">-->
+<!--                    <sheet>-->
+<!--                        <group>-->
+<!--                            <field name="employee_id"/>-->
+<!--                            <field name="salary_date"/>-->
+<!--                            <field name="amount"/>-->
+<!--                            <field name="currency_id"/>-->
+<!--                            <field name="payment_status"/>-->
+<!--                            <field name="notes"/>-->
+<!--                        </group>-->
+<!--                    </sheet>-->
+<!--                    &lt;!&ndash; Chatter for messages and activities &ndash;&gt;-->
+<!--                    <div class="oe_chatter">-->
+<!--                        <field name="message_follower_ids"/>-->
+<!--                        <field name="activity_ids"/>-->
+<!--                        <field name="message_ids"/>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash; GRAPH VIEW &ndash;&gt;-->
+<!--        <record id="view_salary_payment_graph" model="ir.ui.view">-->
+<!--            <field name="name">salary.payment.graph</field>-->
+<!--            <field name="model">salary.payment</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <graph string="Salaries Graph" type="bar">-->
+<!--                    <field name="amount" type="measure"/>-->
+<!--                    <field name="salary_date" type="row"/>-->
+<!--                    <field name="employee_id" type="col"/>-->
+<!--                </graph>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash; PIVOT VIEW &ndash;&gt;-->
+<!--        <record id="view_salary_payment_pivot" model="ir.ui.view">-->
+<!--            <field name="name">salary.payment.pivot</field>-->
+<!--            <field name="model">salary.payment</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <pivot string="Salary Pivot">-->
+<!--                    <field name="salary_date" type="row"/>-->
+<!--                    <field name="employee_id" type="col"/>-->
+<!--                    <field name="amount" type="measure"/>-->
+<!--                </pivot>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash; SEARCH VIEW &ndash;&gt;-->
+<!--        <record id="view_salary_payment_search" model="ir.ui.view">-->
+<!--            <field name="name">salary.payment.search</field>-->
+<!--            <field name="model">salary.payment</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <search string="Salary Payments">-->
+<!--                    <field name="employee_id"/>-->
+<!--                    <field name="salary_date"/>-->
+<!--                    &lt;!&ndash;                    <filter string="This Month" name="filter_this_month"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                            domain="[&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                ('salary_date','>=', (context_today().replace(day=1))),&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                ('salary_date','<=', context_today())&ndash;&gt;-->
+<!--                    &lt;!&ndash;                            ]"/>&ndash;&gt;-->
+
+<!--                    <searchpanel>-->
+
+<!--                        &lt;!&ndash; Employee list &ndash;&gt;-->
+<!--                        <field name="employee_id" string="Employees"/>-->
+<!--                        <field name="payment_status" string="Payment Status"/>-->
+<!--                    </searchpanel>-->
+<!--                </search>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash; ACTION &ndash;&gt;-->
+<!--        <record id="action_salary_payment" model="ir.actions.act_window">-->
+<!--            <field name="name">Salary Payments</field>-->
+<!--            <field name="res_model">salary.payment</field>-->
+<!--            <field name="view_mode">tree,form,graph,pivot</field>-->
+<!--            <field name="search_view_id" ref="view_salary_payment_search"/>-->
+<!--            <field name="help" type="html">-->
+<!--                <p>-->
+<!--                    Create and manage salary payments for employees.-->
+<!--                </p>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash; MENU: put under HR (menu_poultry_hr must exist already) &ndash;&gt;-->
+<!--        <menuitem id="menu_salary_payment"-->
+<!--                  name="Salary Payments"-->
+<!--                  parent="menu_poultry_hr"-->
+<!--                  action="action_salary_payment"-->
+<!--                  sequence="20"/>-->
+<!--    </data>-->
+<!--</odoo>-->
+
+
 <odoo>
-    <data>
-        <!-- TREE VIEW -->
-        <record id="view_salary_payment_tree" model="ir.ui.view">
-            <field name="name">salary.payment.tree</field>
-            <field name="model">salary.payment</field>
-            <field name="arch" type="xml">
-                <tree string="Salary Payments" create="true" edit="true" delete="true">
-                    <field name="employee_id"/>
-                    <field name="salary_date"/>
-                    <field name="amount"/>
-                    <field name="payment_status" widget="badge"
-                           decoration-success="payment_status == 'paid'"
-                           decoration-danger="payment_status == 'unpaid'"/>
+    <!-- FORM VIEW -->
+    <record id="view_salary_payment_form" model="ir.ui.view">
+        <field name="name">salary.payment.form</field>
+        <field name="model">salary.payment</field>
+        <field name="arch" type="xml">
+            <form string="Employee Salary Payment">
+                <sheet>
+                    <group>
+                        <field name="employee_id"/>
+                        <field name="salary_date"/>
+                        <field name="currency_id"/>
+                    </group>
 
-                    <field name="notes"/>
-                </tree>
-            </field>
-        </record>
+                    <group>
+                        <field name="total_salary" readonly="1"/>
+                        <field name="previous_paid_amount" readonly="1"/>
+                        <field name="amount_received"/>
+                        <field name="amount_remaining" readonly="1"/>
+                        <field name="payment_status" readonly="1"/>
+                    </group>
 
-        <!-- FORM VIEW (with chatter) -->
-        <record id="view_salary_payment_form" model="ir.ui.view">
-            <field name="name">salary.payment.form</field>
-            <field name="model">salary.payment</field>
-            <field name="arch" type="xml">
-                <form string="Salary Payment">
-                    <sheet>
-                        <group>
-                            <field name="employee_id"/>
-                            <field name="salary_date"/>
-                            <field name="amount"/>
-                            <field name="currency_id"/>
-                            <field name="payment_status"/>
-                            <field name="notes"/>
-                        </group>
-                    </sheet>
-                    <!-- Chatter for messages and activities -->
-                    <div class="oe_chatter">
-                        <field name="message_follower_ids"/>
-                        <field name="activity_ids"/>
-                        <field name="message_ids"/>
-                    </div>
-                </form>
-            </field>
-        </record>
+                    <group>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
 
-        <!-- GRAPH VIEW -->
-        <record id="view_salary_payment_graph" model="ir.ui.view">
-            <field name="name">salary.payment.graph</field>
-            <field name="model">salary.payment</field>
-            <field name="arch" type="xml">
-                <graph string="Salaries Graph" type="bar">
-                    <field name="amount" type="measure"/>
-                    <field name="salary_date" type="row"/>
-                    <field name="employee_id" type="col"/>
-                </graph>
-            </field>
-        </record>
+                <!-- Chatter for Odoo 17 -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
 
-        <!-- PIVOT VIEW -->
-        <record id="view_salary_payment_pivot" model="ir.ui.view">
-            <field name="name">salary.payment.pivot</field>
-            <field name="model">salary.payment</field>
-            <field name="arch" type="xml">
-                <pivot string="Salary Pivot">
-                    <field name="salary_date" type="row"/>
-                    <field name="employee_id" type="col"/>
-                    <field name="amount" type="measure"/>
-                </pivot>
-            </field>
-        </record>
+    <!-- TREE VIEW -->
+    <record id="view_salary_payment_tree" model="ir.ui.view">
+        <field name="name">salary.payment.tree</field>
+        <field name="model">salary.payment</field>
+        <field name="arch" type="xml">
+            <tree string="Employee Salary Payments">
+                <field name="employee_id"/>
+                <field name="salary_date"/>
+                <field name="total_salary"/>
+                <field name="amount_received"/>
+                <field name="amount_remaining"/>
 
-        <!-- SEARCH VIEW -->
-        <record id="view_salary_payment_search" model="ir.ui.view">
-            <field name="name">salary.payment.search</field>
-            <field name="model">salary.payment</field>
-            <field name="arch" type="xml">
-                <search string="Salary Payments">
-                    <field name="employee_id"/>
-                    <field name="salary_date"/>
-                    <!--                    <filter string="This Month" name="filter_this_month"-->
-                    <!--                            domain="[-->
-                    <!--                                ('salary_date','>=', (context_today().replace(day=1))),-->
-                    <!--                                ('salary_date','<=', context_today())-->
-                    <!--                            ]"/>-->
+                <field name="payment_status" widget="badge"
+                       decoration-success="payment_status=='paid'"
+                       decoration-warning="payment_status=='partially_paid'"
+                       decoration-danger="payment_status=='not_paid'"/>
 
-                    <searchpanel>
+            </tree>
+        </field>
+    </record>
 
-                        <!-- Employee list -->
-                        <field name="employee_id" string="Employees"/>
-                        <field name="payment_status" string="Payment Status"/>
-                    </searchpanel>
-                </search>
-            </field>
-        </record>
 
-        <!-- ACTION -->
-        <record id="action_salary_payment" model="ir.actions.act_window">
-            <field name="name">Salary Payments</field>
-            <field name="res_model">salary.payment</field>
-            <field name="view_mode">tree,form,graph,pivot</field>
-            <field name="search_view_id" ref="view_salary_payment_search"/>
-            <field name="help" type="html">
-                <p>
-                    Create and manage salary payments for employees.
-                </p>
-            </field>
-        </record>
+    <!-- Search view for Salary Payment -->
+    <record id="view_salary_payment_search" model="ir.ui.view">
+        <field name="name">salary.payment.search</field>
+        <field name="model">salary.payment</field>
+        <field name="arch" type="xml">
+            <search string="Salary Payments">
+                <!-- Quick search fields -->
+                <field name="employee_id"/>
+                <field name="salary_date"/>
 
-        <!-- MENU: put under HR (menu_poultry_hr must exist already) -->
-        <menuitem id="menu_salary_payment"
-                  name="Salary Payments"
-                  parent="menu_poultry_hr"
-                  action="action_salary_payment"
-                  sequence="20"/>
-    </data>
+                <!-- Optional filters (uncomment if needed) -->
+                <!--
+                <filter string="This Month" name="filter_this_month"
+                    domain="[('salary_date','>=', (context_today().replace(day=1))),
+                             ('salary_date','<=', context_today())]"/>
+                -->
+
+                <!-- Search panel (left sidebar) -->
+                <searchpanel>
+                    <!-- Employee list -->
+                    <field name="employee_id" string="Employees"/>
+
+                    <!-- Payment Status -->
+                    <field name="payment_status" string="Payment Status"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+
+    <!-- KANBAN VIEW -->
+    <record id="view_salary_payment_kanban" model="ir.ui.view">
+        <field name="name">salary.payment.kanban</field>
+        <field name="model">salary.payment</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_example">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-att-class="'oe_kanban_global_click o_kanban_card card-shadow p-3 mb-3 ' +
+                                        (record.payment_status == 'paid' ? 'bg-success-light' :
+                                        record.payment_status == 'partially_paid' ? 'bg-warning-light' : 'bg-light')"
+                             style="border-radius: 12px; transition: transform 0.2s; cursor: pointer;">
+
+                            <!-- Header: Employee + Total Salary -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong class="h5 text-primary">
+                                    <field name="employee_id"/>
+                                </strong>
+                                <span class="badge bg-info text-white">
+                                    Total:
+                                    <field name="total_salary"/>
+                                </span>
+                            </div>
+
+                            <!-- Body: Amount Received and Remaining -->
+                            <div class="o_kanban_details mb-2">
+                                <div>
+                                    <i class="fa fa-money-bill text-success"></i>
+                                    Received:
+                                    <span class="badge bg-success">
+                                        <field name="amount_received"/>
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <i class="fa fa-hourglass-half text-danger"></i>
+                                    Remaining:
+                                    <span class="badge bg-danger">
+                                        <field name="amount_remaining"/>
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <i class="fa fa-calendar text-secondary"></i>
+                                    Salary Date:
+                                    <field name="salary_date"/>
+                                </div>
+                            </div>
+
+                            <!-- Footer: Payment Status -->
+                            <div class="mt-3">
+                                <t t-if="record.payment_status == 'paid'">
+                                    <span class="badge bg-success">
+                                        <i class="fa fa-check-circle"></i>
+                                        Paid
+                                    </span>
+                                </t>
+                                <t t-if="record.payment_status == 'partially_paid'">
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="fa fa-exclamation-circle"></i>
+                                        Partially Paid
+                                    </span>
+                                </t>
+                                <t t-if="record.payment_status == 'not_paid'">
+                                    <span class="badge bg-secondary">
+                                        <i class="fa fa-times-circle"></i>
+                                        Not Paid
+                                    </span>
+                                </t>
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+
+                <kanban quick_create="true"/>
+            </kanban>
+        </field>
+    </record>
+
+
+    <!-- GRAPH VIEW -->
+    <record id="view_salary_payment_graph" model="ir.ui.view">
+        <field name="name">salary.payment.graph</field>
+        <field name="model">salary.payment</field>
+        <field name="arch" type="xml">
+            <graph string="Salary Payments" type="bar">
+                <field name="amount_received" type="measure"/>
+                <field name="employee_id" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- PIVOT VIEW -->
+    <record id="view_salary_payment_pivot" model="ir.ui.view">
+        <field name="name">salary.payment.pivot</field>
+        <field name="model">salary.payment</field>
+        <field name="arch" type="xml">
+            <pivot string="Salary Payments Pivot">
+                <field name="employee_id" type="row"/>
+                <field name="salary_date" type="col"/>
+                <field name="amount_received" type="measure"/>
+                <field name="amount_remaining" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_salary_payment" model="ir.actions.act_window">
+        <field name="name">Employee Salary Payments</field>
+        <field name="res_model">salary.payment</field>
+        <field name="view_mode">kanban,tree,form,graph,pivot</field>
+    </record>
+
+    <!-- MENU -->
+    <!--    <menuitem id="menu_salary_payment_root" name="Salaries" sequence="20"/>-->
+    <menuitem id="menu_salary_payment" name="Employee Salary Payments" parent="menu_poultry_hr"
+              action="action_salary_payment"/>
 </odoo>
