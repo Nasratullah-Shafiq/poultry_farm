@@ -69,77 +69,159 @@
         </field>
     </record>
 
-
+<!--    kanban view poultry.farm -->
     <record id="view_poultry_farm_kanban" model="ir.ui.view">
-        <field name="name">poultry.farm.kanban</field>
-        <field name="model">poultry.farm</field>
-        <field name="arch" type="xml">
-            <kanban class="o_kanban_with_small_column">
-                <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_global_click o_kanban_card shadow-sm"
-                             style="border-radius: 10px; overflow: hidden;">
+    <field name="name">poultry.farm.kanban</field>
+    <field name="model">poultry.farm</field>
 
-                            <!-- Header -->
-                            <div style="background:#4CAF50; padding:10px; color:white; font-size:16px;">
-                                <i class="fa fa-home"></i>
-                                <strong>
-                                    <field name="farm_id"/>
-                                </strong>
+    <field name="arch" type="xml">
+        <kanban class="o_kanban_example">
+            <templates>
+                <t t-name="kanban-box">
+
+                    <div class="oe_kanban_global_click o_kanban_card card-shadow p-3 mb-3"
+                         style="border-radius: 12px; transition: transform 0.2s; cursor: pointer;">
+
+                        <!-- Header: Poultry Type + Branch -->
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong class="h4 text-primary">
+                                <field name="branch_id"/>
+                            </strong>
+
+                            <span class="badge bg-info text-white" style="font-size: 14px;">
+                                <i class="fa fa-code-branch"></i>
+                                <field name="farm_id"/>
+                            </span>
+                        </div>
+
+                        <!-- Body Details -->
+                        <div class="o_kanban_details mb-2">
+
+                            <!-- Farm House -->
+                            <div>
+                                <i class="fa fa-warehouse text-secondary"></i>
+                                Farm House:
+                                <field name="item_type_id"/>
                             </div>
 
-                            <div style="padding:12px;">
-
-                                <!-- Poultry Type -->
-                                <div style="margin-bottom:8px;">
-                                    <i class="fa fa-dove text-primary"></i>
-                                    <strong>Poultry Type:</strong>
-                                    <field name="item_type_id"/>
-                                </div>
-
-                                <!-- Branch -->
-                                <div style="margin-bottom:8px;">
-                                    <i class="fa fa-code-branch text-warning"></i>
-                                    <strong>Branch:</strong>
-                                    <field name="branch_id"/>
-                                </div>
-
-                                <!-- Farm -->
-                                <div style="margin-bottom:8px;">
-                                    <i class="fa fa-warehouse text-info"></i>
-                                    <strong>Farm House:</strong>
-                                    <field name="farm_id"/>
-                                </div>
-
-                                <!-- Total Quantity -->
-                                <div style="margin-top:12px;">
-                                    <i class="fa fa-boxes text-success"></i>
-                                    <strong>Total Quantity:</strong>
+                            <!-- Total Quantity -->
+                            <div style="font-size: 14px;">
+                                <i class="fa fa-box text-success"></i>
+                                Total Quantity:
+                                <span class="badge bg-secondary" style="font-size: 14px;">
                                     <field name="total_quantity"/>
-                                </div>
+                                </span>
+                            </div>
 
-                                <!-- Progress bar (Optional visual enhancement) -->
-                                <div class="progress" style="height:6px; margin-top:5px;">
-                                    <div class="progress-bar bg-success" role="progressbar"
-                                         t-att-style="'width:' + (record.total_quantity.value > 0 ? record.total_quantity.value : 1) + '%;'">
-                                    </div>
-                                </div>
+                            <!-- Purchase / Sale Record Info -->
+                            <div>
+                                <i class="fa fa-shopping-cart text-primary"></i>
+                                Purchases:
+                                <span class="badge bg-primary">
+<!--                                    <field name="purchase_count"/>-->
+                                </span>
+                            </div>
 
-                                <!-- Last Updated -->
-                                <div style="margin-top:12px; font-size:13px;">
-                                    <i class="fa fa-clock text-muted"></i>
-                                    <strong>Updated:</strong>
-                                    <field name="last_updated"/>
-                                </div>
-
+                            <div>
+                                <i class="fa fa-money-bill text-warning"></i>
+                                Sales:
+                                <span class="badge bg-warning text-dark">
+<!--                                    <field name="sale_count"/>-->
+                                </span>
                             </div>
 
                         </div>
-                    </t>
-                </templates>
-            </kanban>
-        </field>
-    </record>
+
+                        <!-- Footer: Updated Date -->
+                        <div class="mt-3">
+                            <span class="badge bg-secondary">
+                                <i class="fa fa-clock"></i>
+                                Updated: <field name="last_updated"/>
+                            </span>
+                        </div>
+
+                    </div>
+
+                </t>
+            </templates>
+
+            <kanban quick_create="true"/>
+        </kanban>
+    </field>
+</record>
+
+
+
+<!--    <record id="view_poultry_farm_kanban" model="ir.ui.view">-->
+<!--        <field name="name">poultry.farm.kanban</field>-->
+<!--        <field name="model">poultry.farm</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <kanban class="o_kanban_with_small_column">-->
+<!--                <templates>-->
+<!--                    <t t-name="kanban-box">-->
+<!--                        <div class="oe_kanban_global_click o_kanban_card shadow-sm"-->
+<!--                             style="border-radius: 10px; overflow: hidden;">-->
+
+<!--                            &lt;!&ndash; Header &ndash;&gt;-->
+<!--                            <div style="background:#4CAF50; padding:10px; color:white; font-size:16px;">-->
+<!--                                <i class="fa fa-home"></i>-->
+<!--                                <strong>-->
+<!--                                    <field name="farm_id"/>-->
+<!--                                </strong>-->
+<!--                            </div>-->
+
+<!--                            <div style="padding:12px;">-->
+
+<!--                                &lt;!&ndash; Poultry Type &ndash;&gt;-->
+<!--                                <div style="margin-bottom:8px;">-->
+<!--                                    <i class="fa fa-dove text-primary"></i>-->
+<!--                                    <strong>Poultry Type:</strong>-->
+<!--                                    <field name="item_type_id"/>-->
+<!--                                </div>-->
+
+<!--                                &lt;!&ndash; Branch &ndash;&gt;-->
+<!--                                <div style="margin-bottom:8px;">-->
+<!--                                    <i class="fa fa-code-branch text-warning"></i>-->
+<!--                                    <strong>Branch:</strong>-->
+<!--                                    <field name="branch_id"/>-->
+<!--                                </div>-->
+
+<!--                                &lt;!&ndash; Farm &ndash;&gt;-->
+<!--                                <div style="margin-bottom:8px;">-->
+<!--                                    <i class="fa fa-warehouse text-info"></i>-->
+<!--                                    <strong>Farm House:</strong>-->
+<!--                                    <field name="farm_id"/>-->
+<!--                                </div>-->
+
+<!--                                &lt;!&ndash; Total Quantity &ndash;&gt;-->
+<!--                                <div style="margin-top:12px;">-->
+<!--                                    <i class="fa fa-boxes text-success"></i>-->
+<!--                                    <strong>Total Quantity:</strong>-->
+<!--                                    <field name="total_quantity"/>-->
+<!--                                </div>-->
+
+<!--                                &lt;!&ndash; Progress bar (Optional visual enhancement) &ndash;&gt;-->
+<!--                                <div class="progress" style="height:6px; margin-top:5px;">-->
+<!--                                    <div class="progress-bar bg-success" role="progressbar"-->
+<!--                                         t-att-style="'width:' + (record.total_quantity.value > 0 ? record.total_quantity.value : 1) + '%;'">-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
+<!--                                &lt;!&ndash; Last Updated &ndash;&gt;-->
+<!--                                <div style="margin-top:12px; font-size:13px;">-->
+<!--                                    <i class="fa fa-clock text-muted"></i>-->
+<!--                                    <strong>Updated:</strong>-->
+<!--                                    <field name="last_updated"/>-->
+<!--                                </div>-->
+
+<!--                            </div>-->
+
+<!--                        </div>-->
+<!--                    </t>-->
+<!--                </templates>-->
+<!--            </kanban>-->
+<!--        </field>-->
+<!--    </record>-->
 
 
     <!--    <record id="view_poultry_farm_kanban" model="ir.ui.view">-->
