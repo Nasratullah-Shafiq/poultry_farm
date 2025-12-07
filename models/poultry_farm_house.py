@@ -49,15 +49,16 @@ class PoultryFarmHouse(models.Model):
         store=True
     )
 
-    farm_stock_ids = fields.One2many(
-        "poultry.farm", "farm_id",
-        string="Farm Stock"
-    )
-
-    @api.depends('farm_stock_ids.total_quantity')
-    def _compute_total_chickens(self):
-        for house in self:
-            house.current_stock = sum(house.farm_stock_ids.mapped('total_quantity'))
+    @api.depends('farm_stock_ids.total_quantity')  # depends on the One2many stock records
+    def _compute_current_stock(self):
+        for rec in self:
+            total_chickens = 0
+            # Iterate only stock records for this house
+            for stock in rec.farm_stock_ids:
+                # Filter by chicken item type if needed
+                if stock.item_type_id.name.lower() == "chicken":
+                    total_chickens += stock.total_quantity
+            rec.current_stock = total_chickens
 
     # Auto-generate farm code using sequence
     @api.model
