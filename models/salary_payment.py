@@ -135,48 +135,65 @@ class PoultrySalary(models.Model):
             # only the number
             rec.paid_this_month_display = str(total_paid)
 
-    @api.depends('paid_this_month_display', 'previous_paid_amount', 'amount_received', 'amount_remaining',
-                 'total_salary')
+    # @api.depends('paid_this_month_display', 'previous_paid_amount', 'amount_received', 'amount_remaining',
+    #              'total_salary')
+    # def _compute_payment_status(self):
+    #     for rec in self:
+    #         # Safely obtain numeric value for "paid this month (previous)".
+    #         # paid_this_month_display is a Char (string) used only for UI display in some setups,
+    #         # so try to parse it to float; fallback to numeric previous_paid_amount.
+    #         prev_paid = 0.0
+    #         if getattr(rec, 'paid_this_month_display', False):
+    #             try:
+    #                 # remove commas and whitespace if any, then convert
+    #                 prev_paid = float(str(rec.paid_this_month_display).replace(',', '').strip())
+    #             except Exception:
+    #                 prev_paid = float(rec.previous_paid_amount or 0.0)
+    #         else:
+    #             prev_paid = float(rec.previous_paid_amount or 0.0)
+    #
+    #         # amount_received is the current row's payment (numeric)
+    #         cur_paid = float(rec.amount_received or 0.0)
+    #
+    #         # Note: depending on your desired semantics you might want to use total_paid = prev_paid + cur_paid
+    #         # but you specifically requested checks based on `paid_this_month_display` first.
+    #         total_paid_this_month = prev_paid + cur_paid
+    #
+    #         # Use the numeric amount_remaining if present; otherwise compute it here
+    #         rem = None
+    #         if rec.amount_remaining is not None:
+    #             rem = float(rec.amount_remaining or 0.0)
+    #         else:
+    #             # fallback compute
+    #             rem = max(float(rec.total_salary or 0.0) - total_paid_this_month, 0.0)
+    #
+    #         # Apply rules in the order you requested
+    #         if prev_paid == 0.0:
+    #             rec.payment_status = 'not_paid'
+    #         elif rem > 0.0:
+    #             rec.payment_status = 'partially_paid'
+    #         elif rem == 0.0 and (rec.total_salary or 0.0) > 0.0:
+    #             rec.payment_status = 'paid'
+    #         else:
+    #             # Fallback: if nothing matched, mark partially_paid (safe default)
+    #             rec.payment_status = 'partially_paid'
+
+    @api.depends('paid_this_month_display', 'amount_remaining', 'total_salary')
     def _compute_payment_status(self):
         for rec in self:
-            # Safely obtain numeric value for "paid this month (previous)".
-            # paid_this_month_display is a Char (string) used only for UI display in some setups,
-            # so try to parse it to float; fallback to numeric previous_paid_amount.
-            prev_paid = 0.0
-            if getattr(rec, 'paid_this_month_display', False):
-                try:
-                    # remove commas and whitespace if any, then convert
-                    prev_paid = float(str(rec.paid_this_month_display).replace(',', '').strip())
-                except Exception:
-                    prev_paid = float(rec.previous_paid_amount or 0.0)
-            else:
-                prev_paid = float(rec.previous_paid_amount or 0.0)
+            # Safeguard values (None → 0)
+            paid = rec.paid_this_month_display or 0
+            remaining = rec.amount_remaining or 0
+            total = rec.total_salary or 0
 
-            # amount_received is the current row's payment (numeric)
-            cur_paid = float(rec.amount_received or 0.0)
-
-            # Note: depending on your desired semantics you might want to use total_paid = prev_paid + cur_paid
-            # but you specifically requested checks based on `paid_this_month_display` first.
-            total_paid_this_month = prev_paid + cur_paid
-
-            # Use the numeric amount_remaining if present; otherwise compute it here
-            rem = None
-            if rec.amount_remaining is not None:
-                rem = float(rec.amount_remaining or 0.0)
-            else:
-                # fallback compute
-                rem = max(float(rec.total_salary or 0.0) - total_paid_this_month, 0.0)
-
-            # Apply rules in the order you requested
-            if prev_paid == 0.0:
+            if paid == 0:
                 rec.payment_status = 'not_paid'
-            elif rem > 0.0:
+            elif remaining > 0:
                 rec.payment_status = 'partially_paid'
-            elif rem == 0.0 and (rec.total_salary or 0.0) > 0.0:
+            elif remaining == 0 and total > 0:
                 rec.payment_status = 'paid'
             else:
-                # Fallback: if nothing matched, mark partially_paid (safe default)
-                rec.payment_status = 'partially_paid'
+                rec.payment_status = 'not_paid'
 
     # @api.depends('total_salary', 'amount_received')
     # def _compute_payment_status(self):
