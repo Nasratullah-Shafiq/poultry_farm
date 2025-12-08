@@ -12,9 +12,10 @@
             <tree string="Poultry Sales" create="true" edit="true">
                 <field name="date"/>
                 <field name="branch_id"/>
+                <field name="farm_id"/>
                 <field name="item_type_id"/>
                 <field name="quantity"/>
-                <field name="unit_price"/>
+                <field name="sale_price"/>
                 <field name="total"/>
                 <field name="customer_id"/>
             </tree>
@@ -37,6 +38,7 @@
                         <group>
                             <field name="date"/>
                             <field name="branch_id"/>
+                            <field name="farm_id"/>
                             <field name="item_type_id"/>
                             <field name="customer_id"/>
                         </group>
@@ -44,13 +46,8 @@
                             <field name="available_quantity"/>
                             <field name="quantity"/>
                             <field name="uom_id"/>
-                            <field name="unit_price"/>
-                            <!--                            <field name="payment_type"/>-->
-                            <!--                            <field name="amount_paid"/>-->
-                            <!--                            <field name="amount_due"/>-->
-                            <!--                            <field name="due_date"/>-->
-                            <!--                            <field name="payment_status"/>-->
-                            <!--                            <field name="payment_note"/>-->
+                            <field name="purchase_price" readonly="1"/>
+                            <field name="sale_price"/>
                             <field name="total" readonly="1"/>
                             <field name="currency_id" invisible="1"/>
                         </group>
