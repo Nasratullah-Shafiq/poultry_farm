@@ -6,9 +6,6 @@ access_poultry_finance,Poultry Finance,poultry_farm.model_poultry_finance,base.g
 access_item_type,Item Type,poultry_farm.model_item_type,base.group_user,1,1,1,1
 access_poultry_purchase,Poultry Purchase,poultry_farm.model_poultry_purchase,base.group_user,1,1,1,1
 access_poultry_sale,Poultry Sale,poultry_farm.model_poultry_sale,base.group_user,1,1,1,1
-access_poultry_feed,Poultry Feed,poultry_farm.model_poultry_feed,base.group_user,1,1,1,1
-access_poultry_medicine,Poultry Medicine,poultry_farm.model_poultry_medicine,base.group_user,1,1,1,1
-access_poultry_vaccination,Poultry Vaccination,poultry_farm.model_poultry_vaccination,base.group_user,1,1,1,1
 
 access_poultry_finance_report,Poultry Finance Report,poultry_farm.model_poultry_finance_report,,1,1,1,1
 access_poultry_farm,Poultry Farm,poultry_farm.model_poultry_farm,,1,1,1,1
@@ -20,9 +17,10 @@ access_sale_report_wizard,Sale Report Wizard,poultry_farm.model_poultry_sale_rep
 
 access_sale_report_line,Sale Report Line,poultry_farm.model_poultry_sale_report_line,base.group_user,1,0,1,0
 
-
 access_poultry_death_manager,Poultry Death Manager,poultry_farm.model_poultry_death,base.group_system,1,1,1,1
 access_poultry_cashier,Poultry Cashier,poultry_farm.model_poultry_cashier,base.group_system,1,1,1,1
 access_poultry_customer_user,Poultry Customer,poultry_farm.model_poultry_customer,base.group_system,1,1,1,1
 access_poultry_supplier_user,Poultry Supplier,poultry_farm.model_poultry_supplier,base.group_system,1,1,1,1
 access_salary_payment,Salary Payment,poultry_farm.model_salary_payment,base.group_user,1,1,1,1
+access_customer_payment,Customer Payment,poultry_farm.model_poultry_payment,base.group_user,1,1,1,1
+
