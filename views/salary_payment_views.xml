@@ -142,7 +142,14 @@
                         <field name="paid_this_month_display" nolabel="1"/>
                         <field name="amount_received"/>
                         <field name="amount_remaining" readonly="1"/>
-                        <field name="payment_status" readonly="1"/>
+                        <!--                        <field name="payment_status" readonly="1"/>-->
+                        <!-- ⭐ Your Badge Here -->
+                        <field name="payment_status"
+                               widget="badge"
+                               decoration-success="payment_status == 'paid'"
+                               decoration-warning="payment_status == 'partially_paid'"
+                               decoration-danger="payment_status == 'not_paid'"
+                               readonly="1"/>
                     </group>
 
                     <group>
