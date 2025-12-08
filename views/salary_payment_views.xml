@@ -134,7 +134,12 @@
 
                     <group>
                         <field name="total_salary" readonly="1"/>
-                        <field name="previous_paid_amount" readonly="1"/>
+                        <div>
+                            <span class="o_form_label">
+                                <field name="paid_month_label" nolabel="1"/>
+                            </span>
+                        </div>
+                        <field name="paid_this_month_display" nolabel="1"/>
                         <field name="amount_received"/>
                         <field name="amount_remaining" readonly="1"/>
                         <field name="payment_status" readonly="1"/>
@@ -201,6 +206,9 @@
 
                     <!-- Payment Status -->
                     <field name="payment_status" string="Payment Status"/>
+
+                    <field name="salary_year" string="Year" select="1"/>
+                    <field name="salary_month" string="Month" select="1"/>
                 </searchpanel>
             </search>
         </field>
