@@ -1,5 +1,5 @@
-from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+from odoo import models, fields, api
 
 
 class PoultryPayment(models.Model):
@@ -7,25 +7,29 @@ class PoultryPayment(models.Model):
     _description = 'Customer Payment'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
+    # -------------------------
+    # Basic Fields
+    # -------------------------
     customer_id = fields.Many2one('poultry.customer', string='Customer', required=True, ondelete='cascade')
-
     sale_id = fields.Many2one('poultry.sale', string='Sale')
-
     date = fields.Date(string="Payment Date", default=fields.Date.today(), required=True)
     amount = fields.Monetary(string="Amount Paid", required=True, currency_field='currency_id')
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
     payment_note = fields.Text(string="Notes")
 
-
     # -------------------------
     # Additional Fields
     # -------------------------
-    payment_type = fields.Selection([
-        ('cash', 'Cash'),
-        ('credit', 'Credit')
-    ], string="Payment Type", default='cash')
+    payment_type = fields.Selection(
+        [
+            ('cash', 'Cash'),
+            ('credit', 'Credit')
+        ],
+        string="Payment Type",
+        default='cash'
+    )
 
-    # Amount due for this sale
+    # Computed amount due
     amount_due = fields.Monetary(
         string="Amount Due",
         currency_field='currency_id',
@@ -33,31 +37,62 @@ class PoultryPayment(models.Model):
         store=True
     )
 
-    # Payment status for this sale
-    payment_status = fields.Selection([
-        ('not_paid', 'Not Paid'),
-        ('partial', 'Partially Paid'),
-        ('paid', 'Fully Paid')
-    ], string="Payment Status", compute="_compute_payment_status", store=True)
-
+    # -------------------------
+    # Onchange Logic
+    # -------------------------
     @api.onchange('sale_id')
     def _onchange_sale_id(self):
+        """Automatically set the customer based on the selected sale."""
         if self.sale_id:
             self.customer_id = self.sale_id.customer_id
 
     # -------------------------
-    # Computed Fields
+    # Compute Functions
     # -------------------------
     @api.depends('customer_id.sale_ids.total', 'customer_id.payment_ids.amount')
     def _compute_amount_due(self):
+        """Calculate the remaining unpaid balance for the customer."""
         for payment in self:
             if payment.customer_id:
-                # Total sale of this customer
                 total_sale = sum(payment.customer_id.sale_ids.mapped('total'))
-                # Total paid by this customer
                 total_paid = sum(payment.customer_id.payment_ids.mapped('amount'))
-                # Remaining debt
                 payment.amount_due = total_sale - total_paid
             else:
                 payment.amount_due = 0.0
+
+    # -------------------------
+    # Backend Validation
+    # -------------------------
+    @api.constrains('amount', 'amount_due')
+    def _check_payment_amount(self):
+        """Validate payment rules before saving the record."""
+        for rec in self:
+
+            # Rule 1: Prevent payment when there is no outstanding amount
+            if rec.amount == 0 and rec.amount_due == 0:
+                raise ValidationError(
+                    "Payment cannot be recorded because the customer has no outstanding balance."
+                )
+
+            # Rule 2: Amount must be greater than zero
+            if rec.amount <= 0:
+                raise ValidationError("Please enter an amount greater than zero.")
+
+            # Rule 3: Customer must have at least one sale
+            if rec.customer_id.total_sale == 0:
+                raise ValidationError(
+                    "This customer has no recorded sales. Payment is not allowed."
+                )
+
+            # Rule 4: Prevent negative outstanding balance
+            if rec.amount_due < 0:
+                raise ValidationError(
+                    "Payment exceeds the customer's total sale amount. Please enter a valid amount."
+                )
+
+            # Rule 5: Prevent paying more than the amount due
+            if rec.amount > rec.amount_due:
+                raise ValidationError(
+                    f"The payment amount cannot exceed the remaining balance. Amount Due: {rec.amount_due}"
+                )
 
