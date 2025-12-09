@@ -1,6 +1,7 @@
 from odoo import models, fields, api
 from datetime import date, datetime, timedelta
 import datetime
+from odoo.exceptions import ValidationError
 
 
 
@@ -122,12 +123,7 @@ class PoultrySalary(models.Model):
                 ('salary_date', '<=', month_end),
                 ('id', '!=', rec.id or 0),
             ])
-            # total_paid = sum(payments.mapped('amount_received'))
-            #
-            # # Assign computed values
-            # rec.previous_paid_amount = total_paid
-            # month_name = salary_date.strftime('%B')  # e.g., "January"
-            # rec.paid_this_month_display = f"{month_name} Payment: {total_paid}"
+
             total_paid = sum(payments.mapped('amount_received'))
 
             rec.paid_this_month_display = total_paid
@@ -135,48 +131,6 @@ class PoultrySalary(models.Model):
             # only the number
             rec.paid_this_month_display = str(total_paid)
 
-    # @api.depends('paid_this_month_display', 'previous_paid_amount', 'amount_received', 'amount_remaining',
-    #              'total_salary')
-    # def _compute_payment_status(self):
-    #     for rec in self:
-    #         # Safely obtain numeric value for "paid this month (previous)".
-    #         # paid_this_month_display is a Char (string) used only for UI display in some setups,
-    #         # so try to parse it to float; fallback to numeric previous_paid_amount.
-    #         prev_paid = 0.0
-    #         if getattr(rec, 'paid_this_month_display', False):
-    #             try:
-    #                 # remove commas and whitespace if any, then convert
-    #                 prev_paid = float(str(rec.paid_this_month_display).replace(',', '').strip())
-    #             except Exception:
-    #                 prev_paid = float(rec.previous_paid_amount or 0.0)
-    #         else:
-    #             prev_paid = float(rec.previous_paid_amount or 0.0)
-    #
-    #         # amount_received is the current row's payment (numeric)
-    #         cur_paid = float(rec.amount_received or 0.0)
-    #
-    #         # Note: depending on your desired semantics you might want to use total_paid = prev_paid + cur_paid
-    #         # but you specifically requested checks based on `paid_this_month_display` first.
-    #         total_paid_this_month = prev_paid + cur_paid
-    #
-    #         # Use the numeric amount_remaining if present; otherwise compute it here
-    #         rem = None
-    #         if rec.amount_remaining is not None:
-    #             rem = float(rec.amount_remaining or 0.0)
-    #         else:
-    #             # fallback compute
-    #             rem = max(float(rec.total_salary or 0.0) - total_paid_this_month, 0.0)
-    #
-    #         # Apply rules in the order you requested
-    #         if prev_paid == 0.0:
-    #             rec.payment_status = 'not_paid'
-    #         elif rem > 0.0:
-    #             rec.payment_status = 'partially_paid'
-    #         elif rem == 0.0 and (rec.total_salary or 0.0) > 0.0:
-    #             rec.payment_status = 'paid'
-    #         else:
-    #             # Fallback: if nothing matched, mark partially_paid (safe default)
-    #             rec.payment_status = 'partially_paid'
 
     @api.depends('paid_this_month_display', 'amount_remaining', 'total_salary')
     def _compute_payment_status(self):
@@ -195,12 +149,36 @@ class PoultrySalary(models.Model):
             else:
                 rec.payment_status = 'not_paid'
 
-    # @api.depends('total_salary', 'amount_received')
-    # def _compute_payment_status(self):
-    #     for rec in self:
-    #         if rec.amount_received <= 0:
-    #             rec.payment_status = 'not_paid'
-    #         elif rec.amount_received < rec.total_salary:
-    #             rec.payment_status = 'partially_paid'
-    #         else:
-    #             rec.payment_status = 'paid'
+
+    @api.constrains('amount_received', 'employee_id', 'salary_date')
+    def _check_salary_payment_limit(self):
+        for rec in self:
+            if not rec.employee_id or not rec.salary_date:
+                continue  # skip if employee or date not set
+
+            # Define month start and end
+            month_start = rec.salary_date.replace(day=1)
+            next_month = (month_start + timedelta(days=31)).replace(day=1)
+            month_end = next_month - timedelta(days=1)
+
+            # Calculate total payments already made for this month
+            existing_payments = self.env['salary.payment'].search([
+                ('employee_id', '=', rec.employee_id.id),
+                ('salary_date', '>=', month_start),
+                ('salary_date', '<=', month_end),
+                ('id', '!=', rec.id)
+            ])
+
+            total_paid_so_far = sum(existing_payments.mapped('amount_received'))
+
+            # Include current payment
+            new_total = total_paid_so_far + (rec.amount_received or 0)
+
+            # Validation: cannot exceed total_salary
+            if rec.total_salary and new_total > rec.total_salary:
+                month_name = rec.salary_date.strftime('%B')
+                raise ValidationError(
+                    f"The total salary for {month_name} has already been paid for {rec.employee_id.name}."
+                )
+
+
