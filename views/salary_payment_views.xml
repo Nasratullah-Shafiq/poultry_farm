@@ -126,6 +126,21 @@
         <field name="arch" type="xml">
             <form string="Employee Salary Payment">
                 <sheet>
+                    <!--  RIBBONS GO HERE  -->
+                    <widget name="web_ribbon"
+                            title="Not Paid"
+                            bg_color="bg-danger"
+                            invisible="payment_status != 'not_paid'"/>
+
+                    <widget name="web_ribbon"
+                            title="Partially Paid"
+                            bg_color="bg-warning"
+                            invisible="payment_status != 'partially_paid'"/>
+
+                    <widget name="web_ribbon"
+                            title="Paid"
+                            bg_color="bg-success"
+                            invisible="payment_status != 'paid'"/>
                     <group>
                         <field name="employee_id"/>
                         <field name="salary_date"/>
