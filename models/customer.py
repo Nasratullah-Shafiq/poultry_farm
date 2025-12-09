@@ -44,11 +44,11 @@ class PoultryCustomer(models.Model):
     payment_status = fields.Selection(
         [
             ('not_paid', 'Not Paid'),
-            ('partial', 'Partially Paid'),
-            ('paid', 'Fully Paid')
+            ('partially_paid', 'Partially Paid'),
+            ('fully_paid', 'Fully Paid')
         ],
         string='Payment Status',
-        compute='_compute_totals',
+        compute='_compute_payment_status',
         store=True,
         tracking=True
     )
