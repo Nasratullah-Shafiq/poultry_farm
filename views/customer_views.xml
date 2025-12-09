@@ -181,31 +181,6 @@
     <!--              action="action_poultry_customer" sequence="10"/>-->
     <!--</odoo>-->
 
-
-    <!-- =======================
-         TREE VIEW
-    ======================== -->
-    <record id="view_poultry_customer_tree" model="ir.ui.view">
-        <field name="name">poultry.customer.tree</field>
-        <field name="model">poultry.customer</field>
-        <field name="arch" type="xml">
-            <tree string="Customers">
-                <field name="name"/>
-                <field name="phone"/>
-                <field name="email"/>
-                <field name="total_sale"/>
-                <field name="total_paid"/>
-                <field name="debt"/>
-                <field name="payment_status" widget="badge"
-                       decoration-success="payment_status == 'fully_paid'"
-                       decoration-warning="payment_status == 'partially_paid'"
-                       decoration-danger="payment_status == 'not_paid'"/>
-
-            </tree>
-        </field>
-    </record>
-
-
     <!-- =======================
          FORM VIEW + CHATTER
     ======================== -->
@@ -214,7 +189,27 @@
         <field name="model">poultry.customer</field>
         <field name="arch" type="xml">
             <form string="Customer">
+                <header>
+                    <field name="payment_status" widget="statusbar"
+                           statusbar_visible="fully_paid,partially_paid,not_paid"
+                           statusbar_colors="fully_paid:green;partially_paid:orange;not_paid:red"/>
+                </header>
                 <sheet>
+                    <!--  RIBBONS GO HERE  -->
+                    <widget name="web_ribbon"
+                            title="Not Paid"
+                            bg_color="bg-danger"
+                            invisible="payment_status != 'not_paid'"/>
+
+                    <widget name="web_ribbon"
+                            title="Partially Paid"
+                            bg_color="bg-warning"
+                            invisible="payment_status != 'partially_paid'"/>
+
+                    <widget name="web_ribbon"
+                            title="Paid"
+                            bg_color="bg-success"
+                            invisible="payment_status != 'fully_paid'"/>
                     <group>
                         <group>
                             <field name="name"/>
@@ -225,15 +220,7 @@
                             <field name="total_paid" readonly="1"/>
                             <field name="debt" readonly="1"/>
                         </group>
-                        <group>
-                            <!--                            <field name="payment_status"/>-->
-                            <field name="payment_status"
-                                   widget="statusbar"
-                                   statusbar_visible="not_paid,partial,paid"
-                                   statusbar_colors="{'not_paid': 'red',
-                              'partial': 'orange',
-                              'paid': 'green'}"/>
-                        </group>
+
                     </group>
 
 
@@ -265,7 +252,7 @@
                                     <field name="amount"/>
                                     <field name="payment_type"/>
                                     <field name="amount_due" readonly="1"/>
-                                    <field name="payment_status" readonly="1"/>
+                                    <!--                                    <field name="payment_status" readonly="1"/>-->
                                     <field name="payment_note"/>
                                 </tree>
                             </field>
@@ -282,6 +269,32 @@
             </form>
         </field>
     </record>
+
+
+    <!-- =======================
+         TREE VIEW
+    ======================== -->
+    <record id="view_poultry_customer_tree" model="ir.ui.view">
+        <field name="name">poultry.customer.tree</field>
+        <field name="model">poultry.customer</field>
+        <field name="arch" type="xml">
+            <tree string="Customers">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="total_sale"/>
+                <field name="total_paid"/>
+                <field name="debt"/>
+                <field name="payment_status" widget="badge"
+                       decoration-success="payment_status == 'fully_paid'"
+                       decoration-warning="payment_status == 'partially_paid'"
+                       decoration-danger="payment_status == 'not_paid'"/>
+
+            </tree>
+        </field>
+    </record>
+
+
     <!--    kanban view for customer. view-->
     <record id="view_poultry_customer_kanban" model="ir.ui.view">
         <field name="name">poultry.customer.kanban</field>
