@@ -26,6 +26,36 @@
                         <field name="manager_ids"/>
                         <field name="address"/>
                     </group>
+                    <notebook>
+                        <page string="Farms">
+                            <field name="farm_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="location"/>
+                                    <field name="capacity"/>
+                                    <field name="current_stock"/>
+                                    <field name="state"/>
+                                    <field name="manager_id"/>
+                                </tree>
+
+                                <form>
+                                    <group>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="branch_id" readonly="1"/>
+                                        <field name="location"/>
+                                        <field name="capacity"/>
+                                        <field name="current_stock" readonly="1"/>
+                                        <field name="manager_id"/>
+                                        <field name="state"/>
+                                        <field name="note"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+
                 </sheet>
                 <!-- ✅ Chatter placed inside the form correctly -->
                 <div class="oe_chatter">
@@ -36,18 +66,121 @@
             </form>
         </field>
     </record>
+    <!-- ============================= -->
+    <!--     BRANCH KANBAN VIEW        -->
+    <!-- ============================= -->
+<!--    <record id="view_poultry_branch_kanban" model="ir.ui.view">-->
+<!--    <field name="name">poultry.branch.kanban</field>-->
+<!--    <field name="model">poultry.branch</field>-->
+<!--    <field name="arch" type="xml">-->
+<!--        <kanban class="o_kanban_example">-->
+<!--            <templates>-->
+<!--                <t t-name="kanban-box">-->
+<!--                    <div t-att-class="'oe_kanban_global_click o_kanban_card' + (record.is_main ? ' o_highlight' : '')">-->
+<!--                        <div class="o_kanban_record_top">-->
+<!--                            <strong class="o_kanban_name">-->
+<!--                                <field name="name"/>-->
+<!--                            </strong>-->
+<!--                            <div class="o_kanban_code">-->
+<!--                                <span class="fa fa-barcode"/>-->
+<!--                                <field name="code"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="o_kanban_details">-->
+<!--                            <div>-->
+<!--                                <span class="fa fa-user"/> Manager:-->
+<!--                                <field name="manager_ids"/>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <span class="fa fa-map-marker"/> Address:-->
+<!--                                <field name="address"/>-->
+<!--                            </div>-->
+<!--                            <div t-if="record.is_main">-->
+<!--                                <span class="fa fa-star"/> Main Branch-->
+<!--                            </div>-->
+<!--                            <div t-if="record.farm_ids">-->
+<!--                                <span class="fa fa-home"/> Farms:-->
+<!--                                <field name="farm_ids" widget="many2many_tags"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </t>-->
+<!--            </templates>-->
+<!--            <kanban quick_create="true"/>-->
+<!--        </kanban>-->
+<!--    </field>-->
+<!--</record>-->
+
+
+<record id="view_poultry_branch_kanban" model="ir.ui.view">
+    <field name="name">poultry.branch.kanban</field>
+    <field name="model">poultry.branch</field>
+
+    <field name="arch" type="xml">
+        <kanban class="o_kanban_example">
+            <templates>
+                <t t-name="kanban-box">
+                    <div t-att-class="'oe_kanban_global_click o_kanban_card card-shadow p-3 mb-3 ' + (record.is_main ? 'bg-warning-light' : 'bg-light')"
+                         style="border-radius: 12px; transition: transform 0.2s; cursor: pointer;"
+                         t-att-data-id="record.id"
+                         t-att-title="'Branch: ' + record.name + '\nAddress: ' + (record.address || 'N/A') + '\nManagers: ' + (record.manager_ids ? record.manager_ids.map(m => m.name).join(', ') : 'No Manager') + '\nFarms: ' + (record.farm_ids ? record.farm_ids.length : 0)">
+
+                        <!-- Top: Name & Code -->
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong class="o_kanban_name h5 text-primary"><field name="name"/></strong>
+                            <span class="badge bg-info text-white">
+                                <i class="fa fa-barcode"></i> <field name="code"/>
+                            </span>
+                        </div>
+
+                        <!-- Middle: Managers & Address -->
+                        <div class="o_kanban_details mb-2">
+                            <div>
+                                <i class="fa fa-user text-secondary"></i> Managers:
+                                <t t-if="record.manager_ids and record.manager_ids.length > 0">
+                                    <t t-foreach="record.manager_ids" t-as="manager">
+                                        <span class="badge bg-primary me-1"><t t-esc="manager.name"/></span>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <span class="text-muted">No Manager</span>
+                                </t>
+                            </div>
+                            <div>
+                                <i class="fa fa-map-marker text-danger"></i> Address: <field name="address"/>
+                            </div>
+                        </div>
+
+                        <!-- Bottom: Stats & Highlights -->
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <t t-if="record.is_main">
+                                <span class="badge bg-warning text-dark"><i class="fa fa-star"></i> Main Branch</span>
+                            </t>
+                            <t t-if="record.farm_ids and record.farm_ids.length > 0">
+                                <span class="badge bg-success">
+                                    <i class="fa fa-home"></i> <t t-esc="record.farm_ids.length"/> Farms
+                                </span>
+                            </t>
+                            <t t-else="">
+                                <span class="badge bg-secondary">No Farms</span>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </templates>
+            <kanban quick_create="true"/>
+        </kanban>
+    </field>
+</record>
+
 
     <record id="action_branch" model="ir.actions.act_window">
         <field name="name">Branches</field>
         <field name="res_model">poultry.branch</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,kanban</field>
         <field name="help">Manage branches.</field>
     </record>
 
     <menuitem id="menu_poultry_branches" name="Branches" parent="menu_poultry_setup" action="action_branch"/>
-<!--    <menuitem id="menu_poultry_branches"-->
-<!--          name="Branches"-->
-<!--          parent="menu_poultry_setup"-->
-<!--          action="action_branch"-->
-<!--          sequence="10"/>-->
+
 </odoo>
