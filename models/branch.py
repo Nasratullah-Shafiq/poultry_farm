@@ -12,3 +12,6 @@ class PoultryBranch(models.Model):
     manager_ids = fields.Many2one('res.users', string='Branch Manager')
     is_main = fields.Boolean(string='Is Main Branch', default=False)
 
+    farm_ids = fields.One2many('poultry.farm.house', 'branch_id', string='Farms')
+
+
