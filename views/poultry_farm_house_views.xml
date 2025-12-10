@@ -76,7 +76,7 @@
                         <group>
                             <field name="location"/>
                             <field name="capacity"/>
-                            <field name="current_stock" readonly="1"/>
+                            <field name="current_stock"/>
                             <field name="state"/>
                         </group>
                     </group>
