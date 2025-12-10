@@ -15,23 +15,10 @@ class PoultryFarmHouse(models.Model):
     branch_id = fields.Many2one('poultry.branch', string='Branch', required=True, tracking=True, ondelete='cascade')
     location = fields.Char(string='Location / Address')
     capacity = fields.Integer(string='Capacity (birds)')
-    # current_stock = fields.Integer(string='Current Stock (birds)' ,computed="_compute_available_quantity", readonly=True)
-    # current_stock = fields.Integer(
-    #     string='Current Stock (birds)',
-    #     # related='sale_id.total_quantity',
-    #     store=True,
-    #     readonly=True
-    # )
-    # current_stock = fields.Integer(related="sale_id.available_quantity", store=True)
+    # Add item type
+    item_type_id = fields.Many2one('item.type', string="Type", required=True)
 
     farm_id = fields.Many2one('poultry.farm', string='Farm', required=True)
-
-    # current_stock = fields.Integer(
-    #     string='Current Stock (birds)',
-    #     related='farm_id.total_quantity',
-    #     store=True,
-    #     readonly=True
-    # )
 
     manager_id = fields.Many2one('res.partner', string='Manager')
 
@@ -45,41 +32,56 @@ class PoultryFarmHouse(models.Model):
 
     current_stock = fields.Integer(
         string="Total Chickens",
-        compute="_compute_total_chickens",
+        compute="_compute_total_quantity",
         store=True
     )
 
-    @api.depends('farm_stock_ids.total_quantity')  # depends on the One2many stock records
-    def _compute_current_stock(self):
-        for rec in self:
-            total_chickens = 0
-            # Iterate only stock records for this house
-            for stock in rec.farm_stock_ids:
-                # Filter by chicken item type if needed
-                if stock.item_type_id.name.lower() == "chicken":
-                    total_chickens += stock.total_quantity
-            rec.current_stock = total_chickens
+    class PoultryFarmHouse(models.Model):
+        _name = 'poultry.farm.house'
+        _description = 'Farm House'
 
-    # Auto-generate farm code using sequence
-    @api.model
-    def create(self, vals):
-        if not vals.get('code'):
-            vals['code'] = self.env['ir.sequence'].next_by_code('poultry.farm.seq') or '/'
-        return super().create(vals)
+        name = fields.Char(string="Farm House Name", required=True)
+        branch_id = fields.Many2one('poultry.branch', string="Branch", required=True)
+        item_type_id = fields.Many2one('item.type', string="Poultry Type", required=True)
 
-    # @api.depends('branch_id', 'farm_id', 'item_type_id')
-    # def _compute_available_quantity(self):
-    #     """Compute available stock based on branch + farm + item type."""
-    #     for rec in self:
-    #         if rec.branch_id and rec.farm_id and rec.item_type_id:
-    #
-    #             stock = self.env['poultry.farm'].search([
-    #                 ('branch_id', '=', rec.branch_id.id),
-    #                 ('farm_id', '=', rec.farm_id.id),
-    #                 ('item_type_id', '=', rec.item_type_id.id)
-    #             ], limit=1)
-    #
-    #             rec.available_quantity = stock.current_stock if stock else 0
-    #
-    #         else:
-    #             rec.available_quantity = 0
+        total_quantity = fields.Integer(
+            string="Total Quantity",
+            compute="_compute_total_quantity",
+            store=True
+        )
+        last_updated = fields.Datetime(string="Last Updated", default=fields.Datetime.now)
+
+        @api.depends('branch_id', 'item_type_id')
+        def _compute_total_quantity(self):
+            for house in self:
+                if not house.branch_id or not house.item_type_id:
+                    house.total_quantity = 0
+                    continue
+
+                # Total purchased quantity for this farm house
+                purchases = self.env['poultry.purchase'].search([
+                    ('branch_id', '=', house.branch_id.id),
+                    ('item_type_id', '=', house.item_type_id.id),
+                    ('farm_id', '=', house.id),
+                ])
+                total_purchased = sum(p.quantity for p in purchases)
+
+                # Total deaths for this farm house
+                deaths = self.env['poultry.death'].search([
+                    ('branch_id', '=', house.branch_id.id),
+                    ('item_type_id', '=', house.item_type_id.id),
+                    ('farm_id', '=', house.id),
+                ])
+                total_deaths = sum(d.quantity for d in deaths)
+
+                # Total sold quantity for this farm house (if you track sales)
+                sales = self.env['poultry.sale'].search([
+                    ('branch_id', '=', house.branch_id.id),
+                    ('item_type_id', '=', house.item_type_id.id),
+                    ('farm_id', '=', house.id),
+                ])
+                total_sold = sum(s.quantity for s in sales)
+
+                # Net stock
+                house.total_quantity = max(total_purchased - total_deaths - total_sold, 0)
+                house.last_updated = fields.Datetime.now()
