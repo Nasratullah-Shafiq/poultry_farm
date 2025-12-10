@@ -1,7 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_poultry_branch,Poultry Branch,poultry_farm.model_poultry_branch,base.group_user,1,1,1,1
 access_poultry_employee,Poultry Employee,poultry_farm.model_poultry_employee,base.group_user,1,1,1,1
-access_poultry_salary,Poultry Salary,poultry_farm.model_poultry_salary,base.group_user,1,1,1,1
+
 access_poultry_finance,Poultry Finance,poultry_farm.model_poultry_finance,base.group_user,1,1,1,1
 access_item_type,Item Type,poultry_farm.model_item_type,base.group_user,1,1,1,1
 access_poultry_purchase,Poultry Purchase,poultry_farm.model_poultry_purchase,base.group_user,1,1,1,1
@@ -23,4 +23,8 @@ access_poultry_customer_user,Poultry Customer,poultry_farm.model_poultry_custome
 access_poultry_supplier_user,Poultry Supplier,poultry_farm.model_poultry_supplier,base.group_system,1,1,1,1
 access_salary_payment,Salary Payment,poultry_farm.model_salary_payment,base.group_user,1,1,1,1
 access_customer_payment,Customer Payment,poultry_farm.model_poultry_payment,base.group_user,1,1,1,1
+access_poultry_farm_house,Poultry Farm House,poultry_farm.model_poultry_farm_house,base.group_user,1,1,1,1
+access_poultry_cash_account,poultry.cash.account,model_poultry_cash_account,base.group_user,1,1,1,1
+
+
 
