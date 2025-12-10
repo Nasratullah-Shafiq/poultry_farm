@@ -1,8 +1,7 @@
 from odoo import models, fields, api
 from datetime import date, datetime, timedelta
-import datetime
 from odoo.exceptions import ValidationError
-
+import datetime
 
 
 class PoultrySalary(models.Model):
@@ -149,36 +148,56 @@ class PoultrySalary(models.Model):
             else:
                 rec.payment_status = 'not_paid'
 
-
     @api.constrains('amount_received', 'employee_id', 'salary_date')
     def _check_salary_payment_limit(self):
-        for rec in self:
-            if not rec.employee_id or not rec.salary_date:
-                continue  # skip if employee or date not set
+        """
+        Enforce per-employee, per-month salary limits:
 
-            # Define month start and end
+        - Multiple partial payments are allowed within a month.
+        - The month may only become "fully paid" once. If it's already fully paid,
+          no new payment that keeps the month fully-paid (or overpays) is allowed.
+        - Overpayments are blocked.
+        """
+        for rec in self:
+            # skip incomplete records
+            if not rec.employee_id or not rec.salary_date:
+                continue
+
+            # 0 or negative payment is not allowed
+            if rec.amount_received <= 0:
+                raise ValidationError(
+                    "You cannot pay 0. Please enter an amount greater than 0."
+                )
+            if not rec.total_salary or rec.total_salary <= 0:
+                # If total_salary is not set, block to be safe (or you can skip)
+                f"Salary for {rec.employee_id.name} is not set. Please set the salary before recording a payment."
+
+            # Compute month range
             month_start = rec.salary_date.replace(day=1)
             next_month = (month_start + timedelta(days=31)).replace(day=1)
             month_end = next_month - timedelta(days=1)
 
-            # Calculate total payments already made for this month
+            # Existing payments in the same month for the employee (exclude current record)
             existing_payments = self.env['salary.payment'].search([
                 ('employee_id', '=', rec.employee_id.id),
                 ('salary_date', '>=', month_start),
                 ('salary_date', '<=', month_end),
-                ('id', '!=', rec.id)
+                ('id', '!=', rec.id or 0),
             ])
 
-            total_paid_so_far = sum(existing_payments.mapped('amount_received'))
+            existing_sum = sum(existing_payments.mapped('amount_received') or [0])
+            new_total = existing_sum + (rec.amount_received or 0)
 
-            # Include current payment
-            new_total = total_paid_so_far + (rec.amount_received or 0)
+            # 1) Overpayment not allowed
+            if new_total > rec.total_salary:
+                month_name = rec.salary_date.strftime('%B')
+                raise ValidationError(
+                    f"You cannot pay an amount greater than the total salary ({rec.total_salary})."
+                )
 
-            # Validation: cannot exceed total_salary
-            if rec.total_salary and new_total > rec.total_salary:
+            # 2) If month is already fully paid (existing_sum == total_salary), block any further payment
+            if existing_sum == rec.total_salary:
                 month_name = rec.salary_date.strftime('%B')
                 raise ValidationError(
                     f"The total salary for {month_name} has already been paid for {rec.employee_id.name}."
                 )
-
-
