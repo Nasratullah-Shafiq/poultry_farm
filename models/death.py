@@ -1,8 +1,6 @@
-from odoo.exceptions import UserError
-
 from odoo import SUPERUSER_ID
 from odoo import models, fields, api
-
+from odoo.exceptions import UserError
 
 class PoultryDeath(models.Model):
     _name = 'poultry.death'
@@ -56,14 +54,6 @@ class PoultryDeath(models.Model):
         help="The poultry type for the death record"
     )
 
-    # ✅ Computed remaining quantity based on poultry type AND branch
-    remaining_quantity = fields.Integer(
-        string="Remaining Quantity",
-        # compute='_compute_remaining_quantity',
-        store=False,
-        readonly=True
-    )
-
     # total poultry in the selected branch (all types)
     total_poultry = fields.Integer(
         string="Total Poultry in Branch",
@@ -85,17 +75,8 @@ class PoultryDeath(models.Model):
             else:
                 rec.death_count = 0
 
-    # @api.depends('branch_id')
-    # def _compute_total_poultry(self):
-    #     """Sum total_quantity of all poultry.farm records in the selected branch"""
-    #     for rec in self:
-    #         if rec.branch_id:
-    #             quants = self.env['poultry.farm'].search([('branch_id', '=', rec.branch_id.id)])
-    #             rec.total_poultry = sum(quants.mapped('total_quantity'))
-    #         else:
-    #             rec.total_poultry = 0
 
-    @api.depends('branch_id')
+    @api.depends('branch_id', 'item_type_id')
     def _compute_death_count(self):
         for rec in self:
             deaths = self.env['poultry.death'].search([
