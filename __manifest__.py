@@ -22,29 +22,36 @@
         # Menus should load first
         'views/menu.xml',
 
-        # Wizard and view files
+        # Wizard files
         'wizard/finance_report_wizard_views.xml',
+        'wizard/sale_report_wizard_views.xml',
+        'wizard/purchase_report_wizard_views.xml',
+        'wizard/salary_payment_wizard_views.xml',
+
+        #view files
         'views/branch_views.xml',
         'views/employee_views.xml',
+        'views/salary_payment_views.xml',
         'views/finance_views.xml',
-        'views/farm_views.xml',
-        'views/feed_views.xml',
+        # 'views/farm_views.xml',
         'views/sales_views.xml',
-        'views/medicine_views.xml',
         'views/poultry_views.xml',
-        'wizard/poultry_sale_report_wizard_views.xml',
-        'wizard/poultry_purchase_report_wizard_views.xml',
         'views/poultry_item_views.xml',
         'views/cashier_views.xml',
         'views/death_views.xml',
         'views/customer_views.xml',
         'views/payment_views.xml',
+        'views/purchase_views.xml',
+        'views/poultry_farm_house_views.xml',
+        'views/cash_account_views.xml',
+        'views/cash_deposit_views.xml',
 
         # Reports - actions before templates
         'report/finance_report_action.xml',
         'report/finance_report_template.xml',
-        'report/poultry_purchase_report_template.xml',
-        'report/poultry_sales_report_template.xml',
+        'report/purchase_report_template.xml',
+        'report/sales_report_template.xml',
+        'report/salary_payment_report_template.xml',
     ],
 
     'installable': True,
