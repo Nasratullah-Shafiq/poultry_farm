@@ -1,5 +1,7 @@
-from odoo.exceptions import ValidationError
 from odoo import models, fields, api
+from datetime import date, datetime, timedelta
+from odoo.exceptions import ValidationError
+import datetime
 
 
 class PoultryPayment(models.Model):
@@ -36,6 +38,41 @@ class PoultryPayment(models.Model):
         compute="_compute_amount_due",
         store=True
     )
+
+    # ================================
+    #   YEAR & MONTH FOR SEARCH PANEL
+    # ================================
+    payment_month = fields.Selection(
+        [
+            ('1', 'January'), ('2', 'February'), ('3', 'March'), ('4', 'April'),
+            ('5', 'May'), ('6', 'June'), ('7', 'July'), ('8', 'August'),
+            ('9', 'September'), ('10', 'October'), ('11', 'November'), ('12', 'December')
+        ],
+        string="Month",
+        compute="_compute_year_month",
+        store=True
+    )
+
+    payment_year = fields.Selection(
+        selection="_get_year_selection",
+        string="Year",
+        compute="_compute_year_month",
+        store=True
+    )
+
+    @api.depends('date')
+    def _compute_year_month(self):
+        for rec in self:
+            if rec.date:
+                rec.payment_month = str(rec.date.month)
+                rec.payment_year = str(rec.date.year)
+            else:
+                rec.payment_month = False
+                rec.payment_year = False
+
+    def _get_year_selection(self):
+        current_year = datetime.date.today().year
+        return [(str(y), str(y)) for y in range(current_year - 10, current_year + 1)]
 
     # -------------------------
     # Onchange Logic
