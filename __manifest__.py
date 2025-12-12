@@ -27,6 +27,7 @@
         'wizard/sale_report_wizard_views.xml',
         'wizard/purchase_report_wizard_views.xml',
         'wizard/salary_payment_wizard_views.xml',
+        'wizard/expense_report_wizard_views.xml',
 
         #view files
         'views/branch_views.xml',
@@ -45,6 +46,7 @@
         'views/poultry_farm_house_views.xml',
         'views/cash_account_views.xml',
         'views/cash_deposit_views.xml',
+        'views/expenses_views.xml',
 
         # Reports - actions before templates
         'report/finance_report_action.xml',
@@ -52,6 +54,7 @@
         'report/purchase_report_template.xml',
         'report/sales_report_template.xml',
         'report/salary_payment_report_template.xml',
+        # 'report/expense_report_template.xml',
     ],
 
     'installable': True,
