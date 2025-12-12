@@ -35,7 +35,8 @@ class PoultryDeath(models.Model):
             ('unknown', 'Unknown')
         ],
         string="Reason",
-        required=True
+        required=True,
+        default='disease'
     )
 
     description = fields.Text(string="Additional Notes")
@@ -51,7 +52,8 @@ class PoultryDeath(models.Model):
         'item.type',
         string="Poultry Type",
         required=True,
-        help="The poultry type for the death record"
+        help="The poultry type for the death record",
+        store=True
     )
 
     # total poultry in the selected branch (all types)
@@ -61,6 +63,12 @@ class PoultryDeath(models.Model):
         store=False,
         readonly=True
     )
+
+    @api.constrains('quantity')
+    def _check_quantity(self):
+        for rec in self:
+            if rec.quantity <= 0:
+                raise UserError("Death quantity must be greater than zero.")
 
     @api.depends('branch_id', 'item_type_id')
     def _compute_death_count(self):
