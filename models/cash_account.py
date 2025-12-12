@@ -1,7 +1,6 @@
 from odoo import models, fields, api
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from datetime import date, datetime, timedelta
-from odoo.exceptions import ValidationError
 import datetime
 
 class PoultryCashAccount(models.Model):
@@ -18,6 +17,7 @@ class PoultryCashAccount(models.Model):
         ('unique_branch', 'unique(branch_id)', "Each branch can only have one cash account!")
     ]
     deposit_ids = fields.One2many('poultry.cash.deposit', 'cash_account_id', string="Deposits")
+    expense_ids = fields.One2many('poultry.expense', 'cash_account_id', string='Expenses')
 
     @api.model
     def create(self, vals):
@@ -28,10 +28,17 @@ class PoultryCashAccount(models.Model):
             vals['name'] = f"{code}001"  # 001 because only one account per branch
         return super().create(vals)
 
-    @api.depends('deposit_ids.amount')
+    @api.depends('deposit_ids.amount', 'expense_ids.amount')
     def _compute_balance(self):
         for account in self:
-            account.balance = sum(account.deposit_ids.mapped('amount'))
+            total_deposits = sum(account.deposit_ids.mapped('amount'))
+            total_expenses = sum(account.expense_ids.mapped('amount'))
+            account.balance = total_deposits - total_expenses
+
+    # @api.depends('deposit_ids.amount')
+    # def _compute_balance(self):
+    #     for account in self:
+    #         account.balance = sum(account.deposit_ids.mapped('amount'))
 
 
 
