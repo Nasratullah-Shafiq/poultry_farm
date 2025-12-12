@@ -10,24 +10,13 @@ class PoultryEmployee(models.Model):
 
     name = fields.Char(required=True)
     employee_code = fields.Char()
-    branch_id = fields.Many2one('poultry.branch', string='Branch')
-    job_title = fields.Char()
-    phone = fields.Char()
+    branch_id = fields.Many2one('poultry.branch', string='Branch', required=True)
+    job_title = fields.Char(string = "Job Title", required=True)
+    phone = fields.Char(string="Phone", required=True)
     address = fields.Text()
-    hire_date = fields.Date()
-    salary = fields.Monetary(currency_field='currency_id')
+    hire_date = fields.Date(string="Date", required=True)
+    salary = fields.Monetary(currency_field='currency_id', required=True)
     currency_id = fields.Many2one('res.currency', string='Currency', default=lambda self: self.env.company.currency_id)
     # Attendance placeholder field: a simple counter or last sign-in
     last_attendance = fields.Datetime()
     active = fields.Boolean(default=True)
-
-class PoultrySalaryPayment(models.Model):
-    _name = 'poultry.salary'
-    _description = 'Employee Salary Payment'
-
-    employee_id = fields.Many2one('poultry.employee', required=True)
-    amount = fields.Monetary(currency_field='currency_id', required=True)
-    currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
-    payment_date = fields.Date(default=fields.Date.context_today)
-    journal_id = fields.Many2one('account.journal', string='Journal')
-    note = fields.Text()
