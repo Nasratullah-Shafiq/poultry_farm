@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- TREE VIEW -->
+    <record id="view_poultry_cash_deposit_tree" model="ir.ui.view">
+        <field name="name">poultry.cash.deposit.tree</field>
+        <field name="model">poultry.cash.deposit</field>
+        <field name="arch" type="xml">
+            <tree string="Cash Deposits">
+                <field name="cash_account_id"/>
+                <field name="branch_id"/>
+                <field name="amount" sum="Total"/>
+                <field name="date"/>
+                <field name="user_id"/>
+                <field name="note"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- FORM VIEW -->
+    <record id="view_poultry_cash_deposit_form" model="ir.ui.view">
+        <field name="name">poultry.cash.deposit.form</field>
+        <field name="model">poultry.cash.deposit</field>
+        <field name="arch" type="xml">
+            <form string="Cash Deposit">
+                <sheet>
+                    <group>
+                        <field name="cash_account_id"/>
+                        <field name="branch_id" readonly="1"/>
+                        <field name="amount"/>
+                        <field name="date"/>
+                        <field name="user_id"/>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- SEARCH VIEW WITH SEARCH PANEL -->
+    <record id="view_cash_deposit_search" model="ir.ui.view">
+        <field name="name">cash.deposit.search</field>
+        <field name="model">poultry.cash.deposit</field>
+        <field name="arch" type="xml">
+            <search string="Cash Deposits">
+
+                <!-- Quick search fields -->
+                <field name="cash_account_id"/>
+                <!--            <field name="branch_id"/>-->
+                <field name="date"/>
+
+                <!-- Optional filter (example: this month) -->
+                <!--
+                <filter string="This Month" name="filter_this_month"
+                    domain="[('date','>=', (context_today().replace(day=1))),
+                             ('date','<=', context_today())]"/>
+                -->
+
+                <!-- Search panel -->
+                <searchpanel>
+                    <field name="cash_account_id" string="Cash Account" icon="fa-briefcase"/>
+                    <field name="branch_id" string="Branch" icon="fa-sitemap"/>
+                    <field name="deposit_year" string="Year" select="1" icon="fa-calendar"/>
+                    <field name="deposit_month" string="Month" select="1" icon="fa-calendar"/>
+                    <!--                    <field name="user_id" string="Deposited By"/>-->
+                </searchpanel>
+
+            </search>
+        </field>
+    </record>
+
+
+    <!-- PIVOT VIEW -->
+    <record id="view_poultry_cash_deposit_pivot" model="ir.ui.view">
+        <field name="name">poultry.cash.deposit.pivot</field>
+        <field name="model">poultry.cash.deposit</field>
+        <field name="arch" type="xml">
+            <pivot string="Cash Deposits Pivot">
+                <field name="branch_id" type="row"/>
+                <field name="user_id" type="col"/>
+                <field name="amount" type="measure"/>
+                <field name="date" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- GRAPH VIEW -->
+    <record id="view_poultry_cash_deposit_graph" model="ir.ui.view">
+        <field name="name">poultry.cash.deposit.graph</field>
+        <field name="model">poultry.cash.deposit</field>
+        <field name="arch" type="xml">
+            <graph string="Cash Deposits Graph" type="bar">
+                <field name="branch_id" type="row"/>
+                <field name="amount" type="measure"/>
+                <field name="date" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_poultry_cash_deposit" model="ir.actions.act_window">
+        <field name="name">Cash Deposits</field>
+        <field name="res_model">poultry.cash.deposit</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="search_view_id" ref="view_cash_deposit_search"/>
+    </record>
+
+    <!-- MENU ITEM -->
+    <menuitem id="menu_poultry_cash_deposit"
+              name="Cash Deposits"
+              parent="menu_poultry_finance"
+              action="action_poultry_cash_deposit"
+              sequence="10"/>
+</odoo>
