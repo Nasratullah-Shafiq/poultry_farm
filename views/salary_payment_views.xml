@@ -125,6 +125,11 @@
         <field name="model">salary.payment</field>
         <field name="arch" type="xml">
             <form string="Employee Salary Payment">
+                <header>
+                    <field name="payment_status" widget="statusbar"
+                           statusbar_visible="paid,partially_paid,not_paid"
+                           statusbar_colors="paid:green;partially_paid:orange;not_paid:red"/>
+                </header>
                 <sheet>
                     <!--  RIBBONS GO HERE  -->
                     <widget name="web_ribbon"
