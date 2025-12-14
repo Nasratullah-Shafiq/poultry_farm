@@ -16,7 +16,8 @@ class PoultrySale(models.Model):
     branch_id = fields.Many2one('poultry.branch', required=True)  # Link to the branch where sale occurs
     item_type_id = fields.Many2one('item.type', string='Type', required=True)  # Type of poultry item being sold
     quantity = fields.Integer(string="Quantity for Sale", default=1)  # Number of items sold, default is 1
-    unit_price = fields.Monetary(currency_field='currency_id', required=True)  # Price per unit in selected currency
+    sale_price = fields.Monetary(currency_field='currency_id', required=True)  # Price per unit in selected currency
+    purchase_price = fields.Monetary(string='Purchase Price', currency_field='currency_id', readonly=True)
     uom_id = fields.Many2one(
         'uom.uom', string='Unit of Measure', required=True,
         default=lambda self: self.env.ref('uom.product_uom_unit')  # Default unit of measure is 1 piece
@@ -24,147 +25,72 @@ class PoultrySale(models.Model):
     currency_id = fields.Many2one(
         'res.currency', default=lambda self: self.env.company.currency_id
     )  # Currency for the sale, defaults to company currency
-    customer_id = fields.Many2one(
-        'poultry.customer',
-        string='Customer',
-        required=False,
-        ondelete='cascade'
-    )
+    customer_id = fields.Many2one('poultry.customer', string='Customer', ondelete='cascade')
+    farm_id = fields.Many2one('poultry.farm.house', string='Farm', required=True)
 
     # ---------------------------
     # Computed Fields
     # ---------------------------
     total = fields.Monetary(
         currency_field='currency_id', compute='_compute_total', String="Total", store=True
-    )  # Total sale revenue = quantity * unit_price, stored in DB
+    )  # Total sale revenue = quantity * sale_price, stored in DB
 
-    available_quantity = fields.Integer(
-        string="Available Quantity",
-        compute='_compute_available_quantity',  # Dynamically calculated from poultry stock
-        store=False
-    )
+    available_quantity = fields.Integer(string="Available Quantity", compute='_compute_available_quantity', store=True)
 
-    # # ---------------------------
-    # # Payment Fields
-    # # ---------------------------
-    # payment_type = fields.Selection([
-    #     ('cash', 'Cash'),
-    #     ('credit', 'Credit'),
-    # ], string="Payment Type", default='cash', required=True)  # Type of payment
-    #
-    # amount_paid = fields.Monetary(
-    #     currency_field='currency_id',
-    #     string="Amount Paid",
-    #     default=0.0,
-    #     help="Amount paid by the customer at the time of sale."
-    # )
-    # # amount_paid = fields.Monetary(
-    # #     string="Amount Paid",
-    # #     currency_field='currency_id',
-    # #     compute="_compute_amount_paid",
-    # #     store=True
-    # # )
-    #
-    # amount_due = fields.Monetary(
-    #     currency_field='currency_id',
-    #     string="Amount Due",
-    #     compute="_compute_amount_due", store=True
-    # )  # Computed as revenue - amount_received
-    #
-    # due_date = fields.Date(
-    #     string="Due Date",
-    #     help="Payment deadline if payment type is credit."
-    # )
-
-    payment_ids = fields.One2many(
-        'poultry.payment',
-        'sale_id',
-        string="Payments"
-    )
-
-    # payment_status = fields.Selection([
-    #     ('not_paid', 'Not Paid'),
-    #     ('partial', 'Partially Paid'),
-    #     ('paid', 'Fully Paid'),
-    # ], string="Payment Status", compute="_compute_payment_status", store=True)  # Tracks payment status
-    #
-    # payment_note = fields.Text(string="Payment Notes")  # Optional notes about payment
-
-    # @api.depends('payment_ids.amount')
-    # def _compute_amount_paid(self):
-    #     for rec in self:
-    #         total = sum(rec.payment_ids.mapped('amount'))
-    #         rec.amount_paid = total
-    #
-    # @api.model
-    # def create(self, vals):
-    #     payment = super(PoultryPayment, self).create(vals)
-    #
-    #     # Trigger compute fields on sale
-    #     if payment.sale_id:
-    #         payment.sale_id._compute_amount_paid()
-    #         payment.sale_id._compute_amount_due()
-    #         payment.sale_id._compute_payment_status()
-    #
-    #     return payment
+    payment_ids = fields.One2many('poultry.payment','sale_id',string="Payments")
 
     # ---------------------------
     # Constraints & Validations
     # ---------------------------
+    @api.constrains('customer_id')
+    def _check_customer(self):
+        for rec in self:
+            if not rec.customer_id:
+                raise UserError("Customer is required. Please select a customer before saving.")
 
-    @api.constrains('unit_price')
-    def _check_unit_price(self):
+    @api.onchange('item_type_id')
+    def _onchange_item_type_id(self):
+        if not self.item_type_id:
+            return
+
+        # Fetch latest purchase price
+        latest_purchase = self.env['poultry.purchase'].search(
+            [('item_type_id', '=', self.item_type_id.id)],
+            order='date desc',
+            limit=1
+        )
+
+        if latest_purchase:
+            self.purchase_price = latest_purchase.purchase_price
+        else:
+            self.purchase_price = 0
+
+    @api.constrains('sale_price')
+    def _check_sale_price(self):
         """Ensure unit price is greater than zero."""
         for rec in self:
-            if rec.unit_price <= 0:
+            if rec.sale_price <= 0:
                 raise ValidationError("Unit Price must be greater than zero.")
 
-    # ---------------------------
-    # Computation Methods
-    # ---------------------------
-    # @api.depends('revenue', 'amount_paid')
-    # def _compute_amount_due(self):
-    #     for rec in self:
-    #         rec.amount_due = rec.revenue - rec.amount_paid
-    #
-    # @api.depends('amount_paid', 'revenue')
-    # def _compute_payment_status(self):
-    #     """Determine the payment status based on amount received."""
-    #     for rec in self:
-    #         if rec.amount_paid <= 0:
-    #             rec.payment_status = 'not_paid'
-    #         elif rec.amount_paid < rec.revenue:
-    #             rec.payment_status = 'partial'
-    #         else:
-    #             rec.payment_status = 'paid'
-
-    # @api.onchange('payment_type')
-    # def _onchange_payment_type(self):
-    #     """Auto-update fields based on payment type selection."""
-    #     if self.payment_type == 'cash':
-    #         self.due_date = False  # No due date for cash payments
-    #         self.amount_paid = self.revenue  # Full payment assumed
-    #     else:
-    #         self.amount_paid = 0  # Reset for credit payments
-
-    @api.depends('branch_id', 'item_type_id')
+    @api.depends('branch_id', 'farm_id', 'item_type_id')
     def _compute_available_quantity(self):
-        """Compute available stock for the selected branch and item type."""
+        """Compute available stock for the selected branch, farm, and item type."""
         for rec in self:
-            if rec.branch_id and rec.item_type_id:
+            if rec.branch_id and rec.farm_id and rec.item_type_id:
                 stock = self.env['poultry.farm'].search([
                     ('branch_id', '=', rec.branch_id.id),
+                    ('farm_id', '=', rec.farm_id.id),
                     ('item_type_id', '=', rec.item_type_id.id)
                 ], limit=1)
                 rec.available_quantity = stock.total_quantity if stock else 0
             else:
                 rec.available_quantity = 0
 
-    @api.depends('quantity', 'unit_price')
+    @api.depends('quantity', 'sale_price')
     def _compute_total(self):
         """Compute total revenue for the sale."""
         for rec in self:
-            rec.total = rec.quantity * rec.unit_price
+            rec.total = rec.quantity * rec.sale_price
 
     # ---------------------------
     # Overridden ORM Methods
