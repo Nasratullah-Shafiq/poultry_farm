@@ -1,5 +1,5 @@
 <!--<odoo>-->
-
+<!--    &lt;!&ndash; Poultry Finance Report Template &ndash;&gt;-->
 <!--    <template id="report_poultry_finance_template">-->
 <!--        <t t-call="web.html_container">-->
 <!--            <t t-foreach="docs" t-as="o">-->
@@ -8,7 +8,7 @@
 <!--                    &lt;!&ndash; Report Header &ndash;&gt;-->
 <!--                    <div style="text-align:center; border-bottom:2px solid #4CAF50; padding-bottom:10px; margin-bottom:15px;">-->
 <!--                        <h1 style="color:#4CAF50; font-size:26px; margin:0;">Poultry Finance Report</h1>-->
-<!--                        <p style="font-size:14px; color:#555;">Comprehensive Financial Summary</p>-->
+<!--                        <p style="font-size:14px; color:#555;">Detailed Record of Finance Summary</p>-->
 <!--                    </div>-->
 
 <!--                    &lt;!&ndash; Report Date Range and Branch &ndash;&gt;-->
@@ -26,15 +26,14 @@
 <!--                        </p>-->
 <!--                    </div>-->
 
-<!--                    &lt;!&ndash; Summary Section &ndash;&gt;-->
+<!--                    &lt;!&ndash; Finance Details Table &ndash;&gt;-->
 <!--                    <h3 style="color:#4CAF50; border-bottom:1px solid #ddd; padding-bottom:5px; margin-top:20px;">-->
-<!--                        Financial Summary-->
+<!--                        Finance Details-->
 <!--                    </h3>-->
-
 <!--                    <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size:14px;">-->
 <!--                        <thead>-->
 <!--                            <tr style="background-color:#f5f5f5; border:1px solid #ddd;">-->
-<!--                                <th style="padding:8px; text-align:left;">Category</th>-->
+<!--                                <th style="padding:8px;">Category</th>-->
 <!--                                <th style="padding:8px; text-align:right;">Amount</th>-->
 <!--                            </tr>-->
 <!--                        </thead>-->
@@ -70,26 +69,26 @@
 <!--                                </td>-->
 <!--                            </tr>-->
 <!--                            <tr>-->
-<!--                                <td style="padding:8px; border:1px solid #ddd;">Total Feed Cost</td>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd;">Total Feed</td>-->
 <!--                                <td style="padding:8px; border:1px solid #ddd; text-align:right;">-->
 <!--                                    <t t-esc="o.total_feed"/>-->
 <!--                                </td>-->
 <!--                            </tr>-->
 <!--                            <tr>-->
-<!--                                <td style="padding:8px; border:1px solid #ddd;">Total Medicine Cost</td>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd;">Total Medicine</td>-->
 <!--                                <td style="padding:8px; border:1px solid #ddd; text-align:right;">-->
 <!--                                    <t t-esc="o.total_medicine"/>-->
 <!--                                </td>-->
 <!--                            </tr>-->
 <!--                            <tr>-->
-<!--                                <td style="padding:8px; border:1px solid #ddd;">Total Vaccination Cost</td>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd;">Total Vaccination</td>-->
 <!--                                <td style="padding:8px; border:1px solid #ddd; text-align:right;">-->
 <!--                                    <t t-esc="o.total_vaccination"/>-->
 <!--                                </td>-->
 <!--                            </tr>-->
-<!--                            <tr style="background-color:#f0fff0; font-weight:bold;">-->
+<!--                            <tr>-->
 <!--                                <td style="padding:8px; border:1px solid #ddd;">Net Profit</td>-->
-<!--                                <td style="padding:8px; border:1px solid #ddd; text-align:right; color:#4CAF50;">-->
+<!--                                <td style="padding:8px; border:1px solid #ddd; text-align:right;">-->
 <!--                                    <t t-esc="o.net_profit"/>-->
 <!--                                </td>-->
 <!--                            </tr>-->
@@ -110,93 +109,212 @@
 <!--        </t>-->
 <!--    </template>-->
 <!--</odoo>-->
+
+<!--<odoo>-->
+<!--    &lt;!&ndash; Poultry Finance Report Template &ndash;&gt;-->
+<!--    <template id="report_poultry_finance_template">-->
+<!--        <t t-call="web.html_container">-->
+<!--            <t t-foreach="docs" t-as="o">-->
+<!--                <div class="page">-->
+
+<!--                    &lt;!&ndash; Report Header &ndash;&gt;-->
+<!--                    <div style="text-align:center; border-bottom:2px solid #4CAF50; padding-bottom:10px; margin-bottom:15px;">-->
+<!--                        <h1 style="color:#4CAF50; font-size:26px; margin:0;">Poultry Finance Report</h1>-->
+<!--                        <p style="font-size:14px; color:#555;">Detailed Financial Overview</p>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; Date Range and Branch &ndash;&gt;-->
+<!--                    <div style="margin-bottom:15px; font-size:14px; color:#333;">-->
+<!--                        <p>-->
+<!--                            <strong>From:</strong> <t t-esc="o.start_date"/>-->
+<!--                            -->
+<!--                            <strong>To:</strong> <t t-esc="o.end_date"/>-->
+<!--                        </p>-->
+<!--                        <p>-->
+<!--                            <strong>Branch:</strong>-->
+<!--                            <t t-esc="o.branch_id.name if o.branch_id else 'All Branches'"/>-->
+<!--                        </p>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; Income & Sales Section &ndash;&gt;-->
+<!--                    <h3 style="color:#4CAF50; border-bottom:1px solid #ddd; padding-bottom:5px; margin-top:20px;">-->
+<!--                        Income and Sales-->
+<!--                    </h3>-->
+<!--                    <table style="width:60%; border-collapse:collapse; font-size:14px; margin-top:10px;">-->
+<!--                        <tbody>-->
+<!--                            <tr>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd;">Total Income</td>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_income"/></td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd;">Total Sales</td>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_sales"/></td>-->
+<!--                            </tr>-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+
+<!--                    &lt;!&ndash; Expenses & Costs Section &ndash;&gt;-->
+<!--                    <h3 style="color:#4CAF50; border-bottom:1px solid #ddd; padding-bottom:5px; margin-top:20px;">-->
+<!--                        Expenses and Costs-->
+<!--                    </h3>-->
+<!--                    <table style="width:60%; border-collapse:collapse; font-size:14px; margin-top:10px;">-->
+<!--                        <tbody>-->
+<!--                            <tr>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd;">Total Purchases</td>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_purchases"/></td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd;">Total Expenses</td>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_expenses"/></td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd;">Total Salaries</td>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_salaries"/></td>-->
+<!--                            </tr>-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+
+<!--                    &lt;!&ndash; Feed & Medicine Section &ndash;&gt;-->
+<!--                    <h3 style="color:#4CAF50; border-bottom:1px solid #ddd; padding-bottom:5px; margin-top:20px;">-->
+<!--                        Feed and Medicine-->
+<!--                    </h3>-->
+<!--                    <table style="width:60%; border-collapse:collapse; font-size:14px; margin-top:10px;">-->
+<!--                        <tbody>-->
+<!--                            <tr>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd;">Total Feed</td>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_feed"/></td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd;">Total Medicine</td>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_medicine"/></td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd;">Total Vaccination</td>-->
+<!--                                <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_vaccination"/></td>-->
+<!--                            </tr>-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+
+<!--                    &lt;!&ndash; Net Profit &ndash;&gt;-->
+<!--                    <h3 style="color:#4CAF50; border-top:2px solid #4CAF50; padding-top:10px; margin-top:25px;">-->
+<!--                        Net Profit-->
+<!--                    </h3>-->
+<!--                    <table style="width:60%; border-collapse:collapse; font-size:14px; margin-top:10px;">-->
+<!--                        <tbody>-->
+<!--                            <tr>-->
+<!--                                <td style="padding:10px; border:1px solid #ddd; font-weight:bold;">Net Profit</td>-->
+<!--                                <td style="padding:10px; border:1px solid #ddd; text-align:right; font-weight:bold;">-->
+<!--                                    <t t-esc="o.net_profit"/>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+
+<!--                    &lt;!&ndash; Footer &ndash;&gt;-->
+<!--                    <div style="margin-top:30px; text-align:center; color:#888; font-size:12px;">-->
+<!--                        <p>-->
+<!--                            Generated on <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>-->
+<!--                        </p>-->
+<!--                        <p>Powered by Poultry Farm Management System</p>-->
+<!--                    </div>-->
+
+<!--                </div>-->
+<!--            </t>-->
+<!--        </t>-->
+<!--    </template>-->
+<!--</odoo>-->
+
 <odoo>
-    <!-- PDF Template -->
+    <!-- Finance Report Template -->
     <template id="report_poultry_finance_template">
-        <t t-call="web.external_layout">
-            <div class="page">
-                <h2 style="text-align:center;">Poultry Finance Report</h2>
-                <p>
-                    <strong>Date Range:</strong>
-                    <span t-esc="doc.start_date"/> to <span t-esc="doc.end_date"/>
-                </p>
-                <p>
-                    <strong>Branch:</strong>
-                    <span t-esc="doc.branch_id.name or 'All Branches'"/>
-                </p>
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <div class="page">
 
-                <br/>
+                    <!-- Report Header -->
+                    <div style="text-align:center; border-bottom:2px solid #4CAF50; padding-bottom:10px; margin-bottom:15px;">
+                        <h1 style="color:#4CAF50; font-size:26px; margin:0;">Poultry Finance Report</h1>
+                        <p style="font-size:14px; color:#555;">Detailed Finance Summary</p>
+                    </div>
 
-                <table class="table table-sm table-bordered" style="width:100%; border:1px solid #000;">
-                    <thead>
-                        <tr>
-                            <th style="text-align:left;">Description</th>
-                            <th style="text-align:right;">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Total Income</td>
-                            <td style="text-align:right;">
-                                <span t-esc="doc.total_income"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Total Sales</td>
-                            <td style="text-align:right;">
-                                <span t-esc="doc.total_sales"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Total Purchases</td>
-                            <td style="text-align:right;">
-                                <span t-esc="doc.total_purchases"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Total Expenses</td>
-                            <td style="text-align:right;">
-                                <span t-esc="doc.total_expenses"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Total Salaries</td>
-                            <td style="text-align:right;">
-                                <span t-esc="doc.total_salaries"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Total Feed Cost</td>
-                            <td style="text-align:right;">
-                                <span t-esc="doc.total_feed"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Total Medicine Cost</td>
-                            <td style="text-align:right;">
-                                <span t-esc="doc.total_medicine"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Total Vaccination Cost</td>
-                            <td style="text-align:right;">
-                                <span t-esc="doc.total_vaccination"/>
-                            </td>
-                        </tr>
-                        <tr style="background-color:#f0f0f0;">
-                            <td><strong>Net Profit</strong></td>
-                            <td style="text-align:right;"><strong><span t-esc="doc.net_profit"/></strong></td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <!-- Date Range & Branch -->
+                    <div style="margin-bottom:15px; font-size:14px; color:#333;">
+                        <p>
+                            <strong>From:</strong> <t t-esc="o.start_date"/>
 
-                <br/>
-                <p style="text-align:center; font-size:10px; color:gray;">
-                    Generated on <span t-esc="context.get('current_date', '')"/> by Odoo
-                </p>
-            </div>
+                            <strong>To:</strong> <t t-esc="o.end_date"/>
+                        </p>
+                        <p>
+                            <strong>Branch:</strong> <t t-esc="o.branch_id.name if o.branch_id else 'All Branches'"/>
+                        </p>
+                    </div>
+
+                    <!-- Finance Categories -->
+                    <table style="width:100%; border-collapse:collapse; font-size:14px; margin-top:15px;">
+                        <!-- Income -->
+                        <tr style="background:#f5f5f5;">
+                            <th colspan="2" style="padding:8px; text-align:left;">Income</th>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ddd;">Total Income</td>
+                            <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_income"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ddd;">Total Sales</td>
+                            <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_sales"/></td>
+                        </tr>
+
+                        <!-- Expenses -->
+                        <tr style="background:#f5f5f5;">
+                            <th colspan="2" style="padding:8px; text-align:left;">Expenses</th>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ddd;">Total Purchases</td>
+                            <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_purchases"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ddd;">Total Salaries</td>
+                            <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_salaries"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ddd;">Other Expenses</td>
+                            <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_expenses"/></td>
+                        </tr>
+
+                        <!-- Feed & Medicine -->
+                        <tr style="background:#f5f5f5;">
+                            <th colspan="2" style="padding:8px; text-align:left;">Feed and Medicine</th>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ddd;">Total Feed</td>
+                            <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_feed"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ddd;">Total Medicine</td>
+                            <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_medicine"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ddd;">Total Vaccination</td>
+                            <td style="padding:8px; border:1px solid #ddd; text-align:right;"><t t-esc="o.total_vaccination"/></td>
+                        </tr>
+
+                        <!-- Net Profit -->
+                        <tr style="background:#d9f7be;">
+                            <th style="padding:8px; text-align:left;">Net Profit</th>
+                            <th style="padding:8px; text-align:right;"><t t-esc="o.net_profit"/></th>
+                        </tr>
+                    </table>
+
+                    <!-- Footer -->
+                    <div style="margin-top:30px; text-align:center; color:#888; font-size:12px;">
+                        <p>Generated on <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/></p>
+                        <p>Powered by Poultry Farm Management System</p>
+                    </div>
+
+                </div>
+            </t>
         </t>
     </template>
-
-
 </odoo>
+
+
