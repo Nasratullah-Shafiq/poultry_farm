@@ -156,8 +156,10 @@
                      SEARCH PANEL (Odoo 17)
                 ======================= -->
                 <searchpanel>
-                    <field name="customer_id"/>
-                    <field name="sale_id"/>
+                    <field name="customer_id" icon="fa-user"/>
+                    <field name="sale_id" icon="fa-shopping-cart"/>
+                    <field name="payment_year" string="Year" select="1" icon="fa-calendar"/>
+                    <field name="payment_month" string="Month" select="1" icon="fa-calendar"/>
                 </searchpanel>
 
             </search>
