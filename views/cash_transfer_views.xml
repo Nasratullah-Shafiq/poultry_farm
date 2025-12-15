@@ -1,0 +1,79 @@
+<odoo>
+    <!-- Cash Transfer Action -->
+    <record id="action_cash_transfer" model="ir.actions.act_window">
+        <field name="name">Cash Transfers</field>
+        <field name="res_model">poultry.cash.transfer</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create and confirm cash transfers from Main Account to Branch/Expense/Salary Accounts.
+            </p>
+        </field>
+    </record>
+
+    <!-- Cash Transfer Menu -->
+    <menuitem id="menu_cash_transfer"
+              name="Cash Transfers"
+              parent="menu_poultry_finance"
+              action="action_cash_transfer"
+              sequence="20"/>
+
+    <!-- Tree View -->
+    <record id="view_cash_transfer_tree" model="ir.ui.view">
+        <field name="name">poultry.cash.transfer.tree</field>
+        <field name="model">poultry.cash.transfer</field>
+        <field name="arch" type="xml">
+            <tree string="Cash Transfers">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="from_account_id"/>
+                <field name="to_account_id"/>
+                <field name="amount"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_cash_transfer_form" model="ir.ui.view">
+        <field name="name">poultry.cash.transfer.form</field>
+        <field name="model">poultry.cash.transfer</field>
+        <field name="arch" type="xml">
+            <form string="Cash Transfer">
+                <header>
+                    <button name="action_confirm"
+                            string="Confirm Transfer"
+                            type="object"
+
+                            class="btn-primary"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="date"/>
+                            <field name="amount"/>
+                        </group>
+                        <group>
+                            <field name="to_account_id"/>
+                            <field name="to_branch_id"/>
+                            <field name="to_account_balance"/>
+                        </group>
+                        <group>
+                            <field name="from_account_id"/>
+                            <field name="from_branch_id"/>
+                            <field name="from_account_balance"/>
+                        </group>
+
+                        <group>
+                            <field name="note"/>
+                        </group>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>
