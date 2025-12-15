@@ -358,6 +358,6 @@
 
     <!-- MENU -->
     <!--    <menuitem id="menu_salary_payment_root" name="Salaries" sequence="20"/>-->
-    <menuitem id="menu_salary_payment" name="Employee Salary Payments" parent="menu_poultry_hr"
+    <menuitem id="menu_salary_payment" name="Salary Payments" parent="menu_poultry_hr"
               action="action_salary_payment"/>
 </odoo>
