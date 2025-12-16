@@ -12,7 +12,7 @@
             <tree string="Poultry Sales" create="true" edit="true">
                 <field name="date"/>
                 <field name="branch_id"/>
-                <field name="farm_id"/>
+                <field name="farm_id" domain="[('branch_id', '=', branch_id)]"/>
                 <field name="item_type_id"/>
                 <field name="quantity"/>
                 <field name="sale_price"/>
@@ -38,7 +38,7 @@
                         <group>
                             <field name="date"/>
                             <field name="branch_id"/>
-                            <field name="farm_id"/>
+                            <field name="farm_id" domain="[('branch_id', '=', branch_id)]"/>
                             <field name="item_type_id"/>
                             <field name="customer_id"/>
                         </group>
