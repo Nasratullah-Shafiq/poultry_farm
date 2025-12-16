@@ -39,7 +39,7 @@
                 <!-- Search panel for quick filtering by poultry type -->
                 <searchpanel>
                     <field name="branch_id" string="Branch" icon="fa-sitemap"/>
-                    <field name="farm_id" string="Farm House" icon="fa-building"/>
+                    <field name="farm_id" string="Farm House" icon="fa-home"/>
                     <field name="item_type_id" string="Type" icon="fa-tags"/>
 
                 </searchpanel>
