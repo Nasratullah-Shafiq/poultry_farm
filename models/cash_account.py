@@ -35,11 +35,6 @@ class PoultryCashAccount(models.Model):
             total_expenses = sum(account.expense_ids.mapped('amount'))
             account.balance = total_deposits - total_expenses
 
-    # @api.depends('deposit_ids.amount')
-    # def _compute_balance(self):
-    #     for account in self:
-    #         account.balance = sum(account.deposit_ids.mapped('amount'))
-
 
 
 class PoultryCashDeposit(models.Model):
