@@ -46,6 +46,7 @@
         'views/poultry_farm_house_views.xml',
         'views/cash_account_views.xml',
         'views/cash_deposit_views.xml',
+        'views/cash_transfer_views.xml',
         'views/expenses_views.xml',
 
         # Reports - actions before templates
@@ -54,7 +55,7 @@
         'report/purchase_report_template.xml',
         'report/sales_report_template.xml',
         'report/salary_payment_report_template.xml',
-        # 'report/expense_report_template.xml',
+        'report/expense_report_template.xml',
     ],
 
     'installable': True,
