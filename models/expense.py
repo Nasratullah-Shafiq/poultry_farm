@@ -80,29 +80,32 @@ class PoultryExpense(models.Model):
 
     @api.model
     def create(self, vals):
-        """Override create to deduct expense amount from the branch cash account."""
-        if 'branch_id' in vals and not vals.get('cash_account_id'):
-            account = self.env['poultry.cash.account'].search([('branch_id', '=', vals['branch_id'])], limit=1)
-            if account:
-                vals['cash_account_id'] = account.id
+        # Dynamically set cash_account_id if missing
+        if not vals.get('cash_account_id'):
+            # Example: get the cash account for the selected branch
+            if vals.get('branch_id'):
+                cash_account = self.env['poultry.cash.account'].search([('branch_id', '=', vals['branch_id'])], limit=1)
+                if not cash_account:
+                    raise ValidationError("No cash account found for this branch.")
+                vals['cash_account_id'] = cash_account.id
             else:
-                raise UserError("No cash account found for the selected branch!")
+                raise ValidationError("Cash account or branch must be selected.")
 
-        record = super().create(vals)
+        # Check amount
+        if vals.get('amount', 0) <= 0:
+            raise ValidationError("Expense amount must be greater than zero.")
 
-        # ---------------- Update Cash Account ----------------
-        cash_account = record.cash_account_id
-        if record.amount > cash_account.balance:
-            raise UserError(
-                f"Not enough cash in this branch account!\n"
-                f"Available: {cash_account.balance}, Requested: {record.amount}"
-            )
+        # Deduct from cash account
+        account = self.env['poultry.cash.account'].browse(vals['cash_account_id'])
+        if account.balance < vals['amount']:
+            raise ValidationError(f"Insufficient balance in account {account.name}.")
 
-        return record
+        account.write({
+            'balance': account.balance - vals['amount'],
+            'last_update': fields.Datetime.now()
+        })
 
-
-
-
+        return super(PoultryExpense, self).create(vals)
 
 
 class PoultryExpenseType(models.Model):
