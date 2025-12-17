@@ -75,6 +75,7 @@
                 <field name="name"/>
                 <field name="branch_id"/>
                 <field name="balance"/>
+                <field name="currency_type"/>
                 <field name="last_update"/>
             </tree>
         </field>
