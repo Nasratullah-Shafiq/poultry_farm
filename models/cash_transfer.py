@@ -57,34 +57,33 @@ class PoultryCashTransfer(models.Model):
             if rec.amount <= 0:
                 raise ValidationError("Amount must be greater than zero.")
 
-    # def action_confirm(self):
-    #     for rec in self:
-    #         if rec.from_account_id.balance < rec.amount:
-    #             raise ValidationError("Insufficient balance in Main Account.")
-    #
-    #         # Deduct from main account
-    #         rec.from_account_id.balance -= rec.amount
-    #
-    #         # Add to destination account
-    #         rec.to_account_id.balance += rec.amount
-    #
-    #         rec.state = 'confirmed'
+
 
     def action_confirm(self):
         for rec in self:
+            if rec.state == 'confirmed':
+                continue
+
             if rec.from_account_id == rec.to_account_id:
-                raise ValidationError("Cannot transfer to the same account!")
+                raise ValidationError("Cannot transfer to the same account.")
 
-            # Check sufficient balance in the source account
-            if rec.amount > rec.from_account_id.balance:
-                raise ValidationError(f"Insufficient balance in account {rec.from_account_id.name}!")
+            if rec.amount <= 0:
+                raise ValidationError("Transfer amount must be greater than zero.")
 
-            # Deduct from source account's balance (write to main model)
-            rec.from_account_id.write({'balance': rec.from_account_id.balance - rec.amount})
+            # Check if source account has enough balance
+            if rec.from_account_id.balance < rec.amount:
+                raise ValidationError("Insufficient balance in source account.")
 
-            # Add to destination account's balance (write to main model)
-            rec.to_account_id.write({'balance': rec.to_account_id.balance + rec.amount})
+            # ✅ Deduct from source account
+            rec.from_account_id.write({
+                'balance': rec.from_account_id.balance - rec.amount
+            })
 
-            # Mark this transfer as confirmed
+            # ✅ Add to destination account
+            rec.to_account_id.write({
+                'balance': rec.to_account_id.balance + rec.amount
+            })
+
+            # Update state
             rec.state = 'confirmed'
 
