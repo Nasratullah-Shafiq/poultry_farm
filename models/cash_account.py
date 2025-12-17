@@ -10,8 +10,17 @@ class PoultryCashAccount(models.Model):
 
     name = fields.Char(string="Account Name",  readonly=True)
     branch_id = fields.Many2one('poultry.branch', string="Branch", required=True)
-    balance = fields.Float(string="Cash Balance", compute="_compute_balance",tracking=True)
+    balance = fields.Float(string="Cash Balance",tracking=True)
+    usd_balance = fields.Float("USD Balance", digits=(16, 2), tracking=True)
+    kaldar_balance = fields.Float("Kaldar Balance", digits=(16, 2), tracking=True)
+    afn_balance = fields.Float("AFN Balance", digits=(16, 2), tracking=True)
+
     last_update = fields.Datetime(string="Last Updated", default=fields.Datetime.now)
+    currency_type = fields.Selection([
+        ('usd', 'USD'),
+        ('kaldar', 'Kaldar'),
+        ('afn', 'AFN')
+    ], string="Currency", required=True)
 
     _sql_constraints = [
         ('unique_branch', 'unique(branch_id)', "Each branch can only have one cash account!")
@@ -28,12 +37,6 @@ class PoultryCashAccount(models.Model):
             vals['name'] = f"{code}001"  # 001 because only one account per branch
         return super().create(vals)
 
-    @api.depends('deposit_ids.amount', 'expense_ids.amount')
-    def _compute_balance(self):
-        for account in self:
-            total_deposits = sum(account.deposit_ids.mapped('amount'))
-            total_expenses = sum(account.expense_ids.mapped('amount'))
-            account.balance = total_deposits - total_expenses
 
 
 
@@ -47,6 +50,11 @@ class PoultryCashDeposit(models.Model):
     amount = fields.Float(string="Deposit Amount", required=True)
     date = fields.Datetime(string="Deposit Date", default=fields.Datetime.now)
     user_id = fields.Many2one('res.users', string="Deposited By", default=lambda self: self.env.user)
+    currency_type = fields.Selection([
+        ('usd', 'USD'),
+        ('kaldar', 'Kaldar'),
+        ('afn', 'AFN')
+    ], string="Currency", required=True)
     note = fields.Text(string="Note")
 
     # Computed month and year for search panel
@@ -90,3 +98,20 @@ class PoultryCashDeposit(models.Model):
     def _get_year_selection(self):
         current_year = datetime.date.today().year
         return [(str(y), str(y)) for y in range(current_year - 10, current_year + 1)]
+
+ # ✅ ADD AMOUNT TO CASH ACCOUNT BALANCE
+    @api.model
+    def create(self, vals):
+        if vals.get('amount', 0) <= 0:
+            raise ValidationError("Deposit amount must be greater than zero.")
+
+        record = super().create(vals)
+
+        account = record.cash_account_id
+
+        account.write({
+            'balance': account.balance + record.amount,
+            'last_update': fields.Datetime.now(),
+        })
+
+        return record
