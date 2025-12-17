@@ -10,6 +10,7 @@
                 <field name="cash_account_id"/>
                 <field name="branch_id"/>
                 <field name="amount" sum="Total"/>
+                <field name="currency_type"/>
                 <field name="date"/>
                 <field name="user_id"/>
                 <field name="note"/>
@@ -28,6 +29,7 @@
                         <field name="cash_account_id"/>
                         <field name="branch_id" readonly="1"/>
                         <field name="amount"/>
+                        <field name="currency_type"/>
                         <field name="date"/>
                         <field name="user_id"/>
                         <field name="note"/>
@@ -64,6 +66,7 @@
                 <searchpanel>
                     <field name="cash_account_id" string="Cash Account" icon="fa-briefcase"/>
                     <field name="branch_id" string="Branch" icon="fa-sitemap"/>
+                    <field name="currency_type" icon="fa-money"/>
                     <field name="deposit_year" string="Year" select="1" icon="fa-calendar"/>
                     <field name="deposit_month" string="Month" select="1" icon="fa-calendar"/>
                     <!--                    <field name="user_id" string="Deposited By"/>-->
