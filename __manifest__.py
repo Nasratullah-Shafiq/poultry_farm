@@ -29,7 +29,7 @@
         'wizard/salary_payment_wizard_views.xml',
         'wizard/expense_report_wizard_views.xml',
 
-        #view files
+        # view files
         'views/branch_views.xml',
         'views/employee_views.xml',
         'views/salary_payment_views.xml',
