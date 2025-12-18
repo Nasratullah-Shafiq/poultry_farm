@@ -1,7 +1,7 @@
 <odoo>
     <record id="view_salary_payment_report_wizard" model="ir.ui.view">
-        <field name="name">salary.payment.report.wizard.form</field>
-        <field name="model">salary.payment.report.wizard</field>
+        <field name="name">salary.payment.wizard.form</field>
+        <field name="model">salary.payment.wizard</field>
         <field name="arch" type="xml">
             <form string="Salary Payment Report">
                 <group>
@@ -15,7 +15,7 @@
                 </group>
 
                 <group string="Salary Payment Details">
-                    <field name="salary_lines" readonly="1">
+                    <field name="salary_lines" string = "" readonly="1">
                         <tree>
                             <field name="salary_date"/>
                             <field name="employee_id"/>
@@ -36,7 +36,7 @@
 
     <record id="action_salary_payment_report_wizard" model="ir.actions.act_window">
         <field name="name">Salary Payment Report</field>
-        <field name="res_model">salary.payment.report.wizard</field>
+        <field name="res_model">salary.payment.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
