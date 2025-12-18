@@ -57,33 +57,78 @@ class PoultryCashTransfer(models.Model):
             if rec.amount <= 0:
                 raise ValidationError("Amount must be greater than zero.")
 
-
-
     def action_confirm(self):
+        CashAccount = self.env['poultry.cash.account']
+
         for rec in self:
             if rec.state == 'confirmed':
                 continue
 
-            if rec.from_account_id == rec.to_account_id:
-                raise ValidationError("Cannot transfer to the same account.")
-
             if rec.amount <= 0:
                 raise ValidationError("Transfer amount must be greater than zero.")
 
-            # Check if source account has enough balance
-            if rec.from_account_id.balance < rec.amount:
+            source = rec.from_account_id
+
+            # 🔴 Balance check
+            if source.balance < rec.amount:
                 raise ValidationError("Insufficient balance in source account.")
 
-            # ✅ Deduct from source account
-            rec.from_account_id.write({
-                'balance': rec.from_account_id.balance - rec.amount
+            # 🔎 Find destination account by BRANCH + CURRENCY
+            dest = CashAccount.search([
+                ('branch_id', '=', rec.to_branch_id.id),
+                ('currency_type', '=', source.currency_type)
+            ], limit=1)
+
+            # 🆕 Create if missing (safe due to SQL constraint)
+            if not dest:
+                dest = CashAccount.create({
+                    'name': f"{rec.to_branch_id.name} - {source.currency_type.upper()}",
+                    'branch_id': rec.to_branch_id.id,
+                    'currency_type': source.currency_type,
+                    'balance': 0.0,
+                })
+
+            # 🔐 Lock rows (prevents race conditions)
+            source = source.with_for_update()
+            dest = dest.with_for_update()
+
+            # ➖ Deduct from source
+            source.write({
+                'balance': source.balance - rec.amount
             })
 
-            # ✅ Add to destination account
-            rec.to_account_id.write({
-                'balance': rec.to_account_id.balance + rec.amount
+            # ➕ Add to destination
+            dest.write({
+                'balance': dest.balance + rec.amount
             })
 
-            # Update state
             rec.state = 'confirmed'
+
+    # def action_confirm(self):
+    #     for rec in self:
+    #         if rec.state == 'confirmed':
+    #             continue
+    #
+    #         if rec.from_account_id == rec.to_account_id:
+    #             raise ValidationError("Cannot transfer to the same account.")
+    #
+    #         if rec.amount <= 0:
+    #             raise ValidationError("Transfer amount must be greater than zero.")
+    #
+    #         # Check if source account has enough balance
+    #         if rec.from_account_id.balance < rec.amount:
+    #             raise ValidationError("Insufficient balance in source account.")
+    #
+    #         # ✅ Deduct from source account
+    #         rec.from_account_id.write({
+    #             'balance': rec.from_account_id.balance - rec.amount
+    #         })
+    #
+    #         # ✅ Add to destination account
+    #         rec.to_account_id.write({
+    #             'balance': rec.to_account_id.balance + rec.amount
+    #         })
+    #
+    #         # Update state
+    #         rec.state = 'confirmed'
 
