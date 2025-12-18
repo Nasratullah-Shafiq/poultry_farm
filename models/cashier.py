@@ -8,6 +8,12 @@ class PoultryCashier(models.Model):
     name = fields.Char("Cashier Name", required=True, tracking=True)
     phone = fields.Char("Phone")
     email = fields.Char("Email")
+    amount_balance = fields.Float("USD Balance", default=0, digits=(16,2), tracking=True)
+    currency_type = fields.Selection([
+        ('usd', 'USD'),
+        ('kaldar', 'Kaldar'),
+        ('afn', 'AFN')
+    ], string="Currency", required=True)
 
     usd_balance = fields.Float("USD Balance", default=0, digits=(16,2), tracking=True)
     kaldar_balance = fields.Float("Kaldar Balance", default=0, digits=(16,2), tracking=True)
