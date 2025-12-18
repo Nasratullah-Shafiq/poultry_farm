@@ -11,9 +11,9 @@ class PoultryCashAccount(models.Model):
     name = fields.Char(string="Account Name",  readonly=True)
     branch_id = fields.Many2one('poultry.branch', string="Branch", required=True)
     balance = fields.Float(string="Cash Balance",tracking=True)
-    usd_balance = fields.Float("USD Balance", digits=(16, 2), tracking=True)
-    kaldar_balance = fields.Float("Kaldar Balance", digits=(16, 2), tracking=True)
-    afn_balance = fields.Float("AFN Balance", digits=(16, 2), tracking=True)
+    # usd_balance = fields.Float("USD Balance", digits=(16, 2), tracking=True)
+    # kaldar_balance = fields.Float("Kaldar Balance", digits=(16, 2), tracking=True)
+    # afn_balance = fields.Float("AFN Balance", digits=(16, 2), tracking=True)
 
     last_update = fields.Datetime(string="Last Updated", default=fields.Datetime.now)
     currency_type = fields.Selection([
@@ -22,9 +22,9 @@ class PoultryCashAccount(models.Model):
         ('afn', 'AFN')
     ], string="Currency", required=True)
 
-    _sql_constraints = [
-        ('unique_branch', 'unique(branch_id)', "Each branch can only have one cash account!")
-    ]
+    # _sql_constraints = [
+    #     ('unique_branch', 'unique(branch_id)', "Each branch can only have one cash account!")
+    # ]
     deposit_ids = fields.One2many('poultry.cash.deposit', 'cash_account_id', string="Deposits")
     expense_ids = fields.One2many('poultry.expense', 'cash_account_id', string='Expenses')
 
@@ -100,18 +100,40 @@ class PoultryCashDeposit(models.Model):
         return [(str(y), str(y)) for y in range(current_year - 10, current_year + 1)]
 
  # ✅ ADD AMOUNT TO CASH ACCOUNT BALANCE
-    @api.model
-    def create(self, vals):
-        if vals.get('amount', 0) <= 0:
-            raise ValidationError("Deposit amount must be greater than zero.")
+    def action_confirm(self):
+        CashAccount = self.env['poultry.cash.account']
 
-        record = super().create(vals)
+        for rec in self:
+            if rec.state == 'confirmed':
+                continue
 
-        account = record.cash_account_id
+            if rec.amount <= 0:
+                raise ValidationError("Deposit amount must be greater than zero.")
 
-        account.write({
-            'balance': account.balance + record.amount,
-            'last_update': fields.Datetime.now(),
-        })
+            # 🔎 Find account by BRANCH + CURRENCY
+            account = CashAccount.search([
+                ('branch_id', '=', rec.branch_id.id),
+                ('currency_type', '=', rec.currency_type)
+            ], limit=1)
 
-        return record
+            # 🆕 Create if not found
+            if not account:
+                account = CashAccount.create({
+                    'name': f"{rec.branch_id.name} - {rec.currency_type.upper()}",
+                    'branch_id': rec.branch_id.id,
+                    'currency_type': rec.currency_type,
+                    'balance': 0.0,
+                })
+
+            # 🔐 Lock record to avoid race conditions
+            account = account.with_for_update()
+
+            # ➕ Add amount
+            account.write({
+                'balance': account.balance + rec.amount,
+                'last_update': fields.Datetime.now(),
+            })
+
+            # 🔗 Link deposit to account (audit)
+            rec.cash_account_id = account.id
+            rec.state = 'confirmed'
