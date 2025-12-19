@@ -73,7 +73,8 @@
         <field name="arch" type="xml">
             <tree string="Cash Accounts">
                 <field name="name"/>
-                <field name="branch_id"/>
+                <field name="account_type"/>
+                <field name="cashier_id" icon="fa-user"/>
                 <field name="balance"/>
                 <field name="currency_type"/>
                 <field name="last_update"/>
@@ -92,10 +93,13 @@
                 <sheet>
                     <group>
                         <field name="name"/>
-                        <field name="branch_id"/>
+                        <field name="account_type"/>
+                        <field name="branch_id" invisible="account_type not in ('main', 'marco', 'bagram')"/>
+                        <field name="cashier_id" invisible="account_type != 'cashier'"/>
                         <field name="balance" readonly="1"/>
                         <field name="currency_type"/>
                         <field name="last_update" readonly="1"/>
+
                     </group>
                 </sheet>
 
@@ -120,6 +124,11 @@
                 <field name="name"/>
                 <field name="branch_id"/>
                 <!--                <filter name="positive_balance"/>-->
+                <searchpanel>
+                    <field name="account_type" icon="fa-sitemap"/>
+                    <field name="currency_type" icon="fa-money"/>
+                    <field name="cashier_id" icon="fa-user"/>
+                </searchpanel>
             </search>
         </field>
     </record>
@@ -132,8 +141,28 @@
         <field name="res_model">poultry.cash.account</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="search_view_id" ref="view_cash_account_search"/>
+        <field name="context">{'group_by': 'currency_type'}</field>
     </record>
 
+    <record id="action_cash_account_branch" model="ir.actions.act_window">
+    <field name="name">Branch Cash Accounts</field>
+    <field name="res_model">poultry.cash.account</field>
+    <field name="view_mode">kanban,tree,form</field>
+    <field name="domain">
+        [('account_type', 'in', ('main', 'marco', 'bagram'))]
+    </field>
+</record>
+
+
+    <record id="action_cash_account_cashier" model="ir.actions.act_window">
+    <field name="name">Cashier Accounts</field>
+    <field name="res_model">poultry.cash.account</field>
+    <field name="view_mode">kanban,tree,form</field>
+    <field name="domain">
+        [('account_type', '=', 'cashier')]
+    </field>
+
+</record>
     <!-- ============================== -->
     <!--   MENU UNDER FINANCE           -->
     <!-- ============================== -->
@@ -142,4 +171,19 @@
               parent="menu_poultry_finance"
               action="action_cash_account"/>
 
+    <!-- Branch -->
+    <menuitem
+            id="menu_cash_branch"
+            name="Branch Cash Accounts"
+            parent="menu_poultry_finance"
+            action="action_cash_account_branch"
+            sequence="20"/>
+
+    <!-- Cashier -->
+    <menuitem
+            id="menu_cash_cashier"
+            name="Cashier Accounts"
+            parent="menu_poultry_finance"
+            action="action_cash_account_cashier"
+            sequence="30"/>
 </odoo>
