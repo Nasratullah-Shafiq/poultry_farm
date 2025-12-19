@@ -37,6 +37,8 @@ access_salary_payment_wizard,salary.payment.wizard,model_salary_payment_wizard,b
 access_salary_payment_report_line,salary.payment.report.line,model_salary_payment_report_line,base.group_user,1,0,0,0
 
 access_cash_transfer_user,Cash Transfer User,model_poultry_cash_transfer,base.group_user,1,1,1,1
+access_money_account_user,Money Account,model_poultry_money_account,base.group_user,1,1,1,0
+
 
 
 
