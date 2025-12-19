@@ -57,12 +57,14 @@
                         </group>
                         <group>
                             <field name="to_account_id"/>
-                            <field name="to_branch_id"/>
+                            <field name="to_branch_id" invisible="to_account_type != 'branch'"/>
+                            <field name="to_cashier_id" invisible="to_account_type != 'cashier'"/>
                             <field name="to_account_balance"/>
                         </group>
                         <group>
                             <field name="from_account_id"/>
-                            <field name="from_branch_id"/>
+                            <field name="from_branch_id" invisible="from_account_type != 'branch'"/>
+                            <field name="from_cashier_id" invisible="from_account_type != 'cashier'"/>
                             <field name="from_account_balance"/>
                         </group>
 
