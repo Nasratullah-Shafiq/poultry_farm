@@ -18,8 +18,18 @@ class PoultryCashTransfer(models.Model):
     )
     from_branch_id = fields.Many2one('poultry.branch', string="Branch", related='from_account_id.branch_id', readonly=True,
                                 store=True)
+    from_cashier_id = fields.Many2one('poultry.cashier', string="To Cashier")
 
     from_account_balance = fields.Float(string="Account Balance", related='from_account_id.balance', readonly=True, store=True)
+    from_account_type = fields.Selection([
+        ('branch', 'Branch'),
+        ('cashier', 'Cashier'),
+    ], string="From Account Type", required=True)
+
+    to_account_type = fields.Selection([
+        ('branch', 'Branch'),
+        ('cashier', 'Cashier'),
+    ], string="To Account Type", required=True)
 
     to_account_id = fields.Many2one(
         'poultry.cash.account',
@@ -28,6 +38,7 @@ class PoultryCashTransfer(models.Model):
     )
     to_branch_id = fields.Many2one('poultry.branch', string="Branch", related='to_account_id.branch_id', readonly=True,
                                 store=True)
+    to_cashier_id = fields.Many2one('poultry.cashier', string="To Cashier")
     to_account_balance = fields.Float(
         string="Account Balance",
         related='to_account_id.balance',
@@ -103,32 +114,4 @@ class PoultryCashTransfer(models.Model):
             })
 
             rec.state = 'confirmed'
-
-    # def action_confirm(self):
-    #     for rec in self:
-    #         if rec.state == 'confirmed':
-    #             continue
-    #
-    #         if rec.from_account_id == rec.to_account_id:
-    #             raise ValidationError("Cannot transfer to the same account.")
-    #
-    #         if rec.amount <= 0:
-    #             raise ValidationError("Transfer amount must be greater than zero.")
-    #
-    #         # Check if source account has enough balance
-    #         if rec.from_account_id.balance < rec.amount:
-    #             raise ValidationError("Insufficient balance in source account.")
-    #
-    #         # ✅ Deduct from source account
-    #         rec.from_account_id.write({
-    #             'balance': rec.from_account_id.balance - rec.amount
-    #         })
-    #
-    #         # ✅ Add to destination account
-    #         rec.to_account_id.write({
-    #             'balance': rec.to_account_id.balance + rec.amount
-    #         })
-    #
-    #         # Update state
-    #         rec.state = 'confirmed'
 
