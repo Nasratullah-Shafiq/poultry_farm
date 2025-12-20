@@ -49,31 +49,50 @@
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
+
                     <group>
-                        <group>
-                            <field name="name"/>
-                            <field name="date"/>
-                            <field name="amount"/>
+                        <field name="name"/>
+                        <field name="date"/>
+                        <field name="amount"/>`````
+                        <field name="note"/>
+
+                    </group>
+                    <group>
+                        <group string="From Account (Source of Transfer)">
+
+                            <field name="from_account_type"/>
+                            <field name="from_account_id"
+                                   domain="[('account_type', '=', from_account_type)]"/>
+
+                            <field name="from_branch_id" invisible="from_account_type not in ('main', 'marco', 'bagram')"/>
+                            <field name="from_cashier_id" invisible="from_account_type != 'cashier'"/>
+                            <field name="from_currency_type"/>
+
+                            <field name="from_account_balance"/>
+
                         </group>
-                        <group>
-                            <field name="to_account_id"/>
-                            <field name="to_branch_id" invisible="to_account_type != 'branch'"/>
+                        <group string="To Account (Destination of Transfer)">
+
+                            <field name="to_account_type"/>
+                            <field name="to_account_id"
+                                   domain="[('account_type', '=', to_account_type)]"/>
+
+                            <field name="to_branch_id" invisible="to_account_type not in ('main', 'marco', 'bagram')"/>
                             <field name="to_cashier_id" invisible="to_account_type != 'cashier'"/>
+                            <field name="to_currency_type"/>
+
                             <field name="to_account_balance"/>
                         </group>
-                        <group>
-                            <field name="from_account_id"/>
-                            <field name="from_branch_id" invisible="from_account_type != 'branch'"/>
-                            <field name="from_cashier_id" invisible="from_account_type != 'cashier'"/>
-                            <field name="from_account_balance"/>
-                        </group>
 
-                        <group>
-                            <field name="note"/>
-                        </group>
+
                     </group>
 
+
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
             </form>
         </field>
     </record>
