@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
             <tree string="Cash Deposits">
                 <field name="cash_account_id"/>
-                <field name="branch_id"/>
+                <field name="account_type"/>
                 <field name="amount" sum="Total"/>
                 <field name="currency_type"/>
                 <field name="date"/>
@@ -26,10 +26,13 @@
             <form string="Cash Deposit">
                 <sheet>
                     <group>
-                        <field name="cash_account_id"/>
-                        <field name="branch_id" readonly="1"/>
-                        <field name="amount"/>
+                        <field name="account_type"/>
+                        <field name="cash_account_id"
+                               domain="[('account_type', '=', account_type)]"/>
+                        <field name="branch_id" invisible="account_type not in ('main', 'marco', 'bagram')"/>
+                        <field name="cashier_id" invisible="account_type != 'cashier'"/>
                         <field name="currency_type"/>
+                        <field name="amount"/>
                         <field name="date"/>
                         <field name="user_id"/>
                         <field name="note"/>
