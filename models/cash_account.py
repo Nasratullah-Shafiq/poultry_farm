@@ -189,11 +189,20 @@ class PoultryCashDeposit(models.Model):
     amount = fields.Float(string="Deposit Amount", required=True)
     date = fields.Datetime(string="Deposit Date", default=fields.Datetime.now)
     user_id = fields.Many2one('res.users', string="Deposited By", default=lambda self: self.env.user)
-    currency_type = fields.Selection([
-        ('usd', 'USD'),
-        ('kaldar', 'Kaldar'),
-        ('afn', 'AFN')
-    ], string="Currency", required=True)
+
+    cashier_id = fields.Many2one('poultry.cashier', string="From Cashier")
+    account_type = fields.Selection([
+        ('main', 'Main'),
+        ('marco', 'Marco'),
+        ('bagram', 'Bagram'),
+        ('cashier', 'Cashier'),
+    ], string="Account Type", required=True)
+    currency_type = fields.Selection(
+        related='cash_account_id.currency_type',
+        store=True,
+        readonly=True
+    )
+
     note = fields.Text(string="Note")
 
     # Computed month and year for search panel
@@ -276,3 +285,54 @@ class PoultryCashDeposit(models.Model):
             # 🔗 Link deposit to account (audit)
             rec.cash_account_id = account.id
             rec.state = 'confirmed'
+
+    @api.model
+    def create(self, vals):
+        record = super().create(vals)
+
+        account = record.cash_account_id
+        if not account:
+            raise ValidationError(
+                "No Cash Account found for the selected Account Type."
+            )
+
+        account.balance += record.amount
+        account.last_update = fields.Datetime.now()
+
+        return record
+
+    @api.constrains('account_type', 'cash_account_id', 'amount')
+    def _validate_account_and_amount(self):
+        for rec in self:
+            if not rec.cash_account_id:
+                raise ValidationError(
+                    "No Cash Account exists for the selected Account Type."
+                )
+
+            if rec.cash_account_id.account_type != rec.account_type:
+                raise ValidationError(
+                    "Cash Account does not match the selected Account Type."
+                )
+
+            if rec.amount <= 0:
+                raise ValidationError(
+                    "Deposit amount must be greater than zero."
+                )
+
+
+    @api.onchange('account_type')
+    def _onchange_account_type(self):
+        if not self.account_type:
+            self.cash_account_id = False
+            return
+
+        account = self.env['poultry.cash.account'].search(
+            [('account_type', '=', self.account_type)],
+            limit=1
+        )
+
+        if not account:
+            self.cash_account_id = False
+            return
+
+        self.cash_account_id = account.id
