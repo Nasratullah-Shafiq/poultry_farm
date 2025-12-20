@@ -10,7 +10,7 @@ class PoultryExpense(models.Model):
 
     name = fields.Char(string="Expense Description", required=True)
     branch_id = fields.Many2one('poultry.branch', string="Branch", required=True)
-    cash_account_id = fields.Many2one('poultry.cash.account', string="Cash Account", required=True, readonly=True)
+    cash_account_id = fields.Many2one('poultry.cash.account', string="Cash Account", readonly=True)
     cash_balance = fields.Float(
         string="Current Cash Balance",
         related='cash_account_id.balance',
