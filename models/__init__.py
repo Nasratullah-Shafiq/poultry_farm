@@ -1,7 +1,7 @@
 # poultry_farm_management/models/__init__.py
 from . import branch
 from . import employee
-from . import finance
+
 from . import poultry_farm_house
 from . import poultry_stock
 from . import stock_move
@@ -18,4 +18,3 @@ from . import salary_payment
 from . import cash_account
 from . import cash_transfer
 from . import expense
-from . import money_acount
