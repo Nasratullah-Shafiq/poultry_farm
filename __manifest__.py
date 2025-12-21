@@ -15,8 +15,8 @@
     'author': 'Nasratullah Shafiq / Generated',
     'depends': ['base', 'hr', 'account'],
     'data': [
-        'security/ir.model.access.csv',
         'security/security.xml',
+        'security/ir.model.access.csv',
         'data/poultry_default_users.xml',
 
         # Menus should load first
@@ -33,7 +33,7 @@
         'views/branch_views.xml',
         'views/employee_views.xml',
         'views/salary_payment_views.xml',
-        # 'views/finance_views.xml',
+
         'views/sales_views.xml',
         'views/poultry_views.xml',
         'views/poultry_item_views.xml',
