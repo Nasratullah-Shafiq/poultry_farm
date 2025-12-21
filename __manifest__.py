@@ -33,7 +33,7 @@
         'views/branch_views.xml',
         'views/employee_views.xml',
         'views/salary_payment_views.xml',
-        'views/finance_views.xml',
+        # 'views/finance_views.xml',
         'views/sales_views.xml',
         'views/poultry_views.xml',
         'views/poultry_item_views.xml',
@@ -47,7 +47,6 @@
         'views/cash_deposit_views.xml',
         'views/cash_transfer_views.xml',
         'views/expenses_views.xml',
-        'views/money_account_views.xml',
 
         # Reports - actions before templates
         'report/finance_report_action.xml',
