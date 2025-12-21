@@ -34,7 +34,6 @@
         'views/employee_views.xml',
         'views/salary_payment_views.xml',
         'views/finance_views.xml',
-        # 'views/farm_views.xml',
         'views/sales_views.xml',
         'views/poultry_views.xml',
         'views/poultry_item_views.xml',
