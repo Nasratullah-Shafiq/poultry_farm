@@ -226,6 +226,7 @@
         <field name="help">Manage branches.</field>
     </record>
 
-    <menuitem id="menu_poultry_branches" name="Branches" parent="menu_poultry_setup" action="action_branch"/>
+    <menuitem id="menu_poultry_branches" name="Branches" parent="menu_poultry_setup" action="action_branch"
+              groups="poultry_farm.group_poultry_manager,poultry_farm.group_poultry_record_officer"/>
 
 </odoo>
