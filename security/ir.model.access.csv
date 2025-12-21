@@ -1,8 +1,9 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_poultry_branch,Poultry Branch,poultry_farm.model_poultry_branch,base.group_user,1,1,1,1
-access_poultry_employee,Poultry Employee,poultry_farm.model_poultry_employee,base.group_user,1,1,1,1
+access_poultry_branch,Poultry Branch,poultry_farm.model_poultry_branch,poultry_farm.group_poultry_manager,1,1,1,1
+access_poultry_branchs,Poultry Branch,poultry_farm.model_poultry_branch,poultry_farm.group_poultry_record_officer,1,1,0,0
+access_poultry_employee,Poultry Employee,poultry_farm.model_poultry_employee,base.group_system,1,1,1,1
 
-access_poultry_finance,Poultry Finance,poultry_farm.model_poultry_finance,base.group_user,1,1,1,1
+
 access_item_type,Item Type,poultry_farm.model_item_type,base.group_user,1,1,1,1
 access_poultry_purchase,Poultry Purchase,poultry_farm.model_poultry_purchase,base.group_user,1,1,1,1
 access_poultry_sale,Poultry Sale,poultry_farm.model_poultry_sale,base.group_user,1,1,1,1
@@ -17,13 +18,16 @@ access_sale_report_wizard,Sale Report Wizard,poultry_farm.model_poultry_sale_rep
 
 access_sale_report_line,Sale Report Line,poultry_farm.model_poultry_sale_report_line,base.group_user,1,0,1,0
 
-access_poultry_death_manager,Poultry Death Manager,poultry_farm.model_poultry_death,base.group_system,1,1,1,1
+access_poultry_death_manager,Poultry Death Manager,poultry_farm.model_poultry_death,base.group_user,1,1,1,1
+
 access_poultry_cashier,Poultry Cashier,poultry_farm.model_poultry_cashier,base.group_system,1,1,1,1
 access_poultry_customer_user,Poultry Customer,poultry_farm.model_poultry_customer,base.group_system,1,1,1,1
 access_poultry_supplier_user,Poultry Supplier,poultry_farm.model_poultry_supplier,base.group_system,1,1,1,1
 access_salary_payment,Salary Payment,poultry_farm.model_salary_payment,base.group_user,1,1,1,1
 access_customer_payment,Customer Payment,poultry_farm.model_poultry_payment,base.group_user,1,1,1,1
-access_poultry_farm_house,Poultry Farm House,poultry_farm.model_poultry_farm_house,base.group_user,1,1,1,1
+access_poultry_farm_house,Poultry Farm House,poultry_farm.model_poultry_farm_house,poultry_farm.group_poultry_manager,1,1,1,1
+
+ccess_poultry_farm_houses,Poultry Farm House,poultry_farm.model_poultry_farm_house,poultry_farm.group_poultry_record_officer,1,1,0,0
 access_poultry_cash_account,poultry.cash.account,model_poultry_cash_account,base.group_user,1,1,1,1
 access_poultry_cash_deposit,poultry.cash.deposit,model_poultry_cash_deposit,base.group_user,1,1,1,1
 
@@ -37,7 +41,12 @@ access_salary_payment_wizard,salary.payment.wizard,model_salary_payment_wizard,b
 access_salary_payment_report_line,salary.payment.report.line,model_salary_payment_report_line,base.group_user,1,0,0,0
 
 access_cash_transfer_user,Cash Transfer User,model_poultry_cash_transfer,base.group_user,1,1,1,1
-access_money_account_user,Money Account,model_poultry_money_account,base.group_user,1,1,1,0
+
+
+
+
+access_poultry_death_managers,Poultry Death Manager,poultry_farm.model_poultry_death,poultry_farm.group_poultry_manager,1,1,1,1
+
 
 
 
