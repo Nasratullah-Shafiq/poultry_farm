@@ -214,9 +214,11 @@
              MENU ITEM: Dead Chickens
         ============================ -->
         <menuitem id="menu_poultry_death"
-                  name="Dead Chickens"
-                  parent="menu_poultry"
-                  action="action_poultry_death"
-                  sequence="3"/>
+          name="Dead Chickens"
+          parent="menu_poultry"
+          action="action_poultry_death"
+          groups="poultry_farm.group_poultry_record_officer,poultry_farm.group_poultry_manager"
+          sequence="3"/>
+
     </data>
 </odoo>
