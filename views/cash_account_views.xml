@@ -141,49 +141,87 @@
         <field name="res_model">poultry.cash.account</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="search_view_id" ref="view_cash_account_search"/>
-        <field name="context">{'group_by': 'currency_type'}</field>
+        <field name="context">{'group_by': 'account_type'}</field>
     </record>
 
-    <record id="action_cash_account_branch" model="ir.actions.act_window">
-    <field name="name">Branch Cash Accounts</field>
-    <field name="res_model">poultry.cash.account</field>
-    <field name="view_mode">kanban,tree,form</field>
-    <field name="domain">
-        [('account_type', 'in', ('main', 'marco', 'bagram'))]
-    </field>
-</record>
+    <record id="action_cash_account_bagram" model="ir.actions.act_window">
+        <field name="name">Branch Cash Accounts</field>
+        <field name="res_model">poultry.cash.account</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">
+            [('account_type', '=', 'bagram')]
+        </field>
+    </record>
+    <record id="action_cash_account_marco" model="ir.actions.act_window">
+        <field name="name">Branch Cash Accounts</field>
+        <field name="res_model">poultry.cash.account</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">
+            [('account_type', '=', 'marco')]
+        </field>
+    </record>
+    <record id="action_cash_account_main" model="ir.actions.act_window">
+        <field name="name">Branch Cash Accounts</field>
+        <field name="res_model">poultry.cash.account</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">
+            [('account_type', '=', 'main')]
+        </field>
+    </record>
 
 
     <record id="action_cash_account_cashier" model="ir.actions.act_window">
-    <field name="name">Cashier Accounts</field>
-    <field name="res_model">poultry.cash.account</field>
-    <field name="view_mode">kanban,tree,form</field>
-    <field name="domain">
-        [('account_type', '=', 'cashier')]
-    </field>
+        <field name="name">Cashier Accounts</field>
+        <field name="res_model">poultry.cash.account</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">
+            [('account_type', '=', 'cashier')]
+        </field>
 
-</record>
+    </record>
     <!-- ============================== -->
     <!--   MENU UNDER FINANCE           -->
     <!-- ============================== -->
-    <menuitem id="menu_poultry_cash_accounts"
-              name="Cash Accounts"
-              parent="menu_poultry_finance"
-              action="action_cash_account"/>
+    <!--    <menuitem id="menu_poultry_cash_accounts"-->
+    <!--              name="Cash Accounts"-->
+    <!--              parent="menu_poultry_accounts"-->
+    <!--              action="action_cash_account"/>-->
 
     <!-- Branch -->
+    <menuitem id="menu_cash_branch_root"
+              name="Branch Account"
+              parent="menu_poultry_accounts"
+              sequence="10"/>
     <menuitem
-            id="menu_cash_branch"
-            name="Branch Cash Accounts"
-            parent="menu_poultry_finance"
-            action="action_cash_account_branch"
+            id="menu_cash_main"
+            name="Main Branch Accounts"
+            parent="menu_cash_branch_root"
+            action="action_cash_account_main"
+            sequence="20"/>
+
+    <menuitem
+            id="menu_cash_marco"
+            name="Marco Branch Accounts"
+            parent="menu_cash_branch_root"
+            action="action_cash_account_marco"
+            sequence="20"/>
+
+    <menuitem
+            id="menu_cash_bagram"
+            name="Bagram Branch Accounts"
+            parent="menu_cash_branch_root"
+            action="action_cash_account_bagram"
             sequence="20"/>
 
     <!-- Cashier -->
+    <menuitem id="menu_cash_cashier_root"
+              name="Cashier Account"
+              parent="menu_poultry_accounts"
+              sequence="20"/>
     <menuitem
             id="menu_cash_cashier"
             name="Cashier Accounts"
-            parent="menu_poultry_finance"
+            parent="menu_cash_cashier_root"
             action="action_cash_account_cashier"
             sequence="30"/>
 </odoo>
