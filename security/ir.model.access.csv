@@ -14,7 +14,8 @@ access_poultry_farm,Poultry Farm,poultry_farm.model_poultry_farm,,1,1,1,1
 access_purchase_report_wizard,Purchase Report Wizard,poultry_farm.model_poultry_purchase_report,base.group_user,1,0,1,0
 access_purchase_report_line,Purchase Report Line,poultry_farm.model_poultry_purchase_report_line,base.group_user,1,0,1,0
 
-access_sale_report_wizard,Sale Report Wizard,poultry_farm.model_poultry_sale_report_wizard,base.group_user,1,0,1,0
+access_sale_report_wizard,Sale Report Wizard,poultry_farm.model_poultry_sale_report_wizard,base.group_user,1,1,1,0
+
 
 access_sale_report_line,Sale Report Line,poultry_farm.model_poultry_sale_report_line,base.group_user,1,0,1,0
 
