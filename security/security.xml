@@ -13,6 +13,11 @@
         <field name="category_id" ref="poultry_farm.module_category_poultry"/>
     </record>
 
+    <!--    app menu visibility to specific group -->
+    <record id="base.menu_management" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('poultry_farm.group_poultry_manager')])]"/>
+    </record>
+
     <!-- Record Officer Group -->
     <record id="group_poultry_record_officer" model="res.groups">
         <field name="name">Poultry Record Officer</field>
