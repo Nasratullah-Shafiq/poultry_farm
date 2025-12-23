@@ -15,7 +15,10 @@ access_purchase_report_wizard,Purchase Report Wizard,poultry_farm.model_poultry_
 access_purchase_report_line,Purchase Report Line,poultry_farm.model_poultry_purchase_report_line,base.group_user,1,0,1,0
 
 access_sale_report_wizard,Sale Report Wizard,poultry_farm.model_poultry_sale_report_wizard,base.group_user,1,1,1,0
-access_poultry_sale_report_wizard,poultry.sale.report.wizard,model_poultry_sale_report_wizard,base.group_system,1,1,1,1
+access_poultry_sale_report_wizard,poultry.sale.report.wizard,model_poultry_sale_report_wizard,base.group_user,1,1,1,1
+
+access_poultry_purchase_wizard_erp,Poultry Purchase Wizard,model_poultry_purchase_report,base.group_user,1,1,1,1
+
 
 access_sale_report_line,Sale Report Line,poultry_farm.model_poultry_sale_report_line,base.group_user,1,0,1,0
 
@@ -39,12 +42,9 @@ access_expense_report_wizard,expense.report.wizard,model_expense_report_wizard,b
 access_expense_report_line,expense.report.line,model_expense_report_line,base.group_user,1,1,1,1
 
 access_salary_payment_wizard,salary.payment.wizard,model_salary_payment_wizard,base.group_user,1,1,1,1
-access_salary_payment_report_line,salary.payment.report.line,model_salary_payment_report_line,base.group_user,1,0,0,0
+access_salary_payment_report_line,salary.payment.report.line,model_salary_payment_report_line,base.group_user,1,1,1,1
 
 access_cash_transfer_user,Cash Transfer User,model_poultry_cash_transfer,base.group_user,1,1,1,1
-
-
-
 
 access_poultry_death_managers,Poultry Death Manager,poultry_farm.model_poultry_death,poultry_farm.group_poultry_manager,1,1,1,1
 
