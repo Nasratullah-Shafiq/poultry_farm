@@ -55,7 +55,7 @@ class PoultrySaleReportWizard(models.TransientModel):
                 'branch_id': sale.branch_id.id,
                 'item_type_id': sale.item_type_id.id,
                 'quantity': sale.quantity,
-                'unit_price': sale.unit_price,
+                'unit_price': sale.sale_price,
                 'total': sale.total,
                 'customer_id': sale.customer_id.id
             })

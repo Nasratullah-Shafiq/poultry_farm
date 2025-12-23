@@ -65,7 +65,7 @@ class PoultryPurchaseReport(models.TransientModel):
                 'branch_id': purchase.branch_id.id,
                 'item_type_id': purchase.item_type_id.id,
                 'quantity': purchase.quantity,
-                'unit_price': purchase.unit_price,
+                'unit_price': purchase.purchase_price,
                 'total': purchase.total,
                 'supplier_id': purchase.supplier_id.id,
             })
