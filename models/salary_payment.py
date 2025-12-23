@@ -13,7 +13,7 @@ class PoultrySalary(models.Model):
         'poultry.employee', string='Employee', required=True
     )
     salary_date = fields.Date(string='Salary Date', required=True)
-    amount_received = fields.Monetary(string='Amount Received', required=True, default=0)
+    amount = fields.Monetary(string='Amount To be paid', required=True, default=0)
     amount_remaining = fields.Monetary(
         string='Amount Remaining',
         compute='_compute_amount_remaining',
@@ -84,11 +84,11 @@ class PoultrySalary(models.Model):
         compute="_compute_year_month",
         store=True
     )
-    @api.depends('total_salary', 'amount_received', 'paid_this_month_display')
+    @api.depends('total_salary', 'amount', 'paid_this_month_display')
     def _compute_amount_remaining(self):
         for rec in self:
             # Remaining salary = total_salary - (previous paid + current payment)
-            rec.amount_remaining = max(rec.total_salary - (rec.paid_this_month_display + rec.amount_received), 0)
+            rec.amount_remaining = max(rec.total_salary - (rec.paid_this_month_display + rec.amount), 0)
 
     @api.depends('salary_date')
     def _compute_year_month(self):
@@ -102,7 +102,7 @@ class PoultrySalary(models.Model):
 
 
 
-    @api.depends('employee_id', 'salary_date', 'amount_received')
+    @api.depends('employee_id', 'salary_date', 'amount')
     def _compute_previous_paid_amount(self):
         for rec in self:
             if not rec.employee_id or not rec.salary_date:
@@ -123,7 +123,7 @@ class PoultrySalary(models.Model):
                 ('id', '!=', rec.id or 0),
             ])
 
-            total_paid = sum(payments.mapped('amount_received'))
+            total_paid = sum(payments.mapped('amount'))
 
             rec.paid_this_month_display = total_paid
 
@@ -148,7 +148,7 @@ class PoultrySalary(models.Model):
             else:
                 rec.payment_status = 'not_paid'
 
-    @api.constrains('amount_received', 'employee_id', 'salary_date')
+    @api.constrains('amount', 'employee_id', 'salary_date')
     def _check_salary_payment_limit(self):
         """
         Enforce per-employee, per-month salary limits:
@@ -164,7 +164,7 @@ class PoultrySalary(models.Model):
                 continue
 
             # 0 or negative payment is not allowed
-            if rec.amount_received <= 0:
+            if rec.amount <= 0:
                 raise ValidationError(
                     "You cannot pay 0. Please enter an amount greater than 0."
                 )
@@ -185,8 +185,8 @@ class PoultrySalary(models.Model):
                 ('id', '!=', rec.id or 0),
             ])
 
-            existing_sum = sum(existing_payments.mapped('amount_received') or [0])
-            new_total = existing_sum + (rec.amount_received or 0)
+            existing_sum = sum(existing_payments.mapped('amount') or [0])
+            new_total = existing_sum + (rec.amount or 0)
 
             # 1) Overpayment not allowed
             if new_total > rec.total_salary:
