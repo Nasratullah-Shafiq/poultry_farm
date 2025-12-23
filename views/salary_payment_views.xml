@@ -160,7 +160,7 @@
                             </span>
                         </div>
                         <field name="paid_this_month_display" nolabel="1"/>
-                        <field name="amount_received"/>
+                        <field name="amount"/>
                         <field name="amount_remaining" readonly="1"/>
                         <!--                        <field name="payment_status" readonly="1"/>-->
                         <!-- ⭐ Your Badge Here -->
@@ -196,7 +196,7 @@
                 <field name="employee_id"/>
                 <field name="salary_date"/>
                 <field name="total_salary"/>
-                <field name="amount_received"/>
+                <field name="amount"/>
                 <field name="amount_remaining"/>
 
                 <field name="payment_status" widget="badge"
@@ -272,7 +272,7 @@
                                     <i class="fa fa-money-bill text-success"></i>
                                     Received:
                                     <span class="badge bg-success">
-                                        <field name="amount_received"/>
+                                        <field name="amount"/>
                                     </span>
                                 </div>
 
@@ -329,7 +329,7 @@
         <field name="model">salary.payment</field>
         <field name="arch" type="xml">
             <graph string="Salary Payments" type="bar">
-                <field name="amount_received" type="measure"/>
+                <field name="amount" type="measure"/>
                 <field name="employee_id" type="row"/>
             </graph>
         </field>
@@ -343,7 +343,7 @@
             <pivot string="Salary Payments Pivot">
                 <field name="employee_id" type="row"/>
                 <field name="salary_date" type="col"/>
-                <field name="amount_received" type="measure"/>
+                <field name="amount" type="measure"/>
                 <field name="amount_remaining" type="measure"/>
             </pivot>
         </field>
