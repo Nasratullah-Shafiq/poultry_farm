@@ -47,6 +47,7 @@
         'views/cash_deposit_views.xml',
         'views/cash_transfer_views.xml',
         'views/expenses_views.xml',
+        'views/hide_menu.xml',
 
         # Reports - actions before templates
         'report/finance_report_action.xml',
