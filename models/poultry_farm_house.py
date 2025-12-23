@@ -16,9 +16,9 @@ class PoultryFarmHouse(models.Model):
     location = fields.Char(string='Location / Address')
     capacity = fields.Integer(string='Capacity (birds)')
     # Add item type
-    item_type_id = fields.Many2one('item.type', string="Type", required=True)
+    item_type_id = fields.Many2one('item.type', string="Type")
 
-    farm_id = fields.Many2one('poultry.farm', string='Farm', required=True)
+    farm_id = fields.Many2one('poultry.farm', string='Farm')
 
     manager_id = fields.Many2one('res.partner', string='Manager')
 
