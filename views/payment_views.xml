@@ -98,7 +98,6 @@
     </record>
 
 
-
     <!-- =======================
          GRAPH VIEW
     ======================== -->
@@ -132,7 +131,6 @@
     </record>
 
 
-
     <!-- =======================
          SEARCH VIEW + SEARCH PANEL
     ======================== -->
@@ -148,9 +146,9 @@
                 <field name="date"/>
 
                 <!-- Filters -->
-<!--                <filter string="Paid" domain="[('amount', '>', 0)]"/>-->
-<!--                <filter string="Zero Amount" domain="[('amount', '=', 0)]"/>-->
-<!--                <filter string="Has Due" domain="[('amount_due', '>', 0)]"/>-->
+                <!--                <filter string="Paid" domain="[('amount', '>', 0)]"/>-->
+                <!--                <filter string="Zero Amount" domain="[('amount', '=', 0)]"/>-->
+                <!--                <filter string="Has Due" domain="[('amount_due', '>', 0)]"/>-->
 
                 <!-- ======================
                      SEARCH PANEL (Odoo 17)
@@ -167,7 +165,6 @@
     </record>
 
 
-
     <!-- =======================
          ACTION
     ======================== -->
@@ -179,18 +176,14 @@
     </record>
 
 
-
     <!-- =======================
          MENU ITEMS
     ======================== -->
-    <menuitem id="menu_poultry_payment_root"
-              name="Payments"
-              parent="menu_poultry_customer_root"
-              sequence="30"/>
 
     <menuitem id="menu_poultry_payment"
               name="Customer Payments"
-              parent="menu_poultry_payment_root"
-              action="action_poultry_payment"/>
+              parent="menu_poultry_customer"
+              action="action_poultry_payment"
+              sequence="10"/>
 
 </odoo>
