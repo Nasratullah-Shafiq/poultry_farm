@@ -449,15 +449,23 @@
     <!-- =======================
          MENU ITEMS
     ======================== -->
-    <menuitem id="menu_poultry_customer_root"
+    <menuitem id="menu_poultry_customers"
               name="Customers"
-              parent="menu_poultry_farm"
-              sequence="20"/>
-
-    <menuitem id="menu_poultry_customer"
-              name="Customers"
-              parent="menu_poultry_customer_root"
+              parent="menu_poultry_customer"
               action="action_poultry_customer"
-              sequence="10"/>
+              sequence="5"
+              />
+
+
+    <!--    <menuitem id="menu_poultry_customer_root"-->
+    <!--              name="Customers"-->
+    <!--              parent="menu_poultry_farm"-->
+    <!--              sequence="20"/>-->
+
+<!--    <menuitem id="menu_poultry_customer"-->
+<!--              name="Customers"-->
+<!--              parent="menu_poultry_customer_root"-->
+<!--              action="action_poultry_customer"-->
+<!--              sequence="5"/>-->
 
 </odoo>
