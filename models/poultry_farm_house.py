@@ -1,7 +1,8 @@
 # poultry_farm_management/models/farm.py
-from odoo import models, fields, api
 from odoo.exceptions import UserError
 from odoo.exceptions import ValidationError
+
+from odoo import models, fields, api
 
 
 class PoultryFarmHouse(models.Model):
@@ -36,52 +37,75 @@ class PoultryFarmHouse(models.Model):
         store=True
     )
 
-    class PoultryFarmHouse(models.Model):
-        _name = 'poultry.farm.house'
-        _description = 'Farm House'
+    # class PoultryFarmHouse(models.Model):
+    #     _name = 'poultry.farm.house'
+    #     _description = 'Farm House'
+    #
+    #     name = fields.Char(string="Farm House Name", required=True)
+    #     branch_id = fields.Many2one('poultry.branch', string="Branch", required=True)
+    #     item_type_id = fields.Many2one('item.type', string="Poultry Type", required=True)
+    #
+    #     total_quantity = fields.Integer(
+    #         string="Total Quantity",
+    #         compute="_compute_total_quantity",
+    #         store=True
+    #     )
+    #     last_updated = fields.Datetime(string="Last Updated", default=fields.Datetime.now)
 
-        name = fields.Char(string="Farm House Name", required=True)
-        branch_id = fields.Many2one('poultry.branch', string="Branch", required=True)
-        item_type_id = fields.Many2one('item.type', string="Poultry Type", required=True)
+    @api.depends('branch_id', 'item_type_id')
+    def _compute_total_quantity(self):
+        for house in self:
+            if not house.branch_id or not house.item_type_id:
+                house.total_quantity = 0
+                continue
 
-        total_quantity = fields.Integer(
-            string="Total Quantity",
-            compute="_compute_total_quantity",
-            store=True
-        )
-        last_updated = fields.Datetime(string="Last Updated", default=fields.Datetime.now)
+            # Total purchased quantity for this farm house
+            purchases = self.env['poultry.purchase'].search([
+                ('branch_id', '=', house.branch_id.id),
+                ('item_type_id', '=', house.item_type_id.id),
+                ('farm_id', '=', house.id),
+            ])
+            total_purchased = sum(p.quantity for p in purchases)
 
-        @api.depends('branch_id', 'item_type_id')
-        def _compute_total_quantity(self):
-            for house in self:
-                if not house.branch_id or not house.item_type_id:
-                    house.total_quantity = 0
-                    continue
+            # Total deaths for this farm house
+            deaths = self.env['poultry.death'].search([
+                ('branch_id', '=', house.branch_id.id),
+                ('item_type_id', '=', house.item_type_id.id),
+                ('farm_id', '=', house.id),
+            ])
+            total_deaths = sum(d.quantity for d in deaths)
 
-                # Total purchased quantity for this farm house
-                purchases = self.env['poultry.purchase'].search([
-                    ('branch_id', '=', house.branch_id.id),
-                    ('item_type_id', '=', house.item_type_id.id),
-                    ('farm_id', '=', house.id),
-                ])
-                total_purchased = sum(p.quantity for p in purchases)
+            # Total sold quantity for this farm house (if you track sales)
+            sales = self.env['poultry.sale'].search([
+                ('branch_id', '=', house.branch_id.id),
+                ('item_type_id', '=', house.item_type_id.id),
+                ('farm_id', '=', house.id),
+            ])
+            total_sold = sum(s.quantity for s in sales)
 
-                # Total deaths for this farm house
-                deaths = self.env['poultry.death'].search([
-                    ('branch_id', '=', house.branch_id.id),
-                    ('item_type_id', '=', house.item_type_id.id),
-                    ('farm_id', '=', house.id),
-                ])
-                total_deaths = sum(d.quantity for d in deaths)
+            # Net stock
+            house.total_quantity = max(total_purchased - total_deaths - total_sold, 0)
+            house.last_updated = fields.Datetime.now()
 
-                # Total sold quantity for this farm house (if you track sales)
-                sales = self.env['poultry.sale'].search([
-                    ('branch_id', '=', house.branch_id.id),
-                    ('item_type_id', '=', house.item_type_id.id),
-                    ('farm_id', '=', house.id),
-                ])
-                total_sold = sum(s.quantity for s in sales)
+    @api.model
+    def create(self, vals):
+        if not vals.get('code') and vals.get('name'):
+            # Take first 3 letters of name
+            prefix = vals['name'].replace(' ', '').upper()[:3]
 
-                # Net stock
-                house.total_quantity = max(total_purchased - total_deaths - total_sold, 0)
-                house.last_updated = fields.Datetime.now()
+            # Search last sequence with same prefix
+            last_record = self.search(
+                [('code', 'like', f'{prefix}-%')],
+                order='code desc',
+                limit=1
+            )
+
+            if last_record and last_record.code:
+                last_number = int(last_record.code.split('-')[-1])
+                new_number = last_number + 1
+            else:
+                new_number = 1
+
+            vals['code'] = f"{prefix}-{str(new_number).zfill(3)}"
+
+        return super(PoultryFarmHouse, self).create(vals)
