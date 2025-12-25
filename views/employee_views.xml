@@ -33,7 +33,7 @@
                         <group>
                             <group>
 <!--                                <field name="name"/>-->
-                                <field name="agent_name" class="o_employee_availability"
+                                <field name="name" class="o_employee_availability"
                                                        placeholder="Employee's Name"/>
                                 <field name="employee_code"/>
                                 <field name="branch_id"/>
