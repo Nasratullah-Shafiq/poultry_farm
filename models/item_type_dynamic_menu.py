@@ -22,6 +22,26 @@ class ItemType(models.Model):
                 rec._update_stock_balance_menu_view()
         return res
 
+    def unlink(self):
+        IrUiMenu = self.env['ir.ui.menu']
+        IrActWindow = self.env['ir.actions.act_window']
+        IrUiView = self.env['ir.ui.view']
+
+        for item in self:
+            # 1️⃣ Delete child menu
+            menu_name = f"{item.name} Stock"
+            IrUiMenu.search([('name', '=', menu_name)]).unlink()
+
+            # 2️⃣ Delete window action
+            action_name = f"{item.name} Stock Action"
+            IrActWindow.search([('name', '=', action_name)]).unlink()
+
+            # 3️⃣ Delete tree view
+            view_name = f"poultry_farm_tree_{item.id}"
+            IrUiView.search([('name', '=', view_name)]).unlink()
+
+        return super(ItemType, self).unlink()
+
     def _create_stock_balance_menu_view(self):
         """Create parent Stock Balance menu, tree view, window action, and child menu for this item type."""
         IrUiMenu = self.env['ir.ui.menu']
