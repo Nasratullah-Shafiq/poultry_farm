@@ -37,26 +37,36 @@ class PoultryFarmHouse(models.Model):
         store=True
     )
 
-    # class PoultryFarmHouse(models.Model):
-    #     _name = 'poultry.farm.house'
-    #     _description = 'Farm House'
-    #
-    #     name = fields.Char(string="Farm House Name", required=True)
-    #     branch_id = fields.Many2one('poultry.branch', string="Branch", required=True)
-    #     item_type_id = fields.Many2one('item.type', string="Poultry Type", required=True)
-    #
-    #     total_quantity = fields.Integer(
-    #         string="Total Quantity",
-    #         compute="_compute_total_quantity",
-    #         store=True
-    #     )
-    #     last_updated = fields.Datetime(string="Last Updated", default=fields.Datetime.now)
+    @api.model
+    def create(self, vals):
+        if not vals.get('code') and vals.get('name'):
+            # Take first 3 letters of name
+            prefix = vals['name'].replace(' ', '').upper()[:3]
+
+            # Search last sequence with same prefix
+            last_record = self.search(
+                [('code', 'like', f'{prefix}-%')],
+                order='code desc',
+                limit=1
+            )
+
+            if last_record and last_record.code:
+                last_number = int(last_record.code.split('-')[-1])
+                new_number = last_number + 1
+            else:
+                new_number = 1
+
+            vals['code'] = f"{prefix}-{str(new_number).zfill(3)}"
+
+        return super(PoultryFarmHouse, self).create(vals)
+
+
 
     @api.depends('branch_id', 'item_type_id')
     def _compute_total_quantity(self):
         for house in self:
             if not house.branch_id or not house.item_type_id:
-                house.total_quantity = 0
+                house.current_stock = 0
                 continue
 
             # Total purchased quantity for this farm house
@@ -84,28 +94,7 @@ class PoultryFarmHouse(models.Model):
             total_sold = sum(s.quantity for s in sales)
 
             # Net stock
-            house.total_quantity = max(total_purchased - total_deaths - total_sold, 0)
+            house.current_stock = max(total_purchased - total_deaths - total_sold, 0)
             house.last_updated = fields.Datetime.now()
 
-    @api.model
-    def create(self, vals):
-        if not vals.get('code') and vals.get('name'):
-            # Take first 3 letters of name
-            prefix = vals['name'].replace(' ', '').upper()[:3]
 
-            # Search last sequence with same prefix
-            last_record = self.search(
-                [('code', 'like', f'{prefix}-%')],
-                order='code desc',
-                limit=1
-            )
-
-            if last_record and last_record.code:
-                last_number = int(last_record.code.split('-')[-1])
-                new_number = last_number + 1
-            else:
-                new_number = 1
-
-            vals['code'] = f"{prefix}-{str(new_number).zfill(3)}"
-
-        return super(PoultryFarmHouse, self).create(vals)
