@@ -39,9 +39,14 @@ class PoultryFarmHouse(models.Model):
 
     @api.model
     def create(self, vals):
-        if not vals.get('code') and vals.get('name'):
-            # Take first 3 letters of name
-            prefix = vals['name'].replace(' ', '').upper()[:3]
+        # Check if code is not provided and branch_id exists
+        if not vals.get('code') and vals.get('branch_id'):
+            branch = self.env['poultry.branch'].browse(vals['branch_id'])
+            if not branch:
+                raise ValidationError("Branch not found for code generation.")
+
+            # Take first 3 letters of branch name
+            prefix = branch.name.replace(' ', '').upper()[:3]
 
             # Search last sequence with same prefix
             last_record = self.search(
@@ -59,8 +64,6 @@ class PoultryFarmHouse(models.Model):
             vals['code'] = f"{prefix}-{str(new_number).zfill(3)}"
 
         return super(PoultryFarmHouse, self).create(vals)
-
-
 
     @api.depends('branch_id', 'item_type_id')
     def _compute_total_quantity(self):
