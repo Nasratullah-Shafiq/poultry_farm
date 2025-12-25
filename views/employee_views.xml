@@ -9,7 +9,8 @@
             <field name="model">poultry.employee</field>
             <field name="arch" type="xml">
                 <tree string="Employees">
-                    <field name="name"/>
+                    <field class="text-break" name="name" options="{'line_breaks': False}" widget="text" placeholder="e.g. Cheese Burger"/>
+<!--                    <field name="name"/>-->
                     <field name="employee_code"/>
                     <field name="job_title"/>
                     <field name="branch_id"/>
@@ -31,7 +32,9 @@
                     <sheet>
                         <group>
                             <group>
-                                <field name="name"/>
+<!--                                <field name="name"/>-->
+                                <field name="agent_name" class="o_employee_availability"
+                                                       placeholder="Employee's Name"/>
                                 <field name="employee_code"/>
                                 <field name="branch_id"/>
                                 <field name="job_title"/>
