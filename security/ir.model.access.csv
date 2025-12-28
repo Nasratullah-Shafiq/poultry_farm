@@ -50,5 +50,8 @@ access_poultry_death_managers,Poultry Death Manager,poultry_farm.model_poultry_d
 
 access_poultry_employee_manager,Poultry Employee Manager,model_poultry_employee,base.group_user,1,1,1,1
 
+access_poultry_sale_report_line_manager,Poultry Sale Report Line Manager,model_poultry_sale_report_line,poultry_farm.group_poultry_manager,1,1,0,1
+
+
 
 
