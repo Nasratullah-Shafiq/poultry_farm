@@ -126,10 +126,3 @@ class PoultryPayment(models.Model):
                 raise ValidationError(
                     "Payment exceeds the customer's total sale amount. Please enter a valid amount."
                 )
-
-            # Rule 5: Prevent paying more than the amount due
-            if rec.amount > rec.amount_due:
-                raise ValidationError(
-                    f"The payment amount cannot exceed the remaining balance. Amount Due: {rec.amount_due}"
-                )
-
