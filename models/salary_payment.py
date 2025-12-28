@@ -13,7 +13,7 @@ class PoultrySalary(models.Model):
         'poultry.employee', string='Employee', required=True
     )
     salary_date = fields.Date(string='Salary Date', required=True)
-    amount = fields.Monetary(string='Amount To be paid', required=True, default=0)
+    amount = fields.Monetary(string='Amount To be paid', required=True)
     amount_remaining = fields.Monetary(
         string='Amount Remaining',
         compute='_compute_amount_remaining',
@@ -130,23 +130,19 @@ class PoultrySalary(models.Model):
             # only the number
             rec.paid_this_month_display = str(total_paid)
 
-
-    @api.depends('paid_this_month_display', 'amount_remaining', 'total_salary')
+    @api.depends('amount_remaining', 'total_salary')
     def _compute_payment_status(self):
         for rec in self:
-            # Safeguard values (None → 0)
-            paid = rec.paid_this_month_display or 0
-            remaining = rec.amount_remaining or 0
             total = rec.total_salary or 0
+            remaining = rec.amount_remaining or 0
 
-            if paid == 0:
+            if remaining == total:
                 rec.payment_status = 'not_paid'
             elif remaining > 0:
                 rec.payment_status = 'partially_paid'
-            elif remaining == 0 and total > 0:
-                rec.payment_status = 'paid'
             else:
-                rec.payment_status = 'not_paid'
+                rec.payment_status = 'paid'
+
 
     @api.constrains('amount', 'employee_id', 'salary_date')
     def _check_salary_payment_limit(self):
