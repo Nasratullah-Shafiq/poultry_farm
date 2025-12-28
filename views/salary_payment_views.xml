@@ -247,78 +247,111 @@
         <field name="name">salary.payment.kanban</field>
         <field name="model">salary.payment</field>
         <field name="arch" type="xml">
-            <kanban class="o_kanban_example">
+            <kanban class="o_kanban_example" quick_create="true">
+
+                <!-- REQUIRED: preload fields for kanban logic -->
+                <field name="employee_id"/>
+                <field name="salary_month"/>
+                <field name="salary_date"/>
+                <field name="total_salary"/>
+                <field name="amount"/>
+                <field name="amount_remaining"/>
+                <field name="payment_status"/>
+
                 <templates>
                     <t t-name="kanban-box">
-                        <div t-att-class="'oe_kanban_global_click o_kanban_card card-shadow p-3 mb-3 ' +
-                                        (record.payment_status == 'paid' ? 'bg-success-light' :
-                                        record.payment_status == 'partially_paid' ? 'bg-warning-light' : 'bg-light')"
-                             style="border-radius: 12px; transition: transform 0.2s; cursor: pointer;">
 
-                            <!-- Header: Employee + Total Salary -->
+                        <div class="oe_kanban_global_click o_kanban_card card-shadow p-3 mb-3"
+                             style="border-radius: 12px; transition: transform 0.2s; cursor: pointer; font-size:16px;">
+
+                            <!-- Header: Employee Name + Salary Month -->
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <strong class="h5 text-primary">
+                                <strong class="h4 text-primary">
                                     <field name="employee_id"/>
                                 </strong>
-                                <span class="badge bg-info text-white">
-                                    Total:
-                                    <field name="total_salary"/>
+
+                                <span class="badge bg-info text-white" style="font-size:14px;">
+                                    <i class="fa fa-calendar me-1"></i>
+                                    <field name="salary_month"/>
                                 </span>
                             </div>
 
-                            <!-- Body: Amount Received and Remaining -->
-                            <div class="o_kanban_details mb-2">
+                            <!-- Body Details -->
+                            <div class="o_kanban_details mb-2" style="line-height:1.6;">
+
+                                <!-- Salary Date -->
                                 <div>
-                                    <i class="fa fa-money-bill text-success"></i>
-                                    Received:
-                                    <span class="badge bg-success">
+                                    <i class="fa fa-calendar-check text-secondary"></i>
+                                    Salary Date:
+                                    <field name="salary_date"/>
+                                </div>
+
+                                <!-- Total Salary -->
+                                <div>
+                                    <i class="fa fa-usd text-primary"></i>
+
+                                    Total Salary:
+                                    <span class="badge bg-primary text-white" style="font-size:14px;">
+                                        <field name="total_salary"/>
+                                    </span>
+                                </div>
+
+                                <!-- Paid Amount -->
+                                <div>
+                                    <i class="fa fa-check text-success"></i>
+
+
+                                    Paid Salary:
+                                    <span class="badge bg-success text-white" style="font-size:14px;">
                                         <field name="amount"/>
                                     </span>
                                 </div>
 
+                                <!-- Remaining Amount -->
                                 <div>
-                                    <i class="fa fa-hourglass-half text-danger"></i>
+                                    <i class="fa fa-exclamation-circle text-danger"></i>
                                     Remaining:
-                                    <span class="badge bg-danger">
+                                    <span class="badge bg-danger text-white" style="font-size:14px;">
                                         <field name="amount_remaining"/>
                                     </span>
                                 </div>
 
-                                <div>
-                                    <i class="fa fa-calendar text-secondary"></i>
-                                    Salary Date:
-                                    <field name="salary_date"/>
-                                </div>
                             </div>
 
                             <!-- Footer: Payment Status -->
                             <div class="mt-3">
-                                <t t-if="record.payment_status == 'paid'">
-                                    <span class="badge bg-success">
+                                <t t-if="record.payment_status.raw_value == 'paid'">
+                                    <span class="badge bg-success text-white">
                                         <i class="fa fa-check-circle"></i>
                                         Paid
                                     </span>
+
                                 </t>
-                                <t t-if="record.payment_status == 'partially_paid'">
+
+                                <t t-if="record.payment_status.raw_value == 'partially_paid'">
                                     <span class="badge bg-warning text-dark">
                                         <i class="fa fa-exclamation-circle"></i>
                                         Partially Paid
                                     </span>
                                 </t>
-                                <t t-if="record.payment_status == 'not_paid'">
-                                    <span class="badge bg-secondary">
+
+                                <t t-if="record.payment_status.raw_value == 'not_paid'">
+                                    <span class="badge bg-danger text-white">
                                         <i class="fa fa-times-circle"></i>
                                         Not Paid
                                     </span>
+
                                 </t>
                             </div>
 
                         </div>
+
                     </t>
                 </templates>
 
-                <kanban quick_create="true"/>
             </kanban>
+
+
         </field>
     </record>
 
@@ -353,7 +386,7 @@
     <record id="action_salary_payment" model="ir.actions.act_window">
         <field name="name">Employee Salary Payments</field>
         <field name="res_model">salary.payment</field>
-        <field name="view_mode">kanban,tree,form,graph,pivot</field>
+        <field name="view_mode">tree,kanban,form,graph,pivot</field>
     </record>
 
     <!-- MENU -->
