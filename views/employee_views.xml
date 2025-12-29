@@ -9,8 +9,9 @@
             <field name="model">poultry.employee</field>
             <field name="arch" type="xml">
                 <tree string="Employees">
-                    <field class="text-break" name="name" options="{'line_breaks': False}" widget="text" placeholder="e.g. Cheese Burger"/>
-<!--                    <field name="name"/>-->
+                    <field class="text-break" name="name" options="{'line_breaks': False}" widget="text"
+                           placeholder="e.g. Cheese Burger"/>
+                    <!--                    <field name="name"/>-->
                     <field name="employee_code"/>
                     <field name="job_title"/>
                     <field name="branch_id"/>
@@ -24,42 +25,182 @@
         <!-- ===========================
              FORM VIEW: Employees (with chatter)
         ============================ -->
-        <record id="view_employee_form" model="ir.ui.view">
+        <record id="view_poultry_employee_form" model="ir.ui.view">
             <field name="name">poultry.employee.form</field>
             <field name="model">poultry.employee</field>
             <field name="arch" type="xml">
-                <form string="Employee Record">
+
+                <form string="Employee">
                     <sheet>
+
+                        <!-- HEADER (Avatar + Name) -->
+                        <div class="oe_title">
+                            <div class="d-flex align-items-center">
+
+                                <!-- Avatar -->
+                                <div class="me-3">
+                                    <field name="image_1920"
+                                           widget="image"
+                                           class="oe_avatar"
+                                           options="{'preview_image': 'image_1920'}"/>
+                                </div>
+
+                                <!-- Name + Code -->
+                                <div>
+                                    <h1>
+                                        <field name="name"
+                                               placeholder="Employee Name"/>
+                                    </h1>
+                                    <div class="text-muted">
+                                        <field name="employee_code"
+                                               readonly="1"/>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- MAIN INFORMATION -->
                         <group>
-                            <group>
-<!--                                <field name="name"/>-->
-                                <field name="name" class="o_employee_availability"
-                                                       placeholder="Employee's Name"/>
-                                <field name="employee_code"/>
+                            <group string="Job Information">
                                 <field name="branch_id"/>
                                 <field name="job_title"/>
-                                <field name="phone"/>
-                                <field name="address"/>
-                            </group>
-                            <group>
                                 <field name="hire_date"/>
+                            </group>
+
+                            <group string="Compensation">
                                 <field name="salary"/>
-                                <field name="currency_id"/>
-                                <field name="last_attendance"/>
-                                <field name="active"/>
+                                <field name="currency_id" invisible="1"/>
                             </group>
                         </group>
-                    </sheet>
 
-                    <!-- ✅ Chatter Section -->
+                        <!-- CONTACT INFORMATION -->
+                        <group string="Contact Details">
+                            <field name="phone"/>
+                            <field name="address"/>
+                        </group>
+
+                    </sheet>
+                    <!-- CHATTER (STANDARD ODOO WAY) -->
                     <div class="oe_chatter">
                         <field name="message_follower_ids"/>
                         <field name="activity_ids"/>
                         <field name="message_ids"/>
                     </div>
                 </form>
+
             </field>
         </record>
+
+
+        <!-- views/employee_views.xml -->
+        <record id="poultry_employee_kanban_view" model="ir.ui.view">
+            <field name="name">poultry.employee.kanban</field>
+            <field name="model">poultry.employee</field>
+            <field name="priority">10</field>
+            <field name="arch" type="xml">
+
+                <kanban class="o_hr_employee_kanban" sample="1">
+
+                    <!-- Declare fields -->
+                    <field name="name"/>
+                    <field name="job_title"/>
+                    <field name="phone"/>
+                    <field name="branch_id"/>
+                    <field name="salary"/>
+                    <field name="currency_id"/>
+                    <field name="image_1920"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click
+                                o_kanban_record_has_image_fill
+                                o_hr_kanban_record">
+
+                                <!-- LEFT IMAGE (exact HR behavior) -->
+                                <t t-if="record.image_1920.raw_value">
+                                    <field name="image_1920"
+                                           class="o_kanban_image_fill_left d-block"
+                                           widget="background_image"
+                                           options="{'zoom': true, 'zoom_delay': 1000}"/>
+                                </t>
+
+                                <t t-else="">
+                                    <div class="o_kanban_image_fill_left
+                                        d-flex
+                                        align-items-center
+                                        justify-content-center
+                                        bg-100 bg-gradient">
+                                        <svg class="w-75 h-75 opacity-50" viewBox="0 0 20 20">
+                                            <g fill="currentColor">
+                                                <path d="M 10 11 C 4.08 11 2 14 2 16 L 2 19 L 18 19 L 18 16 C 18 14 15.92 11 10 11 Z"/>
+                                                <circle cx="10" cy="5.5" r="4.5"/>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </t>
+
+                                <!-- DETAILS -->
+                                <div class="oe_kanban_details">
+
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+
+                                            <!-- Name -->
+                                            <strong class="o_kanban_record_title">
+                                                <field name="name"/>
+                                            </strong>
+
+                                            <!-- Job Title -->
+                                            <span class="o_kanban_record_subtitle">
+                                                <field name="job_title"/>
+                                            </span>
+
+                                        </div>
+                                    </div>
+
+                                    <ul>
+                                        <!-- Phone -->
+                                        <li class="o_force_ltr">
+                                            <i class="fa fa-fw me-2 fa-phone text-primary"/>
+                                            <field name="phone"/>
+                                        </li>
+
+                                        <!-- Branch -->
+                                        <li class="o_text_overflow">
+                                            <i class="fa fa-fw me-2 fa-building text-primary"/>
+                                            <field name="branch_id"/>
+                                        </li>
+
+                                        <!-- Salary -->
+                                        <li>
+                                            <i class="fa fa-fw me-2 fa-money text-primary"/>
+                                            <field name="salary" widget="monetary"/>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- BOTTOM BAR (same HR spacing & shadow) -->
+                                <div class="oe_kanban_content
+                                    o_hr_employee_kanban_bottom
+                                    position-absolute
+                                    bottom-0
+                                    start-0
+                                    end-0">
+                                    <div class="o_kanban_record_bottom mt-3">
+                                        <div class="oe_kanban_bottom_left"/>
+                                        <div class="oe_kanban_bottom_right"/>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+
+            </field>
+        </record>
+
 
         <!-- ===========================
              SEARCH VIEW: Employees
@@ -88,7 +229,7 @@
                     <!-- Search Panel -->
                     <searchpanel>
                         <field name="branch_id" string="Branch"/>
-<!--                        <field name="job_title" string="Job Title"/>-->
+                        <!--                        <field name="job_title" string="Job Title"/>-->
                     </searchpanel>
                 </search>
             </field>
@@ -131,7 +272,7 @@
         <record id="action_employee" model="ir.actions.act_window">
             <field name="name">Employees</field>
             <field name="res_model">poultry.employee</field>
-            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="view_mode">kanban,form,tree,graph,pivot</field>
             <field name="search_view_id" ref="view_employee_search"/>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
