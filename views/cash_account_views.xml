@@ -179,13 +179,7 @@
         </field>
 
     </record>
-    <!-- ============================== -->
-    <!--   MENU UNDER FINANCE           -->
-    <!-- ============================== -->
-    <!--    <menuitem id="menu_poultry_cash_accounts"-->
-    <!--              name="Cash Accounts"-->
-    <!--              parent="menu_poultry_accounts"-->
-    <!--              action="action_cash_account"/>-->
+
 
     <!-- Branch -->
     <menuitem id="menu_cash_branch_root"
