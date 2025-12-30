@@ -70,7 +70,7 @@
 
                             <group string="Compensation">
                                 <field name="salary"/>
-                                <field name="currency_id" invisible="1"/>
+                                <field name="currency_id"/>
                             </group>
                         </group>
 
@@ -91,7 +91,6 @@
 
             </field>
         </record>
-
 
         <!-- views/employee_views.xml -->
         <record id="poultry_employee_kanban_view" model="ir.ui.view">

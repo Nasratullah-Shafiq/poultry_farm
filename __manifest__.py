@@ -49,7 +49,7 @@
         'views/cash_transfer_views.xml',
         'views/expenses_views.xml',
         'views/hide_menu.xml',
-        'views/dashboard_views.xml',
+        # 'views/dashboard_views.xml',
 
         # Reports - actions before templates
         'report/finance_report_action.xml',
@@ -59,6 +59,12 @@
         'report/salary_payment_report_template.xml',
         'report/expense_report_template.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            # 'poultry_farm/static/src/css/dashboard.css',
+            # 'poultry_farm/static/src/js/dashboard_graph.js',
+        ],
+    },
 
     'installable': True,
     'application': True,
