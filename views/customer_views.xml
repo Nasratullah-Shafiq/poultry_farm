@@ -122,6 +122,14 @@
 
         <field name="arch" type="xml">
             <kanban class="o_kanban_example">
+                <!-- Declare required fields -->
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="total_sale"/>
+                <field name="total_paid"/>
+                <field name="debt"/>
+                <field name="payment_status"/>
                 <templates>
                     <t t-name="kanban-box">
 
@@ -135,7 +143,7 @@
                                 </strong>
 
                                 <span class="badge bg-info text-white" style="font-size: 14px;">
-                                    <i class="fa fa-phone"></i>
+                                    <i class="fa fa-phone me-2"></i>
                                     <field name="phone"/>
                                 </span>
                             </div>
@@ -145,7 +153,7 @@
 
                                 <!-- Email -->
                                 <div>
-                                    <i class="fa fa-envelope text-secondary"></i>
+                                    <i class="fa fa-envelope text-primary"></i>
                                     Email:
                                     <field name="email"/>
                                 </div>
@@ -161,7 +169,7 @@
 
                                 <!-- Total Paid -->
                                 <div>
-                                    <i class="fa fa-money-bill text-success"></i>
+                                    <i class="fa fa-dollar-sign"></i>
                                     Total Paid:
                                     <span class="badge bg-success text-white" style="font-size:14px;">
                                         <field name="total_paid"/>
@@ -171,7 +179,7 @@
                                 <!-- Debt -->
                                 <div>
                                     <i class="fa fa-exclamation-circle text-danger"></i>
-                                    Debt:
+                                    Total Debt:
                                     <span class="badge bg-danger text-white" style="font-size:14px;">
                                         <field name="debt"/>
                                     </span>
@@ -180,11 +188,33 @@
                             </div>
 
                             <!-- Footer -->
-                            <div class="mt-3">
-                                <span class="badge bg-secondary">
-                                    <i class="fa fa-user"></i>
+                            <div class="mt-3 d-flex align-items-center gap-2">
+
+                                <!-- Customer Badge -->
+                                <span class="badge bg-secondary rounded-pill px-3 py-1">
+                                    <i class="fa fa-user me-1"/>
                                     Customer
                                 </span>
+
+                                <!-- Payment Status Pills (Tree-style) -->
+                                <t t-if="record.payment_status.raw_value == 'fully_paid'">
+                                    <span class="badge bg-success text-white rounded-pill px-3 py-1">
+                                        Fully Paid
+                                    </span>
+                                </t>
+
+                                <t t-if="record.payment_status.raw_value == 'partially_paid'">
+                                    <span class="badge bg-warning text-dark rounded-pill px-3 py-1">
+                                        Partially Paid
+                                    </span>
+                                </t>
+
+                                <t t-if="record.payment_status.raw_value == 'not_paid'">
+                                    <span class="badge bg-danger text-white rounded-pill px-3 py-1">
+                                        Not Paid
+                                    </span>
+                                </t>
+
                             </div>
 
                         </div>
@@ -194,6 +224,8 @@
 
                 <kanban quick_create="true"/>
             </kanban>
+
+
         </field>
     </record>
 
@@ -274,6 +306,6 @@
               parent="menu_poultry_customer"
               action="action_poultry_customer"
               sequence="5"
-              />
+    />
 
 </odoo>
