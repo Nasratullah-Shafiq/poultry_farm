@@ -29,6 +29,14 @@ class PoultryEmployee(models.Model):
     last_attendance = fields.Datetime()
     active = fields.Boolean(default=True)
 
+    @api.constrains('salary')
+    def _check_salary_not_zero(self):
+        for rec in self:
+            if rec.salary <= 0:
+                raise UserError(
+                    "Please assign employee salary. Salary must be greater than zero."
+                )
+
     @api.model
     def create(self, vals):
         # Generate employee_code only if not set
