@@ -15,16 +15,12 @@ class PoultryEmployee(models.Model):
     job_title = fields.Char(string = "Job Title", required=True)
     phone = fields.Char(string="Phone", required=True)
     address = fields.Text()
-    hire_date = fields.Date(string="Date", required=True)
+    hire_date = fields.Date(string="Hire Date", required=True)
     salary = fields.Monetary(currency_field='currency_id', required=True)
     currency_id = fields.Many2one('res.currency', string='Currency', default=lambda self: self.env.company.currency_id)
 
     image_1920 = fields.Image(string='Employee Photo', max_width=1920, max_height=1920)
-    # currency_id = fields.Selection(
-    #     [('USD', 'USD'), ('AFN', 'Afghani'), ('KLD', 'Kaldar')],
-    #     string='Currency',
-    #     default='AFN'
-    # )
+
     # Attendance placeholder field: a simple counter or last sign-in
     last_attendance = fields.Datetime()
     active = fields.Boolean(default=True)
@@ -39,42 +35,79 @@ class PoultryEmployee(models.Model):
 
     @api.model
     def create(self, vals):
-        # Generate employee_code only if not set
-        if not vals.get('employee_code'):
-            # Get the last created employee_code numeric part globally
-            last_employee = self.search([('employee_code', '!=', False)], order='id desc', limit=1)
-            if last_employee and last_employee.employee_code and '-' in last_employee.employee_code:
-                try:
-                    last_number = int(last_employee.employee_code.split('-')[1])
-                except:
-                    last_number = 0
-                new_number = str(last_number + 1).zfill(3)
-            else:
-                new_number = '001'
+        if not vals.get('employee_code') and vals.get('name'):
+            vals['employee_code'] = self._generate_employee_code(vals['name'])
 
-            # Use first 3 letters of name as prefix
-            prefix = vals.get('name', 'EMP').replace(' ', '').upper()[:3]
-            vals['employee_code'] = f'{prefix}-{new_number}'
-
-        return super(PoultryEmployee, self).create(vals)
+        return super().create(vals)
 
     def write(self, vals):
-        for rec in self:
-            # Only generate employee_code if not already set
-            if not rec.employee_code and vals.get('name'):
-                last_employee = self.search([('employee_code', '!=', False)], order='id desc', limit=1)
-                if last_employee and last_employee.employee_code and '-' in last_employee.employee_code:
-                    try:
-                        last_number = int(last_employee.employee_code.split('-')[1])
-                    except:
-                        last_number = 0
-                    new_number = str(last_number + 1).zfill(3)
-                else:
-                    new_number = '001'
+        for record in self:
+            # Assign code only if missing
+            if not record.employee_code:
+                name = vals.get('name', record.name)
+                if name and 'employee_code' not in vals:
+                    vals['employee_code'] = self._generate_employee_code(name)
 
-                prefix = vals.get('name', 'EMP').replace(' ', '').upper()[:3]
-                vals['employee_code'] = f'{prefix}-{new_number}'
+        return super().write(vals)
 
-        return super(PoultryEmployee, self).write(vals)
+    def _generate_employee_code(self, name):
+        """
+        Example: NAS-001, NAS-002
+        Prefix = first 3 letters of employee name (no spaces, uppercase)
+        """
+        prefix = name.replace(' ', '').upper()[:3]
 
+        last_employee = self.search(
+            [('employee_code', 'like', f'{prefix}-%')],
+            order='id desc',
+            limit=1
+        )
 
+        if last_employee and last_employee.employee_code:
+            try:
+                last_number = int(last_employee.employee_code.split('-')[1])
+            except Exception:
+                last_number = 0
+            new_number = str(last_number + 1).zfill(3)
+        else:
+            new_number = '001'
+
+        return f'{prefix}-{new_number}'
+
+    # @api.model
+    # def create(self, vals):
+    #     # Auto-generate employee code if missing
+    #     if not vals.get('employee_code'):
+    #         vals['employee_code'] = self._generate_employee_code()
+    #
+    #     return super().create(vals)
+    #
+    # def write(self, vals):
+    #     # Assign code only if record has no code
+    #     for record in self:
+    #         if not record.employee_code:
+    #             if 'employee_code' not in vals:
+    #                 vals['employee_code'] = self._generate_employee_code()
+    #
+    #     return super().write(vals)
+    #
+    # def _generate_employee_code(self):
+    #     """
+    #     Generate unique employee code: EMP-001, EMP-002, ...
+    #     """
+    #     last_employee = self.search(
+    #         [('employee_code', '!=', False)],
+    #         order='id desc',
+    #         limit=1
+    #     )
+    #
+    #     if last_employee and last_employee.employee_code:
+    #         try:
+    #             last_number = int(last_employee.employee_code.split('-')[1])
+    #         except Exception:
+    #             last_number = 0
+    #         new_number = str(last_number + 1).zfill(3)
+    #     else:
+    #         new_number = '001'
+    #
+    #     return f'EMP-{new_number}'

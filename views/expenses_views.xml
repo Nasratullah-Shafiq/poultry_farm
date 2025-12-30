@@ -115,27 +115,6 @@
 </record>
 
 
-<!--    &lt;!&ndash; ============================== &ndash;&gt;-->
-<!--    &lt;!&ndash; SEARCH VIEW &ndash;&gt;-->
-<!--    &lt;!&ndash; ============================== &ndash;&gt;-->
-<!--    <record id="view_poultry_expense_search" model="ir.ui.view">-->
-<!--        <field name="name">poultry.expense.search</field>-->
-<!--        <field name="model">poultry.expense</field>-->
-<!--        <field name="arch" type="xml">-->
-<!--            <search string="Branch Expenses">-->
-<!--                <field name="branch_id"/>-->
-<!--                <field name="expense_type_id"/>-->
-<!--                <field name="user_id"/>-->
-<!--                <field name="date"/>-->
-
-<!--                <searchpanel>-->
-<!--                    <field name="branch_id"/>-->
-<!--                    <field name="expense_type_id"/>-->
-<!--                </searchpanel>-->
-<!--            </search>-->
-<!--        </field>-->
-<!--    </record>-->
-
     <!-- ============================== -->
     <!-- ACTION -->
     <!-- ============================== -->

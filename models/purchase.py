@@ -76,11 +76,22 @@ class PoultryPurchase(models.Model):
                     'farm_id': []
                 }
             }
+    @api.constrains('quantity', 'purchase_price')
+    def _check_values(self):
+        for rec in self:
+            if rec.quantity <= 0:
+                raise ValidationError('Quantity must be greater than zero.')
+            if rec.purchase_price <= 0:
+                raise ValidationError('Unit price must be greater than zero.')
 
 
 
+    # -------------------------
+    # COMPUTES
+    # -------------------------
 
-
-
-
+    @api.depends('quantity', 'purchase_price')
+    def _compute_total(self):
+        for rec in self:
+            rec.total = rec.quantity * rec.purchase_price
 

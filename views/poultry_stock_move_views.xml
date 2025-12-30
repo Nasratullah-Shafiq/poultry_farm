@@ -44,13 +44,5 @@
               name="Purchases"
               parent="menu_poultry_farm"
               action="action_purchase"/>
-    <!-- Menu Hierarchy -->
-<!--    <menuitem id="menu_poultry_root" name="Poultry Management"/>-->
 
-<!--    <menuitem id="poultry_inventory_menu_root" name="Inventory"-->
-<!--              parent="menu_poultry_root" sequence="1"/>-->
-
-<!--    <menuitem id="poultry_stock_move_menu" name="Stock Movements"-->
-<!--              parent="poultry_inventory_menu_root"-->
-<!--              action="action_poultry_stock_moves" sequence="2"/>-->
 </odoo>
