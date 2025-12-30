@@ -152,10 +152,16 @@
                                             </strong>
 
                                             <!-- Job Title -->
-                                            <span class="o_kanban_record_subtitle">
-                                                <field name="job_title"/>
-                                            </span>
-
+                                            <!--                                            <span class="o_kanban_record_subtitle">-->
+                                            <!--                                                <field name="job_title"/>-->
+                                            <!--                                            </span>-->
+                                            <div class="mt-1">
+                                                <t t-if="record.job_title.value">
+                                                    <span class="badge rounded-pill bg-info text-white">
+                                                        <t t-esc="record.job_title.value"/>
+                                                    </span>
+                                                </t>
+                                            </div>
                                         </div>
                                     </div>
 
