@@ -123,75 +123,7 @@ class PoultryDeath(models.Model):
             raise UserError("Insufficient stock to record this death. Available: %s, Requested: %s" %
                             (farm_record.total_quantity, qty))
 
-        # ---------------- STOCK UPDATE LOGIC ------------------
 
-    # def _update_stock(self, old_qty=0, old_branch=None, old_type=None):
-    #     """
-    #     Subtract death quantity from poultry.farm (like sales logic).
-    #     Handles create, update, and delete.
-    #     """
-    #
-    #     for rec in self:
-    #         branch = rec.branch_id
-    #         ptype = rec.item_type_id
-    #
-    #         # 1️⃣ REVERT OLD STOCK (if editing or deleting)
-    #         if old_branch and old_type:
-    #             old_stock = self.env['poultry.farm'].search([
-    #                 ('branch_id', '=', old_branch.id),
-    #                 ('item_type_id', '=', old_type.id)
-    #             ], limit=1)
-    #             if old_stock:
-    #                 old_stock.total_quantity += old_qty  # return old stock
-    #
-    #         # 2️⃣ APPLY NEW STOCK (subtract)
-    #         stock = self.env['poultry.farm'].search([
-    #             ('branch_id', '=', branch.id),
-    #
-    #         ], limit=1)
-    #
-    #         if not stock:
-    #             raise UserError("No stock found for this branch and type!")
-    #
-    #         new_qty = stock.total_quantity - rec.quantity
-    #         stock.total_quantity = new_qty if new_qty >= 0 else 0
-    #
-    #     # ---------------- OVERRIDE CREATE ------------------
-    #
-    # @api.model
-    #
-    # def create(self, vals):
-    #     rec = super().create(vals)
-    #     rec._update_stock()
-    #     return rec
-    #
-    # # ---------------- OVERRIDE WRITE ------------------
-    #
-    # def write(self, vals):
-    #     for rec in self:
-    #         old_qty = rec.quantity
-    #         old_branch = rec.branch_id
-    #         old_type = rec.item_type_id
-    #
-    #         res = super(PoultryDeath, rec).write(vals)
-    #
-    #         rec._update_stock(old_qty, old_branch, old_type)
-    #
-    #     return True
-    #
-    # # ---------------- OVERRIDE DELETE ------------------
-    #
-    # def unlink(self):
-    #     for rec in self:
-    #         stock = self.env['poultry.farm'].search([
-    #             ('branch_id', '=', rec.branch_id.id),
-    #             ('item_type_id', '=', rec.item_type_id.id)
-    #         ], limit=1)
-    #
-    #         if stock:
-    #             stock.total_quantity += rec.quantity  # return quantity
-    #
-    #     return super().unlink()
 
     def _update_stock(self, old_qty=0, old_branch=None, old_type=None):
         """
