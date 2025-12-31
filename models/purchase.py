@@ -23,6 +23,20 @@ class PoultryPurchase(models.Model):
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
     supplier_id = fields.Many2one('poultry.supplier', string='Supplier', required=True)
     total = fields.Monetary(currency_field='currency_id', compute='_compute_total', store=True)
+    status = fields.Selection(
+        [
+            ('new', 'New'),
+            ('purchase_done', 'Purchase Done'),
+        ],
+        string='Status',
+        default='new',
+        required=True,
+        tracking=True
+    )
+
+    def action_purchase_done(self):
+        for record in self:
+            record.status = 'purchase_done'
 
     @api.depends('quantity', 'purchase_price')
     def _compute_total(self):
@@ -83,8 +97,6 @@ class PoultryPurchase(models.Model):
                 raise ValidationError('Quantity must be greater than zero.')
             if rec.purchase_price <= 0:
                 raise ValidationError('Unit price must be greater than zero.')
-
-
 
     # -------------------------
     # COMPUTES
