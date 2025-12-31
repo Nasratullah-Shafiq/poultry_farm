@@ -58,9 +58,14 @@ class PoultryCashTransfer(models.Model):
     date = fields.Date(default=fields.Date.today)
     note = fields.Text()
 
-    state = fields.Selection(
-        [('draft', 'Draft'), ('confirmed', 'Confirmed')],
-        default='draft',
+    status = fields.Selection(
+        [
+            ('new_transfer', 'New Transfer'),
+            ('transfer_done', 'Transfer Done'),
+        ],
+        string='Status',
+        default='new_transfer',
+        required=True,
         tracking=True
     )
 
@@ -107,9 +112,9 @@ class PoultryCashTransfer(models.Model):
                     "Insufficient balance in the source account."
                 )
 
-    def action_confirm(self):
+    def action_transfer_done(self):
         for rec in self:
-            if rec.state == 'confirmed':
+            if rec.status == 'transfer_done':
                 continue
 
             from_account = rec.from_account_id
@@ -128,5 +133,5 @@ class PoultryCashTransfer(models.Model):
             from_account.last_update = fields.Datetime.now()
             to_account.last_update = fields.Datetime.now()
 
-            rec.state = 'confirmed'
+            rec.status = 'transfer_done'
 
