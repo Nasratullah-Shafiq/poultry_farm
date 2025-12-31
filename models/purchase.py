@@ -29,14 +29,25 @@ class PoultryPurchase(models.Model):
             ('purchase_done', 'Purchase Done'),
         ],
         string='Status',
-        default='new',
-        required=True,
-        tracking=True
+        compute='_compute_purchase_status',
+        store=True
     )
 
     def action_purchase_done(self):
         for record in self:
             record.status = 'purchase_done'
+
+    @api.depends('quantity', 'purchase_price', 'total')
+    def _compute_purchase_status(self):
+        for rec in self:
+            qty = rec.quantity or 0
+            price = rec.purchase_price or 0
+            total = rec.total or 0
+
+            if qty > 0 and price > 0 and total > 0:
+                rec.status = 'purchase_done'
+            else:
+                rec.status = 'new'
 
     @api.depends('quantity', 'purchase_price')
     def _compute_total(self):
