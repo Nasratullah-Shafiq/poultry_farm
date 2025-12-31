@@ -24,7 +24,28 @@
         <field name="model">poultry.cash.deposit</field>
         <field name="arch" type="xml">
             <form string="Cash Deposit">
+                <header>
+                    <button name="action_deposit_done"
+                            string="Mark as Deposit Done"
+                            type="object"
+                            class="btn-primary"
+                            invisible="status != 'new_deposit'"/>
+
+                    <field name="status"
+                           widget="statusbar"
+                           statusbar_visible="new_deposit,deposit_done"/>
+                </header>
+
                 <sheet>
+                    <widget name="web_ribbon"
+                            title="New Deposit"
+                            bg_color="bg-info"
+                            invisible="status != 'new_deposit'"/>
+
+                    <widget name="web_ribbon"
+                            title="Deposit Done"
+                            bg_color="bg-success"
+                            invisible="status != 'deposit_done'"/>
                     <group>
                         <field name="account_type"/>
                         <field name="cash_account_id"
