@@ -32,6 +32,21 @@
 
                 <form string="Employee">
                     <sheet>
+                        <field name="employee_status" invisible="1"/>
+                        <widget name="web_ribbon"
+                                title="New Employee"
+                                bg_color="bg-info"
+                                invisible="employee_status != 'new'"/>
+
+                        <widget name="web_ribbon"
+                                title="Hired Employee"
+                                bg_color="bg-success"
+                                invisible="employee_status != 'hired'"/>
+
+                        <widget name="web_ribbon"
+                                title="Fired Employee"
+                                bg_color="bg-danger"
+                                invisible="employee_status != 'fired'"/>
 
                         <!-- HEADER (Avatar + Name) -->
                         <div class="oe_title">
@@ -71,6 +86,7 @@
                             <group string="Compensation">
                                 <field name="salary"/>
                                 <field name="currency_id"/>
+                                <field name="active"/>
                             </group>
                         </group>
 
