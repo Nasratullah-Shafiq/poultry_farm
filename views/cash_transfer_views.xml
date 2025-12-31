@@ -33,7 +33,9 @@
                 <field name="to_account_type"/>
                 <field name="to_currency_type"/>
                 <field name="amount"/>
-                <field name="state"/>
+                <field name="status" widget="badge"
+                       decoration-info="status=='new_transfer'"
+                       decoration-success="status=='transfer_done'"/>
             </tree>
         </field>
     </record>
@@ -45,13 +47,28 @@
         <field name="arch" type="xml">
             <form string="Cash Transfer">
                 <header>
-                    <button name="action_confirm"
-                            string="Confirm Transfer"
+                    <button name="action_transfer_done"
+                            string="Mark as Transfer Done"
                             type="object"
-                            class="btn-primary"/>
-                    <field name="state" widget="statusbar"/>
+                            class="btn-primary"
+                            invisible="status != 'new_transfer'"/>
+
+                    <field name="status"
+                           widget="statusbar"
+                           statusbar_visible="new_transfer,transfer_done"/>
                 </header>
+
                 <sheet>
+                    <field name="status" invisible="1"/>
+                    <widget name="web_ribbon"
+                            title="New Transfer"
+                            bg_color="bg-info"
+                            invisible="status != 'new_transfer'"/>
+
+                    <widget name="web_ribbon"
+                            title="Transfer Done"
+                            bg_color="bg-success"
+                            invisible="status != 'transfer_done'"/>
 
                     <group>
                         <field name="name"/>
@@ -67,7 +84,8 @@
                             <field name="from_account_id"
                                    domain="[('account_type', '=', from_account_type)]"/>
 
-                            <field name="from_branch_id" invisible="from_account_type not in ('main', 'marco', 'bagram')"/>
+                            <field name="from_branch_id"
+                                   invisible="from_account_type not in ('main', 'marco', 'bagram')"/>
                             <field name="from_cashier_id" invisible="from_account_type != 'cashier'"/>
                             <field name="from_currency_type"/>
 
