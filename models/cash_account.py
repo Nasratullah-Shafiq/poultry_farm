@@ -223,8 +223,22 @@ class PoultryCashDeposit(models.Model):
         compute="_compute_year_month",
         store=True
     )
+    status = fields.Selection(
+        [
+            ('new_deposit', 'New Deposit'),
+            ('deposit_done', 'Deposit Done'),
+        ],
+        string='Status',
+        default='new_deposit',
+        required=True,
+        tracking=True
+    )
 
     # Prevent saving zero or negative amounts
+    def action_deposit_done(self):
+        for rec in self:
+            rec.status = 'deposit_done'
+
     @api.constrains('amount')
     def _check_amount(self):
         for record in self:
