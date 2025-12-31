@@ -21,9 +21,33 @@ class PoultryEmployee(models.Model):
 
     image_1920 = fields.Image(string='Employee Photo', max_width=1920, max_height=1920)
 
+    employee_status = fields.Selection(
+        [
+            ('new', 'New Employee'),
+            ('hired', 'Hired Employee'),
+            ('fired', 'Fired Employee'),
+        ],
+        string='Employee Status',
+        compute='_compute_employee_status',
+        store=True,
+        tracking=True
+    )
+
     # Attendance placeholder field: a simple counter or last sign-in
     last_attendance = fields.Datetime()
     active = fields.Boolean(default=True)
+
+    @api.depends('salary', 'active')
+    def _compute_employee_status(self):
+        for rec in self:
+            salary = rec.salary or 0.0
+
+            if not rec.active:
+                rec.employee_status = 'fired'
+            elif salary > 0:
+                rec.employee_status = 'hired'
+            else:
+                rec.employee_status = 'new'
 
     @api.constrains('salary')
     def _check_salary_not_zero(self):
