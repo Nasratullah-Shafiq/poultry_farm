@@ -72,7 +72,29 @@
         <field name="model">poultry.purchase</field>
         <field name="arch" type="xml">
             <form string="Poultry Purchase" create="true" edit="true">
+                <header>
+                    <button name="action_purchase_done"
+                            string="Mark as Purchase Done"
+                            type="object"
+                            class="btn-primary"/>
+<!--                            attrs="{'invisible': [('status', '=', 'purchase_done')]}"/>-->
+
+                    <field name="status"
+                           widget="statusbar"
+                           statusbar_visible="new,purchase_done"/>
+                </header>
+
                 <sheet>
+                     <!--  RIBBONS GO HERE  -->
+                    <widget name="web_ribbon"
+                            title="New Purchase"
+                            bg_color="bg-success"
+                            invisible="status != 'new'"/>
+
+                    <widget name="web_ribbon"
+                            title="Purchase Done"
+                            bg_color="bg-info"
+                            invisible="status != 'purchase_done'"/>
                     <group>
                         <group>
                             <field name="date"/>
