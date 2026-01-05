@@ -24,11 +24,11 @@
         'views/menu.xml',
 
         # Wizard files
-        'wizard/finance_report_wizard_views.xml',
-        'wizard/sale_report_wizard_views.xml',
-        'wizard/purchase_report_wizard_views.xml',
-        'wizard/salary_payment_wizard_views.xml',
-        'wizard/expense_report_wizard_views.xml',
+        'wizard/views/finance_report_wizard_views.xml',
+        'wizard/views/sale_report_wizard_views.xml',
+        'wizard/views/purchase_report_wizard_views.xml',
+        'wizard/views/salary_payment_wizard_views.xml',
+        'wizard/views/expense_report_wizard_views.xml',
 
         # view files
         'views/branch_views.xml',
@@ -37,7 +37,6 @@
 
         'views/sales_views.xml',
         'views/poultry_views.xml',
-        'views/poultry_item_views.xml',
         'views/cashier_views.xml',
         'views/death_views.xml',
         'views/customer_views.xml',
@@ -49,6 +48,8 @@
         'views/cash_transfer_views.xml',
         'views/expenses_views.xml',
         'views/hide_menu.xml',
+        'views/supplier_views.xml',
+        'views/supplier_payment_views.xml',
         # 'views/dashboard_views.xml',
 
         # Reports - actions before templates
