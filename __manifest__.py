@@ -3,7 +3,7 @@
     'name': 'Poultry Farm Management',
     'version': '17.0.1.0.0',
     'category': 'Agriculture',
-    'sequence': -200,
+    # 'sequence': -20,
     'summary': 'Manage poultry purchases, sales, feed, medicine, HR and finance for multi-branch farms',
     'description': """
         Poultry Farm Management system:
