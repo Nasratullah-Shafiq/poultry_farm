@@ -8,6 +8,7 @@
     <menuitem id="menu_poultry_hr" name="HR" parent="menu_poultry" sequence="5" groups="poultry_farm.group_poultry_manager"/>
     <menuitem id="menu_poultry_customer" name="Customer" parent="menu_poultry" sequence="10"/>
     <menuitem id="menu_poultry_finance" name="Finance" parent="menu_poultry" sequence="15"/>
+    <menuitem id="menu_poultry_supplier" name="Supplier" parent="menu_poultry" sequence="20"/>
     <menuitem id="menu_poultry_accounts" name="Accounts" parent="menu_poultry" sequence="20" groups="poultry_farm.group_poultry_manager"/>
     <menuitem id="menu_poultry_farm" name="Farm" sequence="15" parent="menu_poultry"/>
 
