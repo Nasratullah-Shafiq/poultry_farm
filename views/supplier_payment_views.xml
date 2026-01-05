@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <!-- =======================
+         PAYMENT TREE VIEW
+    ======================== -->
+    <record id="view_supplier_payment_tree" model="ir.ui.view">
+        <field name="name">supplier.payment.tree</field>
+        <field name="model">supplier.payment</field>
+        <field name="arch" type="xml">
+            <tree string="Supplier Payments">
+                <field name="supplier_id"/>
+                <field name="purchase_id"/>
+                <field name="date"/>
+                <field name="amount"/>
+                <field name="amount_due"/>
+                <field name="payment_note"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- =======================
+         PAYMENT FORM VIEW
+    ======================== -->
+    <record id="view_supplier_payment_form" model="ir.ui.view">
+        <field name="name">supplier.payment.form</field>
+        <field name="model">supplier.payment</field>
+        <field name="arch" type="xml">
+            <form string="Supplier Payment">
+                <sheet>
+                    <group>
+                        <field name="supplier_id"/>
+                        <field name="purchase_id"/>
+                        <field name="date"/>
+                        <field name="amount"/>
+                        <field name="amount_due"/>
+                        <field name="payment_note"/>
+                    </group>
+                </sheet>
+
+                <!-- Chatter -->
+                <div class="oe_chatter">
+                    <field name="message_ids" widget="mail_thread"/>
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- =======================
+         GRAPH VIEW
+    ======================== -->
+    <record id="view_supplier_payment_graph" model="ir.ui.view">
+        <field name="name">supplier.payment.graph</field>
+        <field name="model">supplier.payment</field>
+        <field name="arch" type="xml">
+            <graph string="Supplier Payments Graph" type="bar">
+                <field name="date" type="row"/>
+                <field name="amount" type="measure"/>
+                <field name="supplier_id" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+
+    <!-- =======================
+         PIVOT VIEW
+    ======================== -->
+    <record id="view_supplier_payment_pivot" model="ir.ui.view">
+        <field name="name">supplier.payment.pivot</field>
+        <field name="model">supplier.payment</field>
+        <field name="arch" type="xml">
+            <pivot string="Supplier Payments Pivot">
+                <field name="supplier_id" type="row"/>
+                <field name="purchase_id" type="row"/>
+                <field name="date" type="col"/>
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+
+    <!-- =======================
+         SEARCH VIEW + SEARCH PANEL
+    ======================== -->
+    <record id="view_supplier_payment_search" model="ir.ui.view">
+        <field name="name">supplier.payment.search</field>
+        <field name="model">supplier.payment</field>
+        <field name="arch" type="xml">
+            <search string="Search Supplier Payments">
+
+                <!-- Quick Search Fields -->
+                <field name="supplier_id" string="Supplier"/>
+                <field name="purchase_id"/>
+                <field name="date"/>
+
+                <!-- ======================
+                     SEARCH PANEL (Odoo 17)
+                ======================= -->
+                <searchpanel>
+                    <field name="supplier_id" icon="fa-truck"/>
+                    <field name="purchase_id" icon="fa-shopping-cart"/>
+                    <field name="payment_year" string="Year" select="1" icon="fa-calendar"/>
+                    <field name="payment_month" string="Month" select="1" icon="fa-calendar"/>
+                </searchpanel>
+
+            </search>
+        </field>
+    </record>
+
+
+    <!-- =======================
+         ACTION
+    ======================== -->
+    <record id="action_supplier_payment" model="ir.actions.act_window">
+        <field name="name">Supplier Payments</field>
+        <field name="res_model">supplier.payment</field>
+        <field name="view_mode">tree,form,graph,pivot</field>
+        <field name="search_view_id" ref="view_supplier_payment_search"/>
+    </record>
+
+
+    <!-- =======================
+         MENU ITEM
+    ======================== -->
+    <menuitem id="menu_supplier_payment"
+              name="Supplier Payments"
+              parent="menu_poultry_supplier"
+              action="action_supplier_payment"
+              sequence="10"/>
+
+</odoo>
