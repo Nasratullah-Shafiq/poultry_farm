@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- =======================
+         FORM VIEW + CHATTER
+    ======================== -->
+    <record id="view_poultry_supplier_form" model="ir.ui.view">
+        <field name="name">poultry.supplier.form</field>
+        <field name="model">poultry.supplier</field>
+        <field name="arch" type="xml">
+            <form string="Supplier">
+                <header>
+                    <field name="payment_status" widget="statusbar"
+                           statusbar_visible="fully_paid,partially_paid,not_paid"
+                           statusbar_colors="fully_paid:green;partially_paid:orange;not_paid:red"/>
+                </header>
+
+                <sheet>
+
+                    <!-- RIBBONS -->
+                    <widget name="web_ribbon"
+                            title="Not Paid"
+                            bg_color="bg-danger"
+                            invisible="payment_status != 'not_paid'"/>
+
+                    <widget name="web_ribbon"
+                            title="Partially Paid"
+                            bg_color="bg-warning"
+                            invisible="payment_status != 'partially_paid'"/>
+
+                    <widget name="web_ribbon"
+                            title="Paid"
+                            bg_color="bg-success"
+                            invisible="payment_status != 'fully_paid'"/>
+
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+
+                            <field name="total_purchase" readonly="1"/>
+                            <field name="total_paid" readonly="1"/>
+                            <field name="debt" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <button name="action_register_payment"
+                            type="object"
+                            string="Register Payment"
+                            class="oe_highlight"/>
+
+                    <notebook>
+
+                        <!-- PURCHASES PAGE -->
+                        <page string="Purchases">
+                            <field name="purchase_ids">
+                                <tree string="Purchase Records">
+                                    <field name="date"/>
+                                    <field name="item_type_id"/>
+                                    <field name="quantity"/>
+                                    <field name="purchase_price"/>
+                                    <field name="total"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <!-- PAYMENTS PAGE -->
+                        <page string="Payments">
+                            <field name="payment_ids">
+                                <tree editable="bottom">
+                                    <field name="date"/>
+                                    <field name="amount"/>
+                                    <field name="payment_type"/>
+                                    <field name="amount_due" readonly="1"/>
+                                    <field name="payment_note"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                </sheet>
+
+                <!-- Chatter -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- =======================
+         TREE VIEW
+    ======================== -->
+    <record id="view_poultry_supplier_tree" model="ir.ui.view">
+        <field name="name">poultry.supplier.tree</field>
+        <field name="model">poultry.supplier</field>
+        <field name="arch" type="xml">
+            <tree string="Suppliers">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="total_purchase"/>
+                <field name="total_paid"/>
+                <field name="debt"/>
+                <field name="payment_status" widget="badge"
+                       decoration-success="payment_status == 'fully_paid'"
+                       decoration-warning="payment_status == 'partially_paid'"
+                       decoration-danger="payment_status == 'not_paid'"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- =======================
+         KANBAN VIEW
+    ======================== -->
+    <record id="view_poultry_supplier_kanban" model="ir.ui.view">
+        <field name="name">poultry.supplier.kanban</field>
+        <field name="model">poultry.supplier</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_example">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="total_purchase"/>
+                <field name="total_paid"/>
+                <field name="debt"/>
+                <field name="payment_status"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+
+                        <div class="oe_kanban_global_click o_kanban_card card-shadow p-3 mb-3"
+                             style="border-radius: 12px; transition: transform 0.2s; cursor: pointer; font-size:16px;">
+
+                            <!-- Header -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong class="h4 text-primary">
+                                    <field name="name"/>
+                                </strong>
+
+                                <span class="badge bg-info text-white" style="font-size:14px;">
+                                    <i class="fa fa-phone me-2"></i>
+                                    <field name="phone"/>
+                                </span>
+                            </div>
+
+                            <!-- Body -->
+                            <div class="o_kanban_details mb-2" style="line-height:1.6;">
+
+                                <div>
+                                    <i class="fa fa-envelope text-primary"></i>
+                                    Email:
+                                    <field name="email"/>
+                                </div>
+
+                                <div>
+                                    <i class="fa fa-shopping-cart text-primary"></i>
+                                    Total Purchase:
+                                    <span class="badge bg-primary text-white" style="font-size:14px;">
+                                        <field name="total_purchase"/>
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <i class="fa fa-dollar-sign"></i>
+                                    Total Paid:
+                                    <span class="badge bg-success text-white" style="font-size:14px;">
+                                        <field name="total_paid"/>
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <i class="fa fa-exclamation-circle text-danger"></i>
+                                    Total Payable:
+                                    <span class="badge bg-danger text-white" style="font-size:14px;">
+                                        <field name="debt"/>
+                                    </span>
+                                </div>
+
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="mt-3 d-flex align-items-center gap-2">
+
+                                <span class="badge bg-secondary rounded-pill px-3 py-1">
+                                    <i class="fa fa-truck me-1"/>
+                                    Supplier
+                                </span>
+
+                                <t t-if="record.payment_status.raw_value == 'fully_paid'">
+                                    <span class="badge bg-success rounded-pill px-3 py-1">
+                                        Fully Paid
+                                    </span>
+                                </t>
+
+                                <t t-if="record.payment_status.raw_value == 'partially_paid'">
+                                    <span class="badge bg-warning text-dark rounded-pill px-3 py-1">
+                                        Partially Paid
+                                    </span>
+                                </t>
+
+                                <t t-if="record.payment_status.raw_value == 'not_paid'">
+                                    <span class="badge bg-danger rounded-pill px-3 py-1">
+                                        Not Paid
+                                    </span>
+                                </t>
+
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+
+                <kanban quick_create="true"/>
+            </kanban>
+        </field>
+    </record>
+
+
+    <!-- =======================
+         GRAPH VIEW
+    ======================== -->
+    <record id="view_poultry_supplier_graph" model="ir.ui.view">
+        <field name="name">poultry.supplier.graph</field>
+        <field name="model">poultry.supplier</field>
+        <field name="arch" type="xml">
+            <graph string="Supplier Statistics" type="bar">
+                <field name="name" type="row"/>
+                <field name="total_purchase" type="measure"/>
+                <field name="total_paid" type="measure"/>
+                <field name="debt" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+
+    <!-- =======================
+         PIVOT VIEW
+    ======================== -->
+    <record id="view_poultry_supplier_pivot" model="ir.ui.view">
+        <field name="name">poultry.supplier.pivot</field>
+        <field name="model">poultry.supplier</field>
+        <field name="arch" type="xml">
+            <pivot string="Supplier Pivot">
+                <field name="name" type="row"/>
+                <field name="total_purchase" type="measure"/>
+                <field name="total_paid" type="measure"/>
+                <field name="debt" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+
+    <!-- =======================
+         SEARCH VIEW
+    ======================== -->
+    <record id="view_poultry_supplier_search" model="ir.ui.view">
+        <field name="name">poultry.supplier.search</field>
+        <field name="model">poultry.supplier</field>
+        <field name="arch" type="xml">
+            <search string="Search Suppliers">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+            </search>
+        </field>
+    </record>
+
+
+    <!-- =======================
+         ACTION
+    ======================== -->
+    <record id="action_poultry_supplier" model="ir.actions.act_window">
+        <field name="name">Suppliers</field>
+        <field name="res_model">poultry.supplier</field>
+        <field name="view_mode">kanban,tree,form,graph,pivot</field>
+        <field name="search_view_id" ref="view_poultry_supplier_search"/>
+    </record>
+
+
+    <!-- =======================
+         MENU
+    ======================== -->
+    <menuitem id="menu_poultry_suppliers"
+              name="Suppliers"
+              parent="menu_poultry_supplier"
+              action="action_poultry_supplier"
+              sequence="5"/>
+
+</odoo>
