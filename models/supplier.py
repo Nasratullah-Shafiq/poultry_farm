@@ -28,7 +28,7 @@ class PoultrySupplier(models.Model):
     )
 
     payment_ids = fields.One2many(
-        'poultry.supplier.payment',
+        'supplier.payment',
         'supplier_id',
         string='Payments'
     )
