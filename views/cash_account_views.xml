@@ -90,8 +90,32 @@
         <field name="model">poultry.cash.account</field>
         <field name="arch" type="xml">
             <form string="Cash Account">
-                <sheet>
-                    <group>
+                 <header>
+                <!-- Button to mark account created -->
+                <button name="action_mark_created"
+                        string="Mark as Account Created"
+                        type="object"
+                        class="btn-primary"
+                        invisible="status != 'new_account'"/>
+
+                <!-- Statusbar -->
+                <field name="status"
+                       widget="statusbar"
+                       statusbar_visible="new_account,account_created"/>
+            </header>
+
+            <sheet>
+                <widget name="web_ribbon"
+                        title="New Account"
+                        bg_color="bg-info"
+                        invisible="status != 'new_account'"/>
+
+                <widget name="web_ribbon"
+                        title="Account Created"
+                        bg_color="bg-success"
+                        invisible="status != 'account_created'"/>
+
+                    <group string="Cash account information">
                         <field name="name"/>
                         <field name="account_type"/>
                         <field name="branch_id" invisible="account_type not in ('main', 'marco', 'bagram')"/>
