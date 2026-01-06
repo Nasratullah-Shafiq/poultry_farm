@@ -70,7 +70,7 @@
                             bg_color="bg-success"
                             invisible="status != 'transfer_done'"/>
 
-                    <group>
+                    <group string="Transfer Information">
                         <field name="name"/>
                         <field name="date"/>
                         <field name="amount"/>

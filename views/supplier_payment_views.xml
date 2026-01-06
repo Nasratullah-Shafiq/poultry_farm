@@ -29,7 +29,32 @@
         <field name="model">supplier.payment</field>
         <field name="arch" type="xml">
             <form string="Supplier Payment">
-                <sheet>
+                <header>
+                <button name="action_payment_done"
+                        string="Mark as Payment Done"
+                        type="object"
+                        class="btn-primary"
+                        invisible="payment_status != 'new'"/>
+
+                <field name="payment_status"
+                       widget="statusbar"
+                       statusbar_visible="new,done"/>
+            </header>
+
+            <sheet>
+                <!-- Hidden for ribbon control -->
+                <field name="payment_status" invisible="1"/>
+
+                <!-- RIBBONS -->
+                <widget name="web_ribbon"
+                        title="New Payment"
+                        bg_color="bg-info"
+                        invisible="payment_status != 'new'"/>
+
+                <widget name="web_ribbon"
+                        title="Payment Done"
+                        bg_color="bg-success"
+                        invisible="payment_status != 'done'"/>
                     <group>
                         <field name="supplier_id"/>
                         <field name="purchase_id"/>

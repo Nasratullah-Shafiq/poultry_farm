@@ -76,8 +76,8 @@
                     <button name="action_purchase_done"
                             string="Mark as Purchase Done"
                             type="object"
-                            class="btn-primary"/>
-<!--                            attrs="{'invisible': [('status', '=', 'purchase_done')]}"/>-->
+                            class="btn-primary"
+                            invisible="status != 'new'"/>
 
                     <field name="status"
                            widget="statusbar"
@@ -85,7 +85,7 @@
                 </header>
 
                 <sheet>
-                     <!--  RIBBONS GO HERE  -->
+                    <!--  RIBBONS GO HERE  -->
                     <widget name="web_ribbon"
                             title="New Purchase"
                             bg_color="bg-success"
