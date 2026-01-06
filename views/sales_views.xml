@@ -33,51 +33,70 @@
         <field name="model">poultry.sale</field>
         <field name="arch" type="xml">
             <form string="Poultry Sale">
+                <header>
+                    <button name="action_sale_done"
+                            string="Mark as Sale Done"
+                            type="object"
+                            class="btn-primary"
+                            invisible="status != 'new'"/>
+
+                    <field name="status"
+                           widget="statusbar"
+                           statusbar_visible="new,sale_done"/>
+                </header>
+
                 <sheet>
+                    <!-- RIBBONS -->
+                    <widget name="web_ribbon"
+                            title="New Sale"
+                            bg_color="bg-info"
+                            invisible="status != 'new'"/>
+
+                    <widget name="web_ribbon"
+                            title="Sale Done"
+                            bg_color="bg-success"
+                            invisible="status != 'sale_done'"/>
+                    <!-- SALE CONTEXT -->
+                <group string="Sale Information">
                     <group>
-                        <group>
-                            <field name="date"/>
-                            <field name="branch_id"/>
-                            <field name="farm_id" domain="[('branch_id', '=', branch_id)]"/>
-                            <field name="item_type_id"/>
-                            <field name="customer_id"/>
-                        </group>
-                        <group>
-                            <field name="available_quantity"/>
-                            <field name="quantity"/>
-                            <field name="uom_id"/>
-                            <field name="purchase_price" readonly="1"/>
-                            <field name="sale_price"/>
-                            <field name="total" readonly="1"/>
-                            <field name="currency_id" invisible="1"/>
-                        </group>
+                        <field name="date"/>
+                        <field name="branch_id"/>
+                        <field name="farm_id"
+                               domain="[('branch_id', '=', branch_id)]"/>
+                        <field name="item_type_id"/>
+                        <field name="customer_id"/>
                     </group>
-                    <!-- PASTE NOTEBOOK HERE -->
-                    <notebook>
-                        <page string="Payments">
-                            <field name="payment_ids">
-                                <tree editable="bottom">
-                                    <field name="date"/>
-                                    <field name="amount"/>
-                                    <field name="payment_type"/>
-                                    <field name="amount_due" readonly="1"/>
-<!--                                    <field name="payment_status" readonly="1"/>-->
-                                    <field name="payment_note"/>
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
-                    <!-- END NOTEBOOK -->
-                </sheet>
-                <!-- Chatter for messages and activities -->
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
-            </form>
-        </field>
-    </record>
+                </group>
+
+                <!-- QUANTITY & PRICING -->
+                <group string="Quantity and Pricing">
+                    <group>
+                        <field name="available_quantity" readonly="1"/>
+                        <field name="quantity"/>
+                        <field name="uom_id"/>
+                    </group>
+
+                    <group>
+                        <field name="purchase_price" readonly="1"/>
+                        <field name="sale_price"/>
+                        <field name="total" readonly="1"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                </group>
+
+            </sheet>
+
+            <!-- CHATTER -->
+            <div class="oe_chatter">
+                <field name="message_follower_ids"/>
+                <field name="activity_ids"/>
+                <field name="message_ids"/>
+            </div>
+
+        </form>
+
+    </field>
+</record>
 
     <!-- =========================
          POULTRY SALES - SEARCH VIEW

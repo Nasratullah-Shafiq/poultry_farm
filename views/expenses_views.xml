@@ -11,6 +11,7 @@
             <tree string="Branch Expenses">
                 <field name="name"/>
                 <field name="branch_id"/>
+                <field name="farm_id"/>
                 <field name="cash_account_id"/>
                 <field name="expense_type_id"/>
                 <field name="amount"/>
@@ -23,36 +24,70 @@
     <!-- ============================== -->
     <!-- FORM VIEW -->
     <!-- ============================== -->
-    <record id="view_poultry_expense_form" model="ir.ui.view">
+        <record id="view_poultry_expense_form" model="ir.ui.view">
         <field name="name">poultry.expense.form</field>
         <field name="model">poultry.expense</field>
         <field name="arch" type="xml">
             <form string="Branch Expense">
+                <header>
+                <!-- Button to mark as done -->
+                <button name="action_expense_done"
+                        string="Mark as Expense Done"
+                        type="object"
+                        class="btn-primary"
+                        invisible="expense_status != 'new'"/>
+
+                <!-- Status Bar -->
+                <field name="expense_status"
+                       widget="statusbar"
+                       statusbar_visible="new,done"/>
+            </header>
+                <!-- Optional: Expense Status Ribbon -->
                 <sheet>
-                    <group>
-                        <field name="name"/>
+                    <field name="expense_status" invisible="1"/>
+                    <widget name="web_ribbon"
+                            title="New Expense"
+                            bg_color="bg-warning"
+                            invisible="expense_status != 'new'"/>
+                    <widget name="web_ribbon"
+                            title="Expense Done"
+                            bg_color="bg-success"
+                            invisible="expense_status != 'done'"/>
+
+
+                    <!-- Branch / Farm Information -->
+                    <group string="Branch and Farm Information">
                         <field name="branch_id"/>
+                        <field name="farm_id" domain="[('branch_id', '=', branch_id)]"/>
                         <field name="cash_account_id" readonly="1"/>
                         <field name="cash_balance" readonly="1"/>
+                    </group>
 
+                    <!-- Expense Details -->
+                    <group string="Expense Details">
+                        <field name="name" string="Description"/>
                         <field name="expense_type_id"/>
                         <field name="amount"/>
                         <field name="date"/>
                         <field name="user_id" readonly="1"/>
                     </group>
 
-                    <group>
+                    <!-- Notes / Additional Information -->
+                    <group string="Notes">
                         <field name="note"/>
                     </group>
                 </sheet>
 
+                <!-- Chatter -->
                 <div class="oe_chatter">
                     <field name="message_follower_ids"/>
                     <field name="message_ids"/>
                 </div>
+
             </form>
         </field>
     </record>
+
 
     <!-- ============================== -->
     <!-- PIVOT VIEW -->
@@ -86,33 +121,33 @@
     </record>
 
     <!-- ============================== -->
-<!-- SEARCH VIEW WITH SEARCH PANEL FOR EXPENSES -->
-<!-- ============================== -->
-<record id="view_poultry_expense_search" model="ir.ui.view">
-    <field name="name">poultry.expense.search</field>
-    <field name="model">poultry.expense</field>
-    <field name="arch" type="xml">
-        <search string="Branch Expenses">
+    <!-- SEARCH VIEW WITH SEARCH PANEL FOR EXPENSES -->
+    <!-- ============================== -->
+    <record id="view_poultry_expense_search" model="ir.ui.view">
+        <field name="name">poultry.expense.search</field>
+        <field name="model">poultry.expense</field>
+        <field name="arch" type="xml">
+            <search string="Branch Expenses">
 
-            <!-- Quick search fields -->
-            <field name="branch_id"/>
-            <field name="expense_type_id"/>
-            <field name="user_id"/>
-            <field name="date"/>
+                <!-- Quick search fields -->
+                <field name="branch_id"/>
+                <field name="expense_type_id"/>
+                <field name="user_id"/>
+                <field name="date"/>
 
-            <!-- Search panel -->
-            <searchpanel>
-                <field name="branch_id" string="Branch" icon="fa-sitemap"/>
-                <field name="expense_type_id" string="Expense Type" icon="fa-list"/>
-<!--                <field name="user_id" string="Recorded By" icon="fa-user"/>-->
-<!--                <field name="date" string="Date" icon="fa-calendar"/>-->
-                <field name="expense_year" string="Year" select="1" icon="fa-calendar"/>
-                <field name="expense_month" string="Month" select="1" icon="fa-calendar"/>
-            </searchpanel>
+                <!-- Search panel -->
+                <searchpanel>
+                    <field name="branch_id" string="Branch" icon="fa-sitemap"/>
+                    <field name="expense_type_id" string="Expense Type" icon="fa-list"/>
+                    <!--                <field name="user_id" string="Recorded By" icon="fa-user"/>-->
+                    <!--                <field name="date" string="Date" icon="fa-calendar"/>-->
+                    <field name="expense_year" string="Year" select="1" icon="fa-calendar"/>
+                    <field name="expense_month" string="Month" select="1" icon="fa-calendar"/>
+                </searchpanel>
 
-        </search>
-    </field>
-</record>
+            </search>
+        </field>
+    </record>
 
 
     <!-- ============================== -->
