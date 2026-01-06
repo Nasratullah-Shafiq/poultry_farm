@@ -3,7 +3,6 @@ access_poultry_branch,Poultry Branch,poultry_farm.model_poultry_branch,poultry_f
 access_poultry_branchs,Poultry Branch,poultry_farm.model_poultry_branch,poultry_farm.group_poultry_record_officer,1,1,0,0
 access_poultry_employee,Poultry Employee,poultry_farm.model_poultry_employee,base.group_system,1,1,1,1
 
-
 access_item_type,Item Type,poultry_farm.model_item_type,base.group_user,1,1,1,1
 access_poultry_purchase,Poultry Purchase,poultry_farm.model_poultry_purchase,base.group_user,1,1,1,1
 access_poultry_sale,Poultry Sale,poultry_farm.model_poultry_sale,base.group_user,1,1,1,1
@@ -13,11 +12,13 @@ access_poultry_farm,Poultry Farm,poultry_farm.model_poultry_farm,,1,1,1,1
 
 access_purchase_report_wizard,Purchase Report Wizard,poultry_farm.model_poultry_purchase_report,base.group_user,1,0,1,0
 access_purchase_report_line,Purchase Report Line,poultry_farm.model_poultry_purchase_report_line,base.group_user,1,0,1,0
-
 access_sale_report_wizard,Sale Report Wizard,poultry_farm.model_poultry_sale_report_wizard,base.group_user,1,1,1,0
 access_poultry_sale_report_wizard,poultry.sale.report.wizard,model_poultry_sale_report_wizard,base.group_user,1,1,1,1
-
 access_poultry_purchase_wizard_erp,Poultry Purchase Wizard,model_poultry_purchase_report,base.group_user,1,1,1,1
+access_expense_report_wizard,expense.report.wizard,model_expense_report_wizard,base.group_user,1,1,1,1
+access_expense_report_line,expense.report.line,model_expense_report_line,base.group_user,1,1,1,1
+access_salary_payment_wizard,salary.payment.wizard,model_salary_payment_wizard,base.group_user,1,1,1,1
+access_salary_payment_report_line,salary.payment.report.line,model_salary_payment_report_line,base.group_user,1,1,1,1
 
 
 access_sale_report_line,Sale Report Line,poultry_farm.model_poultry_sale_report_line,base.group_user,1,0,1,0
@@ -38,11 +39,6 @@ access_poultry_cash_deposit,poultry.cash.deposit,model_poultry_cash_deposit,base
 access_poultry_expense,poultry.expense,model_poultry_expense,base.group_user,1,1,1,1
 access_poultry_expense_type,poultry.expense.type,model_poultry_expense_type,base.group_user,1,1,1,1
 
-access_expense_report_wizard,expense.report.wizard,model_expense_report_wizard,base.group_user,1,1,1,1
-access_expense_report_line,expense.report.line,model_expense_report_line,base.group_user,1,1,1,1
-
-access_salary_payment_wizard,salary.payment.wizard,model_salary_payment_wizard,base.group_user,1,1,1,1
-access_salary_payment_report_line,salary.payment.report.line,model_salary_payment_report_line,base.group_user,1,1,1,1
 
 access_cash_transfer_user,Cash Transfer User,model_poultry_cash_transfer,base.group_user,1,1,1,1
 
@@ -52,6 +48,6 @@ access_poultry_employee_manager,Poultry Employee Manager,model_poultry_employee,
 
 access_poultry_sale_report_line_manager,Poultry Sale Report Line Manager,model_poultry_sale_report_line,poultry_farm.group_poultry_manager,1,1,0,1
 
-
+access_supplier_payment_user,supplier.payment user,model_supplier_payment,base.group_user,1,1,1,1
 
 
