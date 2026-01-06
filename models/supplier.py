@@ -182,6 +182,17 @@ class SupplierPayment(models.Model):
         default='cash'
     )
 
+    payment_status = fields.Selection(
+        [
+            ('new', 'New Payment'),
+            ('done', 'Payment Done')
+        ],
+        default='new',
+        tracking=True
+    )
+
+
+
     # -------------------------
     # Computed Amount Due
     # -------------------------
@@ -213,9 +224,15 @@ class SupplierPayment(models.Model):
         store=True
     )
 
+    def action_payment_done(self):
+        for rec in self:
+            rec.payment_status = 'done'
+
+
     # --------------------------------------------------
     # COMPUTE YEAR & MONTH
     # --------------------------------------------------
+
     @api.depends('date')
     def _compute_year_month(self):
         for rec in self:
