@@ -10,12 +10,12 @@
                         <p style="font-size:14px; color:#555;">Detailed Record of All Salary Payments</p>
                     </div>
 
-                    <!-- Report Date Range and Branch -->
+                    <!-- Report Date Range, Branch and Farm -->
                     <div style="margin-bottom:15px; font-size:14px; color:#333;">
                         <p>
                             <strong>From:</strong>
                             <span><t t-esc="o.start_date"/></span>
-                            <span style="margin-left:20px;"></span>
+                            <span style="margin-left:20px;"> </span>
 
                             <strong>To:</strong>
                             <span><t t-esc="o.end_date"/></span>
@@ -25,6 +25,13 @@
                             <strong>Branch:</strong>
                             <span>
                                 <t t-esc="o.branch_id.name if o.branch_id else 'All Branches'"/>
+                            </span>
+                        </p>
+
+                        <p>
+                            <strong>Farm:</strong>
+                            <span>
+                                <t t-esc="o.farm_id.name if o.farm_id else 'All Farms'"/>
                             </span>
                         </p>
                     </div>
@@ -40,7 +47,8 @@
                                 <th style="padding:8px;">Date</th>
                                 <th style="padding:8px;">Employee</th>
                                 <th style="padding:8px;">Branch</th>
-                                <th style="padding:8px; text-align:right;">Amount</th>
+                                <th style="padding:8px;">Farm</th> <!-- Added Farm column -->
+                                <th style="padding:8px; text-align:right;">Amount Paid</th>
                             </tr>
                         </thead>
 
@@ -48,7 +56,7 @@
                             <t t-foreach="o.salary_lines" t-as="line">
                                 <tr>
                                     <td style="padding:8px; border:1px solid #ddd;">
-                                        <t t-esc="line.salary_date"/>
+                                        <t t-esc="line.month_year"/>
                                     </td>
 
                                     <td style="padding:8px; border:1px solid #ddd;">
@@ -57,6 +65,10 @@
 
                                     <td style="padding:8px; border:1px solid #ddd;">
                                         <t t-esc="line.branch_id.name"/>
+                                    </td>
+
+                                    <td style="padding:8px; border:1px solid #ddd;">
+                                        <t t-esc="line.farm_id.name if line.farm_id else 'N/A'"/>
                                     </td>
 
                                     <td style="padding:8px; border:1px solid #ddd; text-align:right;">
