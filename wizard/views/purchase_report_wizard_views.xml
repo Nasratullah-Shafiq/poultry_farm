@@ -6,6 +6,7 @@
             <form string="Poultry Purchase Report">
                 <group>
                     <field name="branch_id"/>
+                    <field name="farm_id"/>
                     <field name="start_date"/>
                     <field name="end_date"/>
                 </group>
@@ -20,6 +21,7 @@
                         <tree>
                             <field name="date"/>
                             <field name="branch_id"/>
+                            <field name="farm_id"/>
                             <field name="item_type_id"/>
                             <field name="supplier_id"/>
                             <field name="quantity"/>

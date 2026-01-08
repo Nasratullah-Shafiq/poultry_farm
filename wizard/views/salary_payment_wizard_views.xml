@@ -6,6 +6,7 @@
             <form string="Salary Payment Report">
                 <group>
                     <field name="branch_id"/>
+                    <field name="farm_id"/>
                     <field name="start_date"/>
                     <field name="end_date"/>
                 </group>
@@ -17,9 +18,11 @@
                 <group string="Salary Payment Details">
                     <field name="salary_lines" string = "" readonly="1">
                         <tree>
-                            <field name="salary_date"/>
+<!--                            <field name="salary_date"/>-->
+                            <field name="month_year" string="Month"/>
                             <field name="employee_id"/>
                             <field name="branch_id"/>
+                            <field name="farm_id"/>
                             <field name="amount"/>
                         </tree>
                     </field>
