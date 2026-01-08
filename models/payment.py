@@ -39,6 +39,17 @@ class PoultryPayment(models.Model):
         store=True
     )
 
+    payment_status = fields.Selection(
+        [
+            ('new', 'New Payment'),
+            ('done', 'Payment Done')
+        ],
+        default='new',
+        tracking=True
+    )
+
+
+
     # ================================
     #   YEAR & MONTH FOR SEARCH PANEL
     # ================================
@@ -59,6 +70,12 @@ class PoultryPayment(models.Model):
         compute="_compute_year_month",
         store=True
     )
+
+
+    def action_payment_done(self):
+        for rec in self:
+            rec.payment_status = 'done'
+
 
     @api.depends('date')
     def _compute_year_month(self):
