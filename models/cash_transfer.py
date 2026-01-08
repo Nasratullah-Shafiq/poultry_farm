@@ -9,15 +9,103 @@ class PoultryCashTransfer(models.Model):
     _description = 'Cash Transfer'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char(default=lambda self: self.env['ir.sequence'].next_by_code('poultry.cash.transfer'), readonly=True)
+    # name = fields.Char(default=lambda self: self.env['ir.sequence'].next_by_code('poultry.cash.transfer'), readonly=True)
+    #
+    # from_account_id = fields.Many2one('poultry.cash.account', string="From Account")
+    # from_currency_type = fields.Selection(related='from_account_id.currency_type', store=True)
+    #
+    # from_branch_id = fields.Many2one('poultry.branch', string="Branch", related='from_account_id.branch_id', store=True)
+    # from_cashier_id = fields.Many2one('poultry.cashier', string="From Cashier")
+    #
+    # from_account_balance = fields.Float(string="Account Balance", related='from_account_id.balance', readonly=True, store=True)
+    # from_account_type = fields.Selection([
+    #     ('main', 'Main'),
+    #     ('marco', 'Marco'),
+    #     ('bagram', 'Bagram'),
+    #     ('cashier', 'Cashier'),
+    # ], string="Account Type", required=True)
+    #
+    #
+    #
+    #
+    # to_account_type = fields.Selection([
+    #     ('main', 'Main'),
+    #     ('marco', 'Marco'),
+    #     ('bagram', 'Bagram'),
+    #     ('cashier', 'Cashier'),
+    # ], string="Account Type", required=True)
+    #
+    # to_account_id = fields.Many2one(
+    #     'poultry.cash.account',
+    #     string="To Account"
+    # )
+    # to_currency_type = fields.Selection(
+    #     related='to_account_id.currency_type',
+    #     store=True,
+    #     readonly=True
+    # )
+    #
+    # to_branch_id = fields.Many2one('poultry.branch', string="Branch", related='to_account_id.branch_id', store=True)
+    # to_cashier_id = fields.Many2one('poultry.cashier', string="To Cashier")
+    # to_account_balance = fields.Float(
+    #     string="Account Balance",
+    #     related='to_account_id.balance',
+    #     readonly=True,
+    #     store=True
+    # )
+    #
+    # amount = fields.Float(required=True)
+    # date = fields.Date(default=fields.Date.today)
+    # note = fields.Text()
+    #
+    # status = fields.Selection(
+    #     [
+    #         ('new_transfer', 'New Transfer'),
+    #         ('transfer_done', 'Transfer Done'),
+    #     ],
+    #     string='Status',
+    #     default='new_transfer',
+    #     required=True,
+    #     tracking=True
+    # )
 
+    # ---------------------------- BASIC DETAILS -------------------------------
+    # Unique reference for the cash transfer, automatically generated via sequence
+    name = fields.Char(
+        default=lambda self: self.env['ir.sequence'].next_by_code('poultry.cash.transfer'),
+        readonly=True
+    )
+
+    # -------------------------- FROM ACCOUNT DETAILS --------------------------
+    # The account from which money will be transferred
     from_account_id = fields.Many2one('poultry.cash.account', string="From Account")
-    from_currency_type = fields.Selection(related='from_account_id.currency_type', store=True)
 
-    from_branch_id = fields.Many2one('poultry.branch', string="Branch", related='from_account_id.branch_id', store=True)
+    # Currency type of the source account (derived from the related account)
+    from_currency_type = fields.Selection(
+        related='from_account_id.currency_type',
+        store=True
+    )
+
+    # Branch of the source account (automatically fetched from the related account)
+    from_branch_id = fields.Many2one(
+        'poultry.branch',
+        string="Branch",
+        related='from_account_id.branch_id',
+        store=True
+    )
+
+    # Cashier responsible for the source account
     from_cashier_id = fields.Many2one('poultry.cashier', string="From Cashier")
 
-    from_account_balance = fields.Float(string="Account Balance", related='from_account_id.balance', readonly=True, store=True)
+    # Current balance of the source account (read-only)
+    from_account_balance = fields.Float(
+        string="Account Balance",
+        related='from_account_id.balance',
+        readonly=True,
+        store=True
+    )
+
+    # Type of the source account
     from_account_type = fields.Selection([
         ('main', 'Main'),
         ('marco', 'Marco'),
@@ -25,28 +113,29 @@ class PoultryCashTransfer(models.Model):
         ('cashier', 'Cashier'),
     ], string="Account Type", required=True)
 
+    # -------------------------- TO ACCOUNT DETAILS ----------------------------
+    # The account to which money will be transferred
+    to_account_id = fields.Many2one('poultry.cash.account', string="To Account")
 
-
-
-    to_account_type = fields.Selection([
-        ('main', 'Main'),
-        ('marco', 'Marco'),
-        ('bagram', 'Bagram'),
-        ('cashier', 'Cashier'),
-    ], string="Account Type", required=True)
-
-    to_account_id = fields.Many2one(
-        'poultry.cash.account',
-        string="To Account"
-    )
+    # Currency type of the destination account (derived from the related account)
     to_currency_type = fields.Selection(
         related='to_account_id.currency_type',
         store=True,
         readonly=True
     )
 
-    to_branch_id = fields.Many2one('poultry.branch', string="Branch", related='to_account_id.branch_id', store=True)
+    # Branch of the destination account (automatically fetched from the related account)
+    to_branch_id = fields.Many2one(
+        'poultry.branch',
+        string="Branch",
+        related='to_account_id.branch_id',
+        store=True
+    )
+
+    # Cashier responsible for the destination account
     to_cashier_id = fields.Many2one('poultry.cashier', string="To Cashier")
+
+    # Current balance of the destination account (read-only)
     to_account_balance = fields.Float(
         string="Account Balance",
         related='to_account_id.balance',
@@ -54,14 +143,23 @@ class PoultryCashTransfer(models.Model):
         store=True
     )
 
+    # Type of the destination account
+    to_account_type = fields.Selection([
+        ('main', 'Main'),
+        ('marco', 'Marco'),
+        ('bagram', 'Bagram'),
+        ('cashier', 'Cashier'),
+    ], string="Account Type", required=True)
+
+    # ---------------------------- TRANSFER DETAILS ---------------------------
+    # Amount to be transferred
     amount = fields.Float(required=True)
     date = fields.Date(default=fields.Date.today)
     note = fields.Text()
-
     status = fields.Selection(
         [
-            ('new_transfer', 'New Transfer'),
-            ('transfer_done', 'Transfer Done'),
+            ('new_transfer', 'New Transfer'),  # Newly created transfer
+            ('transfer_done', 'Transfer Done'),  # Transfer has been completed
         ],
         string='Status',
         default='new_transfer',
@@ -69,6 +167,34 @@ class PoultryCashTransfer(models.Model):
         tracking=True
     )
 
+    transfer_month = fields.Selection(
+        [
+            ('1', 'January'), ('2', 'February'), ('3', 'March'), ('4', 'April'),
+            ('5', 'May'), ('6', 'June'), ('7', 'July'), ('8', 'August'),
+            ('9', 'September'), ('10', 'October'), ('11', 'November'), ('12', 'December')
+        ],
+        string="Month",
+        compute="_compute_year_month",
+        store=True
+    )
+
+    transfer_year = fields.Selection(
+        selection=lambda self: [(str(y), str(y)) for y in
+                                range(datetime.date.today().year - 10, datetime.date.today().year + 1)],
+        string="Year",
+        compute="_compute_year_month",
+        store=True
+    )
+
+    @api.depends('date')
+    def _compute_year_month(self):
+        for rec in self:
+            if rec.date:
+                rec.transfer_month = str(rec.date.month)
+                rec.transfer_year = str(rec.date.year)
+            else:
+                rec.transfer_month = False
+                rec.transfer_year = False
 
     @api.constrains('from_account_id', 'to_account_id')
     def _check_accounts(self):
