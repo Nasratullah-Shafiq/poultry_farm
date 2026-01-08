@@ -34,6 +34,17 @@ class PoultryCashAccount(models.Model):
     deposit_ids = fields.One2many('poultry.cash.deposit', 'cash_account_id', string="Deposits")
     expense_ids = fields.One2many('poultry.expense', 'cash_account_id', string='Expenses')
 
+    status = fields.Selection(
+        [('new_account', 'New Account'), ('account_created', 'Account Created')],
+        string="Status",
+        default='new_account',
+        tracking=True
+    )
+
+    def action_mark_created(self):
+        for rec in self:
+            rec.status = 'account_created'
+
     @api.constrains('account_type', 'branch_id', 'cashier_id', 'currency_type')
     def _check_unique_currency_account(self):
         for rec in self:

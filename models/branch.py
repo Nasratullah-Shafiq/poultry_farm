@@ -20,6 +20,7 @@ class PoultryBranch(models.Model):
 
     farm_ids = fields.One2many('poultry.farm.house', 'branch_id', string='Farms')
 
+
     farm_names_list = fields.Char(
         string="Farm Names List",
         compute="_compute_farm_names_list",
