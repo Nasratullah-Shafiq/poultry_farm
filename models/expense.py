@@ -22,6 +22,19 @@ class PoultryExpense(models.Model):
     date = fields.Date(default=fields.Date.today)
     user_id = fields.Many2one('res.users', string="Recorded By", default=lambda self: self.env.user)
     note = fields.Text(string="Note")
+    expense_status = fields.Selection(
+        [('new', 'New Expense'),
+         ('done', 'Expense Done')],
+        string="Expense Status",
+        default='new',
+        tracking=True
+    )
+
+    farm_id = fields.Many2one(
+        'poultry.farm.house',
+        string="Farm",
+        domain="[('branch_id', '=', branch_id)]"
+    )
 
     # Computed month and year for search panel
     expense_month = fields.Selection(
@@ -42,7 +55,39 @@ class PoultryExpense(models.Model):
         store=True
     )
 
+    @api.model
+    def action_expense_done(self):
+        for record in self:
+            if record.expense_status != 'done':
+                record.expense_status = 'done'
+
     # Prevent saving zero or negative amounts
+    # -------------------------
+    # Onchange Methods
+    # -------------------------
+
+    @api.onchange('branch_id')
+    def _onchange_branch_id(self):
+        if self.branch_id:
+            # Check if branch has a linked cash account
+            cash_accounts = self.env['poultry.cash.account'].search([('branch_id', '=', self.branch_id.id)])
+            if not cash_accounts:
+                # Show warning in form
+                return {
+                    'warning': {
+                        'title': "No Cash Account!",
+                        'message': "This branch has no cash account. Please create a cash account first."
+                    }
+                }
+            elif len(cash_accounts) == 1:
+                # If only one cash account, auto-fill
+                self.cash_account_id = cash_accounts.id
+            else:
+                # Multiple accounts, let user choose
+                self.cash_account_id = False
+
+
+
     @api.constrains('amount')
     def _check_amount(self):
         for record in self:
