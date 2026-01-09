@@ -16,7 +16,8 @@
               name="Cash Transfers"
               parent="menu_poultry_finance"
               action="action_cash_transfer"
-              sequence="20"/>
+              groups="poultry_farm.group_poultry_manager"
+              sequence="10"/>
 
     <!-- Tree View -->
     <record id="view_cash_transfer_tree" model="ir.ui.view">
@@ -117,5 +118,36 @@
             </form>
         </field>
     </record>
+
+    <record id="view_poultry_cash_transfer_search" model="ir.ui.view">
+        <field name="name">poultry.cash.transfer.search</field>
+        <field name="model">poultry.cash.transfer</field>
+        <field name="arch" type="xml">
+            <search string="Search Cash Transfers">
+
+                <!-- Top search fields -->
+                <field name="from_branch_id"/>
+                <field name="from_cashier_id"/>
+                <field name="date"/>
+
+                <!-- Group By options -->
+                <group expand="0" string="Group By">
+                    <filter name="group_by_branch" string="Branch" context="{'group_by': 'from_branch_id'}"/>
+                    <filter name="group_by_cashier" string="Cashier" context="{'group_by': 'from_cashier_id'}"/>
+                    <filter name="group_by_date" string="Date" context="{'group_by': 'date'}"/>
+                </group>
+
+                <!-- Search Panel with Icons -->
+                <searchpanel>
+                    <field name="from_branch_id" string="Branch" icon="fa-sitemap"/>
+                    <field name="from_cashier_id" string="Cashier" icon="fa-user"/>
+                    <field name="transfer_year" string="Year" select="1" icon="fa-calendar"/>
+                    <field name="transfer_month" string="Month" select="1" icon="fa-calendar"/>
+                </searchpanel>
+
+            </search>
+        </field>
+    </record>
+
 
 </odoo>
