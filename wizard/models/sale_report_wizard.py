@@ -1,17 +1,40 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
+
 class PoultrySaleReportWizard(models.TransientModel):
     _name = 'poultry.sale.report.wizard'
     _description = 'Poultry Sale Report Wizard'
 
     start_date = fields.Date(string="Start Date", required=True)
     end_date = fields.Date(string="End Date", required=True)
-    branch_id = fields.Many2one('poultry.branch', string="Branch")
 
-    total_quantity = fields.Float(string="Total Quantity", readonly=True)
-    total_revenue = fields.Monetary(string="Total Revenue", readonly=True)
-    currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id, readonly=True)
+    branch_id = fields.Many2one(
+        'poultry.branch',
+        string="Branch"
+    )
+
+    farm_id = fields.Many2one(
+        'poultry.farm.house',
+        string="Farm",
+        domain="[('branch_id', '=', branch_id)]"
+    )
+
+    total_quantity = fields.Float(
+        string="Total Quantity",
+        readonly=True
+    )
+
+    total_revenue = fields.Monetary(
+        string="Total Sale",
+        readonly=True
+    )
+
+    currency_id = fields.Many2one(
+        'res.currency',
+        default=lambda self: self.env.company.currency_id,
+        readonly=True
+    )
 
     sale_lines = fields.One2many(
         'poultry.sale.report.line',
@@ -20,45 +43,63 @@ class PoultrySaleReportWizard(models.TransientModel):
         readonly=True
     )
 
+    # -----------------------------
+    # Validations
+    # -----------------------------
     @api.constrains('start_date', 'end_date')
     def _check_date_range(self):
         for rec in self:
             if rec.start_date and rec.end_date and rec.end_date < rec.start_date:
                 raise ValidationError("End Date cannot be earlier than Start Date.")
 
+    # -----------------------------
+    # Domain Builder
+    # -----------------------------
     def _get_domain(self):
+        self.ensure_one()
+
         domain = [
             ('date', '>=', self.start_date),
-            ('date', '<=', self.end_date)
+            ('date', '<=', self.end_date),
         ]
+
         if self.branch_id:
             domain.append(('branch_id', '=', self.branch_id.id))
+
+        if self.farm_id:
+            domain.append(('farm_id', '=', self.farm_id.id))
+
         return domain
 
+    # -----------------------------
+    # Report Generator
+    # -----------------------------
     def generate_report(self):
-        """Fetch and compute sale totals and details."""
         self.ensure_one()
-        domain = self._get_domain()
+
         Sale = self.env['poultry.sale']
+        domain = self._get_domain()
         sales = Sale.search(domain, order='date asc')
 
         # Clear previous lines
         self.sale_lines.unlink()
 
-        total_qty = 0
-        total_revenue = 0
+        total_qty = 0.0
+        total_revenue = 0.0
 
         for sale in sales:
             self.env['poultry.sale.report.line'].create({
                 'wizard_id': self.id,
                 'date': sale.date,
                 'branch_id': sale.branch_id.id,
+                'farm_id': sale.farm_id.id,
                 'item_type_id': sale.item_type_id.id,
                 'quantity': sale.quantity,
                 'unit_price': sale.sale_price,
                 'total': sale.total,
-                'customer_id': sale.customer_id.id
+                'customer_id': sale.customer_id.id,
             })
+
             total_qty += sale.quantity
             total_revenue += sale.total
 
@@ -73,21 +114,60 @@ class PoultrySaleReportWizard(models.TransientModel):
             'target': 'new',
         }
 
+    # -----------------------------
+    # PDF Report
+    # -----------------------------
     def print_pdf_report(self):
         self.generate_report()
-        return self.env.ref('poultry_farm.action_poultry_sale_report').report_action(self)
+        return self.env.ref(
+            'poultry_farm.action_poultry_sale_report'
+        ).report_action(self)
 
 
 class PoultrySaleReportLine(models.TransientModel):
     _name = 'poultry.sale.report.line'
     _description = 'Poultry Sale Report Line'
 
-    wizard_id = fields.Many2one('poultry.sale.report.wizard', ondelete='cascade')
+    wizard_id = fields.Many2one(
+        'poultry.sale.report.wizard',
+        ondelete='cascade'
+    )
+
     date = fields.Date(string="Date")
-    branch_id = fields.Many2one('poultry.branch', string="Branch")
-    item_type_id = fields.Many2one('item.type', string="Type")
+
+    branch_id = fields.Many2one(
+        'poultry.branch',
+        string="Branch"
+    )
+
+    farm_id = fields.Many2one(
+        'poultry.farm.house',
+        string="Farm"
+    )
+
+    item_type_id = fields.Many2one(
+        'item.type',
+        string="Type"
+    )
+
     quantity = fields.Float(string="Quantity")
-    unit_price = fields.Monetary(string="Unit Price", currency_field='currency_id')
-    total = fields.Monetary(string="Total", currency_field='currency_id')
-    customer_id = fields.Many2one('poultry.customer', string="Customer")
-    currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
+
+    unit_price = fields.Monetary(
+        string="Unit Price",
+        currency_field='currency_id'
+    )
+
+    total = fields.Monetary(
+        string="Total",
+        currency_field='currency_id'
+    )
+
+    customer_id = fields.Many2one(
+        'poultry.customer',
+        string="Customer"
+    )
+
+    currency_id = fields.Many2one(
+        'res.currency',
+        default=lambda self: self.env.company.currency_id
+    )
