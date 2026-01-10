@@ -39,6 +39,22 @@ class PoultrySale(models.Model):
 
     payment_ids = fields.One2many('poultry.payment','sale_id',string="Payments")
 
+    status = fields.Selection(
+        [
+            ('new', 'New Sale'),
+            ('sale_done', 'Sale Done')
+        ],
+        string="Status",
+        default='new',
+        tracking=True
+    )
+
+    def action_sale_done(self):
+        for rec in self:
+            if rec.total <= 0:
+                raise ValidationError("Sale total must be greater than zero.")
+            rec.status = 'sale_done'
+
     # ---------------------------
     # Constraints & Validations
     # ---------------------------
