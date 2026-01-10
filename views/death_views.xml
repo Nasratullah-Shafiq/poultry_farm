@@ -54,6 +54,66 @@
             </field>
         </record>
 
+        <!--Kanban view for death record of the Farm-->
+        <record id="view_poultry_death_kanban" model="ir.ui.view">
+            <field name="name">poultry.death.kanban</field>
+            <field name="model">poultry.death</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_dashboard">
+                    <!-- Required fields -->
+                    <field name="death_last_24h"/>
+                    <field name="death_current_month"/>
+                    <field name="death_current_year"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="o_kanban_card">
+
+                                <!-- KPI CARDS -->
+                                <div class="row text-center mb-3">
+
+                                    <!-- Last 24 Hours -->
+                                    <div class="col-4">
+                                        <div class="oe_stat_button bg-danger text-white p-3 rounded">
+                                            <i class="fa fa-clock-o fa-2x"/>
+                                            <div class="mt-1">
+                                                <strong t-esc="record.death_last_24h.value"/>
+                                            </div>
+                                            <div>Last 24 Hours</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- This Month -->
+                                    <div class="col-4">
+                                        <div class="oe_stat_button bg-warning text-white p-3 rounded">
+                                            <i class="fa fa-calendar fa-2x"/>
+                                            <div class="mt-1">
+                                                <strong t-esc="record.death_current_month.value"/>
+                                            </div>
+                                            <div>This Month</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- This Year -->
+                                    <div class="col-4">
+                                        <div class="oe_stat_button bg-info text-white p-3 rounded">
+                                            <i class="fa fa-bar-chart fa-2x"/>
+                                            <div class="mt-1">
+                                                <strong t-esc="record.death_current_year.value"/>
+                                            </div>
+                                            <div>This Year</div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
 
         <!-- ===========================
              SEARCH VIEW: Dead Chickens
@@ -79,9 +139,10 @@
 
                     <!-- Search Panel -->
                     <searchpanel>
-                        <field name="branch_id" string="Branch"/>
-                        <!--                        <field name="poultry_id" string="Poultry"/>-->
-                        <field name="reason" string="Reason"/>
+                        <field name="branch_id" string="Branch" icon="fa-sitemap"/>
+                        <field name="reason" string="Reason" icon="fa-bug"/>
+                        <field name="death_year" string="Year" select="1" icon="fa-calendar"/>
+                        <field name="death_month" string="Month" select="1" icon="fa-calendar"/>
                     </searchpanel>
                 </search>
             </field>
@@ -124,7 +185,7 @@
         <record id="action_poultry_death" model="ir.actions.act_window">
             <field name="name">Poultry Deaths</field>
             <field name="res_model">poultry.death</field>
-            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="view_mode">kanban,tree,form,graph,pivot</field>
             <field name="search_view_id" ref="view_poultry_death_search"/>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
@@ -137,11 +198,11 @@
              MENU ITEM: Dead Chickens
         ============================ -->
         <menuitem id="menu_poultry_death"
-          name="Dead Chickens"
-          parent="menu_poultry"
-          action="action_poultry_death"
-          groups="poultry_farm.group_poultry_record_officer,poultry_farm.group_poultry_manager"
-          sequence="3"/>
+                  name="Dead Chickens"
+                  parent="menu_poultry"
+                  action="action_poultry_death"
+                  groups="poultry_farm.group_poultry_record_officer,poultry_farm.group_poultry_manager"
+                  sequence="3"/>
 
     </data>
 </odoo>
