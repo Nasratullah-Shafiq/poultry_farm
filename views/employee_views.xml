@@ -15,6 +15,7 @@
                     <field name="employee_code"/>
                     <field name="job_title"/>
                     <field name="branch_id"/>
+                    <field name="farm_id"/>
                     <field name="salary"/>
                     <field name="hire_date"/>
                     <field name="active"/>
@@ -79,6 +80,7 @@
                         <group>
                             <group string="Job Information">
                                 <field name="branch_id"/>
+                                <field name="farm_id"/>
                                 <field name="job_title"/>
                                 <field name="hire_date"/>
                             </group>
@@ -249,8 +251,8 @@
 
                     <!-- Search Panel -->
                     <searchpanel>
-                        <field name="branch_id" string="Branch"/>
-                        <!--                        <field name="job_title" string="Job Title"/>-->
+                        <field name="branch_id" string="Branch" icon="fa-sitemap"/>
+                        <field name="farm_id" string="Farm" icon="fa-home"/>
                     </searchpanel>
                 </search>
             </field>
