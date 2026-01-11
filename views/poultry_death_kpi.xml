@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- KPI Kanban View -->
+        <record id="view_poultry_death_kpi_kanban" model="ir.ui.view">
+            <field name="name">poultry.death.kpi.kanban</field>
+            <field name="model">poultry.death.kpi</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_dashboard o_poultry_kpi_dashboard">
+
+                    <!-- REQUIRED FIELD DECLARATIONS -->
+                    <field name="name"/>
+                    <field name="value"/>
+                    <field name="icon"/>
+                    <field name="color"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="o_kanban_card p-4 text-center shadow-sm"
+                                 style="
+                    border-radius: 16px;
+                    transition: transform 0.2s ease, box-shadow 0.2s ease;
+                    background: #ffffff;
+                 "
+                                 t-att-style="'border-top: 4px solid ' + (record.color.value or '#ddd')">
+
+                                <!-- ICON CONTAINER -->
+                                <div class="mb-3">
+                                    <div style="
+                        width: 56px;
+                        height: 56px;
+                        border-radius: 50%;
+                        margin: auto;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background-color: rgba(0,0,0,0.05);
+                    ">
+                                        <i t-att-class="'fa ' + (record.icon.value or 'fa-chart-bar')"
+                                           t-att-style="'color:' + (record.color.value or '#333') + '; font-size:24px;'"/>
+                                    </div>
+                                </div>
+
+                                <!-- KPI VALUE -->
+                                <div style="
+                    font-size: 36px;
+                    font-weight: 700;
+                    line-height: 1;
+                    color: #2c3e50;
+                ">
+                                    <t t-esc="record.value.value or 0"/>
+                                </div>
+
+                                <!-- KPI TITLE -->
+                                <div class="mt-2"
+                                     style="
+                        font-size: 14px;
+                        font-weight: 500;
+                        color: #7f8c8d;
+                        text-transform: uppercase;
+                        letter-spacing: 0.04em;
+                     ">
+                                    <t t-esc="record.name.value"/>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+
+            </field>
+        </record>
+
+        <!-- Action for the KPI Dashboard -->
+        <record id="action_poultry_death_kpi" model="ir.actions.act_window">
+            <field name="name">Death Dashboard</field>
+            <field name="res_model">poultry.death.kpi</field>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="view_poultry_death_kpi_kanban"/>
+            <field name="target">current</field>
+        </record>
+
+        <!-- KPI Dashboard Menu -->
+        <menuitem
+                id="menu_poultry_death_kpi"
+                name="Death Dashboard"
+                parent="menu_poultry"
+                action="action_poultry_death_kpi"
+                sequence="10"/>
+
+    </data>
+</odoo>
