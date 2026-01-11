@@ -2,6 +2,9 @@ from odoo import SUPERUSER_ID
 from odoo import models, fields, api
 from odoo.exceptions import UserError
 
+from datetime import datetime, timedelta, date
+
+
 class PoultryDeath(models.Model):
     _name = 'poultry.death'
     _description = 'Poultry Death Record'
@@ -16,17 +19,11 @@ class PoultryDeath(models.Model):
         help="Branch is automatically fetched from the Poultry Batch"
     )
 
-    date = fields.Date(
-        string="Date of Death",
-        required=True,
-        default=fields.Date.today
-    )
-
-    quantity = fields.Integer(
-        string="Number of Dead Birds",
-        required=True
-    )
-
+    date = fields.Date(string="Date of Death", required=True, default=fields.Date.today)
+    quantity = fields.Integer(string="Number of Dead Birds", required=True)
+    description = fields.Text(string="Additional Notes")
+    notes = fields.Text(string="Additional Notes")
+    death_count = fields.Integer(string="Total Deaths in Batch", compute="_compute_death_count", store=True)
     reason = fields.Selection(
         [
             ('disease', 'Disease'),
@@ -37,15 +34,6 @@ class PoultryDeath(models.Model):
         string="Reason",
         required=True,
         default='disease'
-    )
-
-    description = fields.Text(string="Additional Notes")
-    notes = fields.Text(string="Additional Notes")
-
-    death_count = fields.Integer(
-        string="Total Deaths in Batch",
-        compute="_compute_death_count",
-        store=True
     )
 
     item_type_id = fields.Many2one(
@@ -63,6 +51,64 @@ class PoultryDeath(models.Model):
         store=False,
         readonly=True
     )
+
+    # --------------------------------------------------
+    # KPI FIELDS (Statistics Cards)
+    # --------------------------------------------------
+
+    death_last_24h = fields.Integer(
+        string="Deaths (Last 24 Hours)",
+        compute="_compute_death_statistics"
+    )
+
+    death_current_month = fields.Integer(
+        string="Deaths (This Month)",
+        compute="_compute_death_statistics"
+    )
+
+    death_current_year = fields.Integer(
+        string="Deaths (This Year)",
+        compute="_compute_death_statistics"
+    )
+
+    # Month as Selection
+    death_month = fields.Selection(
+        [
+            ('1', 'January'), ('2', 'February'), ('3', 'March'), ('4', 'April'),
+            ('5', 'May'), ('6', 'June'), ('7', 'July'), ('8', 'August'),
+            ('9', 'September'), ('10', 'October'), ('11', 'November'), ('12', 'December')
+        ],
+        string="Month",
+        compute="_compute_year_month",
+        store=True
+    )
+
+    # Year as Selection
+    death_year = fields.Selection(
+        selection=lambda self: [
+            (str(y), str(y))
+            for y in range(date.today().year - 10, date.today().year + 1)
+        ],
+        string="Year",
+        compute="_compute_year_month",
+        store=True
+    )
+
+    # --------------------------------------------------
+    # COMPUTE YEAR & MONTH
+    # --------------------------------------------------
+
+    @api.depends('date')
+    def _compute_year_month(self):
+        for rec in self:
+            if rec.date:
+                rec.death_month = str(rec.date.month)  # Correct field name
+                rec.death_year = str(rec.date.year)  # Correct field name
+            else:
+                rec.death_month = False
+                rec.death_year = False
+
+
 
     @api.constrains('quantity')
     def _check_quantity(self):
@@ -82,6 +128,53 @@ class PoultryDeath(models.Model):
                 rec.death_count = sum(deaths.mapped('quantity'))
             else:
                 rec.death_count = 0
+
+
+    def _compute_death_statistics(self):
+        """
+        Compute:
+        - Last 24 hours deaths
+        - Current month deaths
+        - Current year deaths
+        """
+        # We compute once and reuse for all records
+        now = datetime.now()
+        today = date.today()
+
+        last_24h = now - timedelta(hours=24)
+        month_start = today.replace(day=1)
+        year_start = today.replace(month=1, day=1)
+
+        Death = self.env['poultry.death']
+
+        # Last 24 hours
+        last_24h_total = sum(
+            Death.search([
+                ('date', '>=', last_24h.date())
+            ]).mapped('quantity')
+        )
+
+        # Current month
+        month_total = sum(
+            Death.search([
+                ('date', '>=', month_start),
+                ('date', '<=', today)
+            ]).mapped('quantity')
+        )
+
+        # Current year
+        year_total = sum(
+            Death.search([
+                ('date', '>=', year_start),
+                ('date', '<=', today)
+            ]).mapped('quantity')
+        )
+
+        for rec in self:
+            rec.death_last_24h = last_24h_total
+            rec.death_current_month = month_total
+            rec.death_current_year = year_total
+
 
 
     @api.depends('branch_id', 'item_type_id')
