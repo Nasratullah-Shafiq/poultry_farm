@@ -20,7 +20,6 @@ access_expense_report_line,expense.report.line,model_expense_report_line,base.gr
 access_salary_payment_wizard,salary.payment.wizard,model_salary_payment_wizard,base.group_user,1,1,1,1
 access_salary_payment_report_line,salary.payment.report.line,model_salary_payment_report_line,base.group_user,1,1,1,1
 
-
 access_sale_report_line,Sale Report Line,poultry_farm.model_poultry_sale_report_line,base.group_user,1,0,1,0
 
 access_poultry_death_manager,Poultry Death Manager,poultry_farm.model_poultry_death,base.group_user,1,1,1,1
@@ -50,4 +49,7 @@ access_poultry_sale_report_line_manager,Poultry Sale Report Line Manager,model_p
 
 access_supplier_payment_user,supplier.payment user,model_supplier_payment,base.group_user,1,1,1,1
 
+access_poultry_purchase_report_line,poultry.purchase.report.line,model_poultry_purchase_report_line,,1,1,1,1
+
+access_poultry_death_kpi_user,poultry.death.kpi user,model_poultry_death_kpi,base.group_user,1,0,0,0
 
