@@ -50,7 +50,7 @@
         'views/hide_menu.xml',
         'views/supplier_views.xml',
         'views/supplier_payment_views.xml',
-        # 'views/dashboard_views.xml',
+        'views/poultry_death_kpi.xml',
 
         # Reports - actions before templates
         'report/finance_report_action.xml',
