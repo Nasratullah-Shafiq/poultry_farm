@@ -82,12 +82,12 @@
         </record>
 
         <!-- KPI Dashboard Menu -->
-        <menuitem
-                id="menu_poultry_death_kpi"
-                name="Death Dashboard"
-                parent="menu_poultry"
-                action="action_poultry_death_kpi"
-                sequence="10"/>
+<!--        <menuitem-->
+<!--                id="menu_poultry_death_kpi"-->
+<!--                name="Death Dashboard"-->
+<!--                parent="menu_poultry"-->
+<!--                action="action_poultry_death_kpi"-->
+<!--                sequence="10"/>-->
 
     </data>
 </odoo>
