@@ -70,6 +70,11 @@ class PoultryDeath(models.Model):
         string="Deaths (This Year)",
         compute="_compute_death_statistics"
     )
+    farm_id = fields.Many2one(
+        'poultry.farm.house',
+        string="Farm",
+        domain="[('branch_id', '=', branch_id)]"
+    )
 
     # Month as Selection
     death_month = fields.Selection(
@@ -186,14 +191,29 @@ class PoultryDeath(models.Model):
             ])
             rec.death_count = sum(d.quantity for d in deaths)
 
-    @api.depends('branch_id', 'item_type_id')
+    @api.depends('branch_id', 'item_type_id', 'farm_id')
     def _compute_total_poultry(self):
         for rec in self:
+            if not rec.branch_id or not rec.item_type_id or not rec.farm_id:
+                rec.total_poultry = 0
+                continue
+
             farms = self.env['poultry.farm'].search([
                 ('branch_id', '=', rec.branch_id.id),
-                ('item_type_id', '=', rec.item_type_id.id)
+                ('item_type_id', '=', rec.item_type_id.id),
+                ('farm_id', '=', rec.farm_id.id),
             ])
+
             rec.total_poultry = sum(f.total_quantity for f in farms)
+
+    # @api.depends('branch_id', 'item_type_id')
+    # def _compute_total_poultry(self):
+    #     for rec in self:
+    #         farms = self.env['poultry.farm'].search([
+    #             ('branch_id', '=', rec.branch_id.id),
+    #             ('item_type_id', '=', rec.item_type_id.id)
+    #         ])
+    #         rec.total_poultry = sum(f.total_quantity for f in farms)
 
     # -------------------------
     # Helpers to modify stock
