@@ -32,11 +32,12 @@
                             <group>
                                 <field name="item_type_id"/>
                                 <field name="branch_id"/>
+                                <field name="farm_id"/>
                                 <field name="date"/>
                                 <field name="quantity"/>
-
                             </group>
                             <group>
+                                <field name="total_poultry"/>
                                 <field name="reason"/>
                                 <field name="notes"/>
 
@@ -53,67 +54,6 @@
                 </form>
             </field>
         </record>
-
-        <!--Kanban view for death record of the Farm-->
-        <record id="view_poultry_death_kanban" model="ir.ui.view">
-            <field name="name">poultry.death.kanban</field>
-            <field name="model">poultry.death</field>
-            <field name="arch" type="xml">
-                <kanban class="o_kanban_dashboard">
-                    <!-- Required fields -->
-                    <field name="death_last_24h"/>
-                    <field name="death_current_month"/>
-                    <field name="death_current_year"/>
-
-                    <templates>
-                        <t t-name="kanban-box">
-                            <div class="o_kanban_card">
-
-                                <!-- KPI CARDS -->
-                                <div class="row text-center mb-3">
-
-                                    <!-- Last 24 Hours -->
-                                    <div class="col-4">
-                                        <div class="oe_stat_button bg-danger text-white p-3 rounded">
-                                            <i class="fa fa-clock-o fa-2x"/>
-                                            <div class="mt-1">
-                                                <strong t-esc="record.death_last_24h.value"/>
-                                            </div>
-                                            <div>Last 24 Hours</div>
-                                        </div>
-                                    </div>
-
-                                    <!-- This Month -->
-                                    <div class="col-4">
-                                        <div class="oe_stat_button bg-warning text-white p-3 rounded">
-                                            <i class="fa fa-calendar fa-2x"/>
-                                            <div class="mt-1">
-                                                <strong t-esc="record.death_current_month.value"/>
-                                            </div>
-                                            <div>This Month</div>
-                                        </div>
-                                    </div>
-
-                                    <!-- This Year -->
-                                    <div class="col-4">
-                                        <div class="oe_stat_button bg-info text-white p-3 rounded">
-                                            <i class="fa fa-bar-chart fa-2x"/>
-                                            <div class="mt-1">
-                                                <strong t-esc="record.death_current_year.value"/>
-                                            </div>
-                                            <div>This Year</div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </t>
-                    </templates>
-                </kanban>
-            </field>
-        </record>
-
 
         <!-- ===========================
              SEARCH VIEW: Dead Chickens
@@ -185,7 +125,7 @@
         <record id="action_poultry_death" model="ir.actions.act_window">
             <field name="name">Poultry Deaths</field>
             <field name="res_model">poultry.death</field>
-            <field name="view_mode">kanban,tree,form,graph,pivot</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
             <field name="search_view_id" ref="view_poultry_death_search"/>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
