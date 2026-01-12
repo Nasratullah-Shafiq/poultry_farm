@@ -206,14 +206,6 @@ class PoultryDeath(models.Model):
 
             rec.total_poultry = sum(f.total_quantity for f in farms)
 
-    # @api.depends('branch_id', 'item_type_id')
-    # def _compute_total_poultry(self):
-    #     for rec in self:
-    #         farms = self.env['poultry.farm'].search([
-    #             ('branch_id', '=', rec.branch_id.id),
-    #             ('item_type_id', '=', rec.item_type_id.id)
-    #         ])
-    #         rec.total_poultry = sum(f.total_quantity for f in farms)
 
     # -------------------------
     # Helpers to modify stock
@@ -311,6 +303,7 @@ class PoultryDeath(models.Model):
         for rec in self:
             stock = self.env['poultry.farm'].search([
                 ('branch_id', '=', rec.branch_id.id),
+                ('farm_id', '=', rec.farm_id.id),
             ], limit=1)
 
             if stock:
