@@ -228,9 +228,7 @@ class PoultryDeath(models.Model):
             raise UserError("Insufficient stock to record this death. Available: %s, Requested: %s" %
                             (farm_record.total_quantity, qty))
 
-
-
-    def _update_stock(self, old_qty=0, old_branch=None, old_type=None):
+    def _update_stock(self, old_qty=0, old_branch=None, old_farm=None):
         """
         Update stock in poultry.farm when deaths are recorded.
         Handles create, update, and delete with validation.
@@ -240,26 +238,30 @@ class PoultryDeath(models.Model):
             # ------------------------------------------------
             # 1️⃣ REVERT OLD STOCK (when editing)
             # ------------------------------------------------
-            if old_branch:
+            if old_branch and old_farm:
                 old_stock = self.env['poultry.farm'].search([
                     ('branch_id', '=', old_branch.id),
+                    ('farm_id', '=', old_farm.id),
                 ], limit=1)
 
                 if old_stock:
                     old_stock.total_quantity += old_qty
 
             # ------------------------------------------------
-            # 2️⃣ GET CURRENT STOCK FOR NEW WRITE/CREATE
+            # 2️⃣ GET CURRENT STOCK (branch + farm)
             # ------------------------------------------------
             stock = self.env['poultry.farm'].search([
                 ('branch_id', '=', rec.branch_id.id),
+                ('farm_id', '=', rec.farm_id.id),
             ], limit=1)
 
             if not stock:
-                raise UserError("No poultry stock found for this branch!")
+                raise UserError(
+                    "No poultry stock found for the selected branch and farm!"
+                )
 
             # ------------------------------------------------
-            # 3️⃣ VALIDATION — DEAD CHICKENS > AVAILABLE STOCK
+            # 3️⃣ VALIDATION
             # ------------------------------------------------
             if rec.quantity > stock.total_quantity:
                 raise UserError(
@@ -269,9 +271,51 @@ class PoultryDeath(models.Model):
                 )
 
             # ------------------------------------------------
-            # 4️⃣ APPLY NEW STOCK (subtract)
+            # 4️⃣ APPLY NEW STOCK
             # ------------------------------------------------
             stock.total_quantity -= rec.quantity
+    # def _update_stock(self, old_qty=0, old_branch=None, old_type=None):
+    #     """
+    #     Update stock in poultry.farm when deaths are recorded.
+    #     Handles create, update, and delete with validation.
+    #     """
+    #     for rec in self:
+    #
+    #         # ------------------------------------------------
+    #         # 1️⃣ REVERT OLD STOCK (when editing)
+    #         # ------------------------------------------------
+    #         if old_branch:
+    #             old_stock = self.env['poultry.farm'].search([
+    #                 ('branch_id', '=', old_branch.id),
+    #             ], limit=1)
+    #
+    #             if old_stock:
+    #                 old_stock.total_quantity += old_qty
+    #
+    #         # ------------------------------------------------
+    #         # 2️⃣ GET CURRENT STOCK FOR NEW WRITE/CREATE
+    #         # ------------------------------------------------
+    #         stock = self.env['poultry.farm'].search([
+    #             ('branch_id', '=', rec.branch_id.id),
+    #         ], limit=1)
+    #
+    #         if not stock:
+    #             raise UserError("No poultry stock found for this branch!")
+    #
+    #         # ------------------------------------------------
+    #         # 3️⃣ VALIDATION — DEAD CHICKENS > AVAILABLE STOCK
+    #         # ------------------------------------------------
+    #         if rec.quantity > stock.total_quantity:
+    #             raise UserError(
+    #                 f"Invalid Entry!\n"
+    #                 f"Death quantity ({rec.quantity}) cannot be greater "
+    #                 f"than available stock ({stock.total_quantity})."
+    #             )
+    #
+    #         # ------------------------------------------------
+    #         # 4️⃣ APPLY NEW STOCK (subtract)
+    #         # ------------------------------------------------
+    #         stock.total_quantity -= rec.quantity
 
     # ======================================================
     # OVERRIDE CREATE
