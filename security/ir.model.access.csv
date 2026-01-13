@@ -53,3 +53,6 @@ access_poultry_purchase_report_line,poultry.purchase.report.line,model_poultry_p
 
 access_poultry_death_kpi_user,poultry.death.kpi user,model_poultry_death_kpi,base.group_user,1,0,0,0
 
+access_dead_report_wizard_user,dead.report.wizard user,model_dead_report_wizard,base.group_user,1,1,1,1
+access_dead_report_line_user,dead.report.line user,model_dead_report_line,base.group_user,1,1,1,1
+
