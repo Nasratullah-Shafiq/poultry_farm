@@ -46,14 +46,21 @@
         <field name="name">Expense Report</field>
         <field name="model">expense.report.wizard</field>
         <field name="report_type">qweb-pdf</field>
-
         <!-- MUST MATCH TEMPLATE ID -->
         <field name="report_name">poultry_farm.report_expense_template</field>
         <field name="report_file">poultry_farm.report_expense_template</field>
-
         <field name="print_report_name">
             'Expense Report - %s' % (object.branch_id.name if object.branch_id else 'All Branches')
         </field>
+    </record>
+
+    <!-- Report Action -->
+    <record id="action_dead_report" model="ir.actions.report">
+        <field name="name">Poultry Death Report</field>
+        <field name="model">dead.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">poultry_farm.report_dead_report_template</field>
+        <field name="print_report_name">'Death Report - %s' % (object.start_date)</field>
     </record>
 
 </odoo>
