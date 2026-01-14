@@ -7,16 +7,17 @@ class PoultryCashAccount(models.Model):
     _name = "poultry.cash.account"
     _description = "Branch Cash Account"
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _rec_name = 'account_no'
 
-    name = fields.Char(string="Account Name",  readonly=True)
+    account_no = fields.Char(string="Account No", readonly=True)
     branch_id = fields.Many2one('poultry.branch', string="Branch")
     balance = fields.Float(string="Cash Balance",tracking=True)
     account_type = fields.Selection([
-        ('main', 'Main'),
-        ('marco', 'Marco'),
-        ('bagram', 'Bagram'),
-        ('cashier', 'Cashier'),
-    ], string="Account Type", required=True)
+        ('main', 'Main Account'),
+        ('marco', 'Marco Account'),
+        ('bagram', 'Bagram Account'),
+        ('cashier', 'Cashier Account'),
+    ], string="Account", required=True)
 
 
     cashier_id = fields.Many2one('poultry.cashier')
@@ -28,9 +29,6 @@ class PoultryCashAccount(models.Model):
         ('afn', 'AFN')
     ], string="Currency", required=True, default='afn')
 
-    # _sql_constraints = [
-    #     ('unique_branch', 'unique(branch_id)', "Each branch can only have one cash account!")
-    # ]
     deposit_ids = fields.One2many('poultry.cash.deposit', 'cash_account_id', string="Deposits")
     expense_ids = fields.One2many('poultry.expense', 'cash_account_id', string='Expenses')
 
@@ -86,6 +84,7 @@ class PoultryCashAccount(models.Model):
 
     #
     #     return super().create(vals)
+
     @api.model
     def create(self, vals):
 
@@ -99,7 +98,6 @@ class PoultryCashAccount(models.Model):
         ):
             branch = self.env['poultry.branch'].browse(vals['branch_id'])
 
-            # Safety check
             if not branch:
                 raise ValidationError("Invalid branch selected.")
 
@@ -113,7 +111,7 @@ class PoultryCashAccount(models.Model):
                 'afn': 3,
             }[vals['currency_type']]
 
-            # 3. Branch index (1, 2, 3 ...)
+            # 3. Branch index
             branch_index = (
                                    self.search_count([
                                        ('branch_id', '=', branch.id),
@@ -121,7 +119,7 @@ class PoultryCashAccount(models.Model):
                                    ]) // 3
                            ) + 1
 
-            # 4. Multiplier (1, 10, 100 ...)
+            # 4. Multiplier
             multiplier = 10 ** (branch_index - 1)
 
             # 5. Final number
@@ -129,10 +127,13 @@ class PoultryCashAccount(models.Model):
             number_str = str(number).zfill(3)
 
             # 6. Currency code
-            currency_code = 'KLD' if vals['currency_type'] == 'kaldar' else vals['currency_type'].upper()
+            currency_code = (
+                'KLD' if vals['currency_type'] == 'kaldar'
+                else vals['currency_type'].upper()
+            )
 
-            # 7. Final name
-            vals['name'] = f"{branch_code}{number_str}{currency_code}"
+            # 7. Final account number
+            vals['account_no'] = f"{branch_code}{number_str}{currency_code}"
 
         # =========================
         # CASHIER ACCOUNTS
@@ -147,7 +148,7 @@ class PoultryCashAccount(models.Model):
             if not cashier:
                 raise ValidationError("Invalid cashier selected.")
 
-            # 1. Cashier code (first 3 letters)
+            # 1. Cashier code
             cashier_code = (cashier.name or 'XXX')[:3].upper()
 
             # 2. Currency order
@@ -173,14 +174,15 @@ class PoultryCashAccount(models.Model):
             number_str = str(number).zfill(3)
 
             # 6. Currency code
-            currency_code = 'KLD' if vals['currency_type'] == 'kaldar' else vals['currency_type'].upper()
+            currency_code = (
+                'KLD' if vals['currency_type'] == 'kaldar'
+                else vals['currency_type'].upper()
+            )
 
-            # 7. Final name
-            vals['name'] = f"{cashier_code}{number_str}{currency_code}"
+            # 7. Final account number
+            vals['account_no'] = f"{cashier_code}{number_str}{currency_code}"
 
         return super().create(vals)
-
-
 
 
 
@@ -195,7 +197,7 @@ class PoultryCashDeposit(models.Model):
     _description = "Cash Deposit to Branch Account"
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    cash_account_id = fields.Many2one('poultry.cash.account', string="Cash Account")
+    cash_account_id = fields.Many2one('poultry.cash.account', string="Account No")
     branch_id = fields.Many2one('poultry.branch', string="Branch", related='cash_account_id.branch_id', readonly=True, store=True)
     amount = fields.Float(string="Deposit Amount", required=True)
     date = fields.Datetime(string="Deposit Date", default=fields.Datetime.now)
@@ -203,11 +205,11 @@ class PoultryCashDeposit(models.Model):
 
     cashier_id = fields.Many2one('poultry.cashier', string="From Cashier")
     account_type = fields.Selection([
-        ('main', 'Main'),
-        ('marco', 'Marco'),
-        ('bagram', 'Bagram'),
-        ('cashier', 'Cashier'),
-    ], string="Account Type", required=True)
+        ('main', 'Main Account'),
+        ('marco', 'Marco Account'),
+        ('bagram', 'Bagram Account'),
+        ('cashier', 'Cashier Account'),
+    ], string="Account", required=True)
     currency_type = fields.Selection(
         related='cash_account_id.currency_type',
         store=True,

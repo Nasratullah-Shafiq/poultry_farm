@@ -30,6 +30,8 @@
         'wizard/views/salary_payment_wizard_views.xml',
         'wizard/views/expense_report_wizard_views.xml',
         'wizard/views/death_report_wizard_views.xml',
+        'wizard/views/cash_deposit_report_wizard_views.xml',
+        'wizard/views/cash_account_report_wizard_views.xml',
 
         # view files
         'views/branch_views.xml',
@@ -61,6 +63,8 @@
         'report/salary_payment_report_template.xml',
         'report/expense_report_template.xml',
         'report/death_report_template.xml',
+        'report/cash_deposit_report_template.xml',
+        'report/cash_account_report_template.xml',
     ],
     'assets': {
         'web.assets_backend': [
