@@ -63,4 +63,26 @@
         <field name="print_report_name">'Death Report - %s' % (object.start_date)</field>
     </record>
 
+    <!-- Cash Report Wizard view action -->
+    <record id="action_cash_deposit_report" model="ir.actions.report">
+        <field name="name">Cash Deposit Report</field>
+        <field name="model">cash.deposit.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">poultry_farm.report_cash_deposit_template</field>
+        <field name="report_file">poultry_farm.report_cash_deposit_template</field>
+    </record>
+
+
+    <!-- Report Action -->
+    <record id="action_cash_account_report" model="ir.actions.report">
+        <field name="name">Cash Account Report</field>
+        <field name="model">cash.account.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">poultry_farm.report_cash_account_template</field>
+        <field name="report_file">Cash_Account_Report</field>
+        <field name="print_report_name">'Cash Account Report - %s' % (object.id)</field>
+    </record>
 </odoo>
+
+
+

@@ -17,7 +17,7 @@
                             <!-- Header: Account Name + Branch -->
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <strong class="h4 text-primary">
-                                    <field name="name"/>
+                                    <field name="account_no"/>
                                 </strong>
                                 <span class="badge bg-info text-white" style="font-size: 14px;">
                                     <i class="fa fa-building"></i>
@@ -72,11 +72,12 @@
         <field name="model">poultry.cash.account</field>
         <field name="arch" type="xml">
             <tree string="Cash Accounts">
-                <field name="name"/>
+                <field name="account_no"/>
                 <field name="account_type"/>
                 <field name="cashier_id" icon="fa-user"/>
                 <field name="balance"/>
                 <field name="currency_type"/>
+
                 <field name="last_update"/>
             </tree>
         </field>
@@ -116,12 +117,13 @@
                         invisible="status != 'account_created'"/>
 
                     <group string="Cash account information">
-                        <field name="name"/>
+                        <field name="account_no"/>
                         <field name="account_type"/>
                         <field name="branch_id" invisible="account_type not in ('main', 'marco', 'bagram')"/>
                         <field name="cashier_id" invisible="account_type != 'cashier'"/>
-                        <field name="balance" readonly="1"/>
                         <field name="currency_type"/>
+                        <field name="balance" readonly="1"/>
+
                         <field name="last_update" readonly="1"/>
 
                     </group>
@@ -145,7 +147,7 @@
         <field name="model">poultry.cash.account</field>
         <field name="arch" type="xml">
             <search>
-                <field name="name"/>
+                <field name="account_no"/>
                 <field name="branch_id"/>
                 <!--                <filter name="positive_balance"/>-->
                 <searchpanel>
