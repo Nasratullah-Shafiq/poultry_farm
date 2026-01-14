@@ -17,7 +17,7 @@
                     </group>
 
                     <group string="Death Details">
-                        <field name="death_lines" readonly="1">
+                        <field name="death_lines" readonly="1" string="">
                             <tree>
                                 <field name="date"/>
                                 <field name="branch_id"/>
