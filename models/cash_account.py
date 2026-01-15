@@ -19,7 +19,6 @@ class PoultryCashAccount(models.Model):
         ('cashier', 'Cashier Account'),
     ], string="Account", required=True)
 
-
     cashier_id = fields.Many2one('poultry.cashier')
 
     last_update = fields.Datetime(string="Last Updated", default=fields.Datetime.now)
