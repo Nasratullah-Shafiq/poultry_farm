@@ -8,7 +8,6 @@ class PoultryEmployee(models.Model):
     _description = 'Poultry Farm Employee'
     _inherit = ['mail.thread', 'mail.activity.mixin']  # Enable chatter
 
-
     name = fields.Char(required=True)
     employee_code = fields.Char(string='Employee Code', readonly=True, copy=False)
     branch_id = fields.Many2one('poultry.branch', string='Branch', required=True)
