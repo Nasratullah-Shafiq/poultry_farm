@@ -1,6 +1,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
+
 class DeadReportWizard(models.TransientModel):
     _name = 'dead.report.wizard'
     _description = 'Poultry Death Report Wizard'
@@ -9,6 +10,7 @@ class DeadReportWizard(models.TransientModel):
     end_date = fields.Date(string="End Date", required=True)
 
     branch_id = fields.Many2one('poultry.branch', string="Branch")
+
     farm_id = fields.Many2one(
         'poultry.farm.house',
         string="Farm",
@@ -33,14 +35,18 @@ class DeadReportWizard(models.TransientModel):
     def _get_domain(self):
         self.ensure_one()
         domain = [('date', '>=', self.start_date), ('date', '<=', self.end_date)]
+
         if self.branch_id:
             domain.append(('branch_id', '=', self.branch_id.id))
+
         if self.farm_id:
             domain.append(('farm_id', '=', self.farm_id.id))
+
         return domain
 
     def generate_report(self):
         self.ensure_one()
+
         Death = self.env['poultry.death']
         domain = self._get_domain()
         deaths = Death.search(domain, order='date asc')
@@ -48,17 +54,18 @@ class DeadReportWizard(models.TransientModel):
         self.death_lines.unlink()
 
         total_deaths = 0
+
         for death in deaths:
             self.env['dead.report.line'].create({
                 'wizard_id': self.id,
                 'date': death.date,
                 'branch_id': death.branch_id.id,
                 'farm_id': death.farm_id.id,
-                'item_type_id': death.item_type_id.id,
                 'quantity': death.quantity,
                 'reason': death.reason,
                 'description': death.description,
             })
+
             total_deaths += death.quantity
 
         self.total_deaths = total_deaths
@@ -82,16 +89,17 @@ class DeadReportLine(models.TransientModel):
     _description = 'Poultry Death Report Line'
 
     wizard_id = fields.Many2one('dead.report.wizard', ondelete='cascade')
+
     date = fields.Date(string="Date")
     branch_id = fields.Many2one('poultry.branch', string="Branch")
     farm_id = fields.Many2one('poultry.farm.house', string="Farm")
-    item_type_id = fields.Many2one('item.type', string="Type")
     quantity = fields.Integer(string="Quantity")
+
     reason = fields.Selection([
         ('disease', 'Disease'),
         ('injury', 'Injury'),
         ('natural', 'Natural Cause'),
         ('unknown', 'Unknown')
     ], string="Reason")
-    description = fields.Text(string="Notes")
 
+    description = fields.Text(string="Notes")

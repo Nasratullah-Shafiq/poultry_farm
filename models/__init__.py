@@ -4,15 +4,14 @@ from . import employee
 from . import poultry_farm_house
 from . import poultry_stock
 from . import death
-from . import item_type_dynamic_menu
 from . import cashier
-from . import customer
+from . import partner
 from . import sale
 from . import purchase
-from . import payment
+from . import poultry_payment
 from . import salary_payment
 from . import cash_account
 from . import cash_transfer
 from . import expense
-from . import supplier
 from . import poultry_death_kpi
+

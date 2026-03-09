@@ -39,11 +39,9 @@
         'views/salary_payment_views.xml',
 
         'views/sales_views.xml',
-        'views/poultry_views.xml',
+        'views/poultry_stock_views.xml',
         'views/cashier_views.xml',
         'views/death_views.xml',
-        'views/customer_views.xml',
-        'views/payment_views.xml',
         'views/purchase_views.xml',
         'views/poultry_farm_house_views.xml',
         'views/cash_account_views.xml',
@@ -51,9 +49,10 @@
         'views/cash_transfer_views.xml',
         'views/expenses_views.xml',
         'views/hide_menu.xml',
-        'views/supplier_views.xml',
-        'views/supplier_payment_views.xml',
         'views/poultry_death_kpi.xml',
+        'views/product_views.xml',
+        'views/poultry_payment_views.xml',
+        'views/partner_views.xml',
 
         # Reports - actions before templates
         'report/finance_report_action.xml',

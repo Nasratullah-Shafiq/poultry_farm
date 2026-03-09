@@ -1,0 +1,445 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<odoo>-->
+
+<!--    &lt;!&ndash; ========================================= &ndash;&gt;-->
+<!--    &lt;!&ndash; CUSTOMER PAYMENT TREE VIEW &ndash;&gt;-->
+<!--    &lt;!&ndash; ========================================= &ndash;&gt;-->
+
+<!--    <record id="view_customer_payment_tree" model="ir.ui.view">-->
+<!--        <field name="name">poultry.payment.customer.tree</field>-->
+<!--        <field name="model">poultry.payment</field>-->
+<!--        <field name="arch" type="xml">-->
+
+<!--            <tree string="Customer Payments" default_order="date desc">-->
+
+<!--                <field name="date"/>-->
+
+<!--                <field name="partner_id"-->
+<!--                       domain="[('partner_type','=','customer')]"/>-->
+
+<!--                <field name="amount"/>-->
+
+<!--                <field name="to_account_type"/>-->
+
+<!--                <field name="to_account_id"/>-->
+
+<!--                <field name="payment_status"/>-->
+
+<!--            </tree>-->
+
+<!--        </field>-->
+<!--    </record>-->
+
+
+<!--    &lt;!&ndash; ========================================= &ndash;&gt;-->
+<!--    &lt;!&ndash; SUPPLIER PAYMENT TREE VIEW &ndash;&gt;-->
+<!--    &lt;!&ndash; ========================================= &ndash;&gt;-->
+
+<!--    <record id="view_supplier_payment_tree" model="ir.ui.view">-->
+<!--        <field name="name">poultry.payment.supplier.tree</field>-->
+<!--        <field name="model">poultry.payment</field>-->
+<!--        <field name="arch" type="xml">-->
+
+<!--            <tree string="Supplier Payments" default_order="date desc">-->
+
+<!--                <field name="date"/>-->
+
+<!--                <field name="partner_id"-->
+<!--                       domain="[('partner_type','=','supplier')]"/>-->
+
+<!--                <field name="amount"/>-->
+
+<!--                <field name="to_account_type"/>-->
+
+<!--                <field name="to_account_id"/>-->
+
+<!--                <field name="payment_status"/>-->
+
+<!--            </tree>-->
+
+<!--        </field>-->
+<!--    </record>-->
+
+
+<!--    &lt;!&ndash; ========================================= &ndash;&gt;-->
+<!--    &lt;!&ndash; CUSTOMER PAYMENT FORM VIEW &ndash;&gt;-->
+<!--    &lt;!&ndash; ========================================= &ndash;&gt;-->
+
+<!--    <record id="view_customer_payment_form" model="ir.ui.view">-->
+<!--        <field name="name">poultry.payment.customer.form</field>-->
+<!--        <field name="model">poultry.payment</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <form string="Customer Payment">-->
+<!--                <header>-->
+<!--                    <button name="action_payment_done"-->
+<!--                            string="Confirm Payment"-->
+<!--                            type="object"-->
+<!--                            class="btn-primary"-->
+<!--                            invisible="payment_status != 'new'"/>-->
+
+<!--                    <field name="payment_status"-->
+<!--                           widget="statusbar"-->
+<!--                           statusbar_visible="new,done"/>-->
+
+<!--                </header>-->
+<!--                <sheet>-->
+<!--                    &lt;!&ndash; Hidden field IMPORTANT &ndash;&gt;-->
+<!--                    <field name="partner_type"/>-->
+<!--                    <group>-->
+<!--                        <group string="Customer Info">-->
+<!--                            <field name="partner_id"-->
+<!--                                   domain="[('partner_type','=','customer')]"/>-->
+<!--                            <field name="date"/>-->
+<!--                            <field name="amount"/>-->
+<!--                            <field name="note"/>-->
+<!--                        </group>-->
+<!--                        <group string="Receive To Account">-->
+<!--                            <field name="to_account_type"/>-->
+<!--                            <field name="to_account_id"-->
+<!--                                   domain="[('account_type','=',to_account_type)]"/>-->
+<!--                            <field name="to_branch_id"-->
+<!--                                   invisible="to_account_type not in ('main','marco','bagram')"/>-->
+<!--                            <field name="to_cashier_id"-->
+<!--                                   invisible="to_account_type != 'cashier'"/>-->
+<!--                            <field name="to_currency_type" readonly="1"/>-->
+<!--                            <field name="to_account_balance" readonly="1"/>-->
+<!--                        </group>-->
+<!--                    </group>-->
+<!--                </sheet>-->
+<!--            </form>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    &lt;!&ndash; ========================================= &ndash;&gt;-->
+<!--    &lt;!&ndash; SUPPLIER PAYMENT FORM VIEW &ndash;&gt;-->
+<!--    &lt;!&ndash; ========================================= &ndash;&gt;-->
+
+<!--    <record id="view_supplier_payment_form" model="ir.ui.view">-->
+<!--        <field name="name">poultry.payment.supplier.form</field>-->
+<!--        <field name="model">poultry.payment</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <form string="Supplier Payment">-->
+<!--                <header>-->
+<!--                    <button name="action_payment_done"-->
+<!--                            string="Confirm Payment"-->
+<!--                            type="object"-->
+<!--                            class="btn-primary"-->
+<!--                            invisible="payment_status != 'new'"/>-->
+
+<!--                    <field name="payment_status"-->
+<!--                           widget="statusbar"-->
+<!--                           statusbar_visible="new,done"/>-->
+
+<!--                </header>-->
+
+
+<!--                <sheet>-->
+<!--                    &lt;!&ndash; Hidden field IMPORTANT &ndash;&gt;-->
+<!--                    <field name="partner_type" invisible="1"/>-->
+<!--                    <group>-->
+
+<!--                        <group string="Supplier Info">-->
+<!--                            <field name="partner_id"-->
+<!--                                   domain="[('partner_type','=','supplier')]"/>-->
+<!--                            <field name="date"/>-->
+<!--                            <field name="amount"/>-->
+<!--                            <field name="note"/>-->
+<!--                        </group>-->
+
+<!--                        <group string="Pay From Account">-->
+<!--                            <field name="to_account_type"/>-->
+<!--                            <field name="to_account_id"-->
+<!--                                   domain="[('account_type','=',to_account_type)]"/>-->
+<!--                            <field name="to_branch_id"-->
+<!--                                   invisible="to_account_type not in ('main','marco','bagram')"/>-->
+<!--                            <field name="to_cashier_id"-->
+<!--                                   invisible="to_account_type != 'cashier'"/>-->
+<!--                            <field name="to_currency_type" readonly="1"/>-->
+<!--                            <field name="to_account_balance" readonly="1"/>-->
+<!--                        </group>-->
+<!--                    </group>-->
+<!--                </sheet>-->
+<!--            </form>-->
+<!--        </field>-->
+<!--    </record>-->
+
+
+<!--    &lt;!&ndash; ========================================= &ndash;&gt;-->
+<!--    &lt;!&ndash; CUSTOMER ACTION &ndash;&gt;-->
+<!--    &lt;!&ndash; ========================================= &ndash;&gt;-->
+
+<!--    <record id="action_customer_payment" model="ir.actions.act_window">-->
+<!--        <field name="name">Customer Payments</field>-->
+<!--        <field name="res_model">poultry.payment</field>-->
+<!--        <field name="view_mode">tree,form</field>-->
+<!--        <field name="domain">-->
+<!--            [('partner_type','=','customer')]-->
+<!--        </field>-->
+<!--        <field name="view_id" ref="view_customer_payment_tree"/>-->
+<!--        <field name="context">-->
+<!--            {'default_partner_type':'customer'}-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    &lt;!&ndash; ========================================= &ndash;&gt;-->
+<!--    &lt;!&ndash; SUPPLIER ACTION &ndash;&gt;-->
+<!--    &lt;!&ndash; ========================================= &ndash;&gt;-->
+
+<!--    <record id="action_supplier_payment" model="ir.actions.act_window">-->
+<!--        <field name="name">Supplier Payments</field>-->
+<!--        <field name="res_model">poultry.payment</field>-->
+<!--        <field name="view_mode">tree,form</field>-->
+<!--        <field name="view_id" ref="view_supplier_payment_tree"/>-->
+<!--        <field name="domain">-->
+<!--            [('partner_type','=','supplier')]-->
+<!--        </field>-->
+<!--        <field name="context">-->
+<!--            {'default_partner_type':'supplier'}-->
+<!--        </field>-->
+<!--    </record>-->
+
+
+<!--    &lt;!&ndash; ========================================= &ndash;&gt;-->
+<!--    &lt;!&ndash; MENUS &ndash;&gt;-->
+<!--    &lt;!&ndash; ========================================= &ndash;&gt;-->
+
+
+<!--    <menuitem id="menu_poultry_payment_root"-->
+<!--              name="Payments"-->
+<!--              sequence="30"/>-->
+
+
+<!--    <menuitem id="menu_customer_payment"-->
+<!--              name="Customer Payments"-->
+<!--              parent="menu_poultry_payment_root"-->
+<!--              action="action_customer_payment"-->
+<!--              sequence="1"/>-->
+
+
+<!--    <menuitem id="menu_supplier_payment"-->
+<!--              name="Supplier Payments"-->
+<!--              parent="menu_poultry_payment_root"-->
+<!--              action="action_supplier_payment"-->
+<!--              sequence="2"/>-->
+
+
+<!--</odoo>-->
+
+<odoo>
+
+    <!-- ========================================= -->
+    <!-- CUSTOMER PAYMENT TREE VIEW -->
+    <!-- ========================================= -->
+    <record id="view_customer_payment_tree" model="ir.ui.view">
+        <field name="name">poultry.payment.customer.tree</field>
+        <field name="model">poultry.payment</field>
+        <field name="arch" type="xml">
+            <tree string="Customer Payments" default_order="date desc">
+                <field name="date"/>
+                <field name="partner_id" string="Customer" domain="[('partner_type','=','customer')]"/>
+                <field name="amount"/>
+                <field name="total_amount"/>
+                <field name="amount_paid"/>
+                <field name="amount_due"/>
+                <field name="to_account_type"/>
+                <field name="to_account_id"/>
+                <field name="payment_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ========================================= -->
+    <!-- SUPPLIER PAYMENT TREE VIEW -->
+    <!-- ========================================= -->
+    <record id="view_supplier_payment_tree" model="ir.ui.view">
+        <field name="name">poultry.payment.supplier.tree</field>
+        <field name="model">poultry.payment</field>
+        <field name="arch" type="xml">
+            <tree string="Supplier Payments" default_order="date desc">
+                <field name="date"/>
+                <field name="partner_id" string="Supplier" domain="[('partner_type','=','partner_type')]"/>
+                <field name="amount"/>
+                <field name="total_amount"/>
+                <field name="amount_paid"/>
+                <field name="amount_due"/>
+                <field name="to_account_type"/>
+                <field name="to_account_id"/>
+                <field name="payment_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ========================================= -->
+    <!-- SINGLE DYNAMIC PAYMENT FORM VIEW -->
+    <!-- ========================================= -->
+    <record id="view_poultry_payment_form" model="ir.ui.view">
+        <field name="name">poultry.payment.form</field>
+        <field name="model">poultry.payment</field>
+        <field name="arch" type="xml">
+            <form string="Payment">
+                <header>
+                    <button name="action_payment_done"
+                            string="Confirm Payment"
+                            type="object"
+                            class="btn-primary"
+                            invisible="payment_status != 'new'"/>
+                    <field name="payment_status" widget="statusbar" statusbar_visible="new,done"/>
+                </header>
+
+                <sheet>
+                    <!--  RIBBONS GO HERE  -->
+                    <widget name="web_ribbon"
+                            title="New Payment"
+                            bg_color="bg-info"
+                            invisible="payment_status != 'new'"/>
+
+                    <widget name="web_ribbon"
+                            title="Payment Done"
+                            bg_color="bg-success"
+                            invisible="payment_status != 'done'"/>
+                    <!-- Hidden partner type field -->
+                    <field name="partner_type" invisible="1"/>
+
+                    <group>
+                        <!--                        <group string="Partner Information">-->
+                        <!--                            <field name="partner_id"-->
+                        <!--                                   domain="[('partner_type','=',partner_type)]"/>-->
+                        <!--                            <field name="date"/>-->
+                        <!--                            <field name="amount"/>-->
+                        <!--                            <field name="note"/>-->
+                        <!--                        </group>-->
+                        <!-- CUSTOMER GROUP -->
+                        <group string="Customer Payment Information"
+                               invisible="partner_type != 'customer'">
+
+                            <field name="partner_id"
+                                   string="Customer"
+                                   domain="[('partner_type','=','customer')]"/>
+
+                            <field name="date"/>
+                            <field name="amount"/>
+                            <field name="note"/>
+
+                        </group>
+
+
+                        <!-- SUPPLIER GROUP -->
+                        <group string="Supplier Payment Information"
+                               invisible="partner_type != 'supplier'">
+
+                            <field name="partner_id"
+                                   string="Supplier"
+                                   domain="[('partner_type','=','supplier')]"/>
+
+                            <field name="date"/>
+                            <field name="amount"/>
+                            <field name="note"/>
+
+                        </group>
+                        <group string="Account Details">
+                            <field name="to_account_type"/>
+                            <field name="to_account_id" required="1" domain="[('account_type','=',to_account_type)]"/>
+                            <field name="to_branch_id" invisible="to_account_type not in ('main','marco','bagram')"/>
+                            <field name="to_cashier_id" invisible="to_account_type != 'cashier'"/>
+                            <field name="to_currency_type" readonly="1"/>
+                            <field name="to_account_balance" readonly="1"/>
+                        </group>
+                        <group string="Payment Summary">
+                            <field name="total_amount" readonly="1"/>
+                            <field name="amount_paid" readonly="1"/>
+                            <field name="amount_due" readonly="1"/>
+                        </group>
+
+
+                    </group>
+
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <!-- ========================================= -->
+    <!-- PAYMENT SEARCH VIEW WITH SEARCH PANEL -->
+    <!-- ========================================= -->
+
+    <record id="view_poultry_payment_search" model="ir.ui.view">
+        <field name="name">poultry.payment.search</field>
+        <field name="model">poultry.payment</field>
+        <field name="arch" type="xml">
+
+            <search string="Search Payments">
+
+                <!-- Normal search filters -->
+                <field name="partner_id"/>
+                <field name="to_account_id"/>
+                <field name="payment_status"/>
+                <field name="date"/>
+
+                <!-- Search Panel (LEFT SIDE) -->
+                <searchpanel>
+                    <!-- Partner -->
+                    <field name="partner_id" icon="fa-user" enable_counters="1"/>
+                    <field name="payment_status" string="Status" enable_counters="1"/>
+                    <field name="to_account_id" icon="fa-money" string="Cash Account"/>
+                    <field name="payment_year" string="Year" select="multi" icon="fa-calendar"/>
+                    <field name="payment_month" string="Month" select="multi" icon="fa-calendar"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <!-- ========================================= -->
+    <!-- CUSTOMER ACTION -->
+    <!-- ========================================= -->
+    <record id="action_customer_payment" model="ir.actions.act_window">
+        <field name="name">Customer Payments</field>
+        <field name="res_model">poultry.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('partner_type','=','customer')]</field>
+        <field name="context">{'default_partner_type':'customer'}</field>
+        <field name="views" eval="[
+            (ref('view_customer_payment_tree'),'tree'),
+            (ref('view_poultry_payment_form'),'form')
+        ]"/>
+    </record>
+
+    <!-- ========================================= -->
+    <!-- SUPPLIER ACTION -->
+    <!-- ========================================= -->
+    <record id="action_supplier_payment" model="ir.actions.act_window">
+        <field name="name">Supplier Payments</field>
+        <field name="res_model">poultry.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('partner_type','=','supplier')]</field>
+        <field name="context">{'default_partner_type':'supplier'}</field>
+        <field name="views" eval="[
+            (ref('view_supplier_payment_tree'),'tree'),
+            (ref('view_poultry_payment_form'),'form')
+        ]"/>
+    </record>
+
+    <!-- ========================================= -->
+    <!-- MENUS -->
+    <!-- ========================================= -->
+    <menuitem id="menu_poultry_payment_root"
+              name="Payments"
+              parent="menu_poultry"
+              sequence="30"/>
+
+    <menuitem id="menu_customer_payment"
+              name="Customer Payments"
+              parent="menu_poultry_payment_root"
+              action="action_customer_payment"
+              sequence="1"/>
+
+    <menuitem id="menu_supplier_payment"
+              name="Supplier Payments"
+              parent="menu_poultry_payment_root"
+              action="action_supplier_payment"
+              sequence="2"/>
+
+</odoo>

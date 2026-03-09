@@ -9,65 +9,6 @@ class PoultryCashTransfer(models.Model):
     _description = 'Cash Transfer'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    # name = fields.Char(default=lambda self: self.env['ir.sequence'].next_by_code('poultry.cash.transfer'), readonly=True)
-    #
-    # from_account_id = fields.Many2one('poultry.cash.account', string="From Account")
-    # from_currency_type = fields.Selection(related='from_account_id.currency_type', store=True)
-    #
-    # from_branch_id = fields.Many2one('poultry.branch', string="Branch", related='from_account_id.branch_id', store=True)
-    # from_cashier_id = fields.Many2one('poultry.cashier', string="From Cashier")
-    #
-    # from_account_balance = fields.Float(string="Account Balance", related='from_account_id.balance', readonly=True, store=True)
-    # from_account_type = fields.Selection([
-    #     ('main', 'Main'),
-    #     ('marco', 'Marco'),
-    #     ('bagram', 'Bagram'),
-    #     ('cashier', 'Cashier'),
-    # ], string="Account Type", required=True)
-    #
-    #
-    #
-    #
-    # to_account_type = fields.Selection([
-    #     ('main', 'Main'),
-    #     ('marco', 'Marco'),
-    #     ('bagram', 'Bagram'),
-    #     ('cashier', 'Cashier'),
-    # ], string="Account Type", required=True)
-    #
-    # to_account_id = fields.Many2one(
-    #     'poultry.cash.account',
-    #     string="To Account"
-    # )
-    # to_currency_type = fields.Selection(
-    #     related='to_account_id.currency_type',
-    #     store=True,
-    #     readonly=True
-    # )
-    #
-    # to_branch_id = fields.Many2one('poultry.branch', string="Branch", related='to_account_id.branch_id', store=True)
-    # to_cashier_id = fields.Many2one('poultry.cashier', string="To Cashier")
-    # to_account_balance = fields.Float(
-    #     string="Account Balance",
-    #     related='to_account_id.balance',
-    #     readonly=True,
-    #     store=True
-    # )
-    #
-    # amount = fields.Float(required=True)
-    # date = fields.Date(default=fields.Date.today)
-    # note = fields.Text()
-    #
-    # status = fields.Selection(
-    #     [
-    #         ('new_transfer', 'New Transfer'),
-    #         ('transfer_done', 'Transfer Done'),
-    #     ],
-    #     string='Status',
-    #     default='new_transfer',
-    #     required=True,
-    #     tracking=True
-    # )
 
     # ---------------------------- BASIC DETAILS -------------------------------
     # Unique reference for the cash transfer, automatically generated via sequence

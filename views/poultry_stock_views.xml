@@ -1,18 +1,193 @@
+<!--<odoo>-->
+<!--    &lt;!&ndash; =========================-->
+<!--         Poultry Stock Views and Menus-->
+<!--    ========================= &ndash;&gt;-->
+
+<!--    &lt;!&ndash; =========================-->
+<!--         Tree View for Poultry Stock-->
+<!--         Displays branch, poultry type, total quantity, and last updated-->
+<!--         Read-only: Users cannot create or edit records from the tree view-->
+<!--    ========================= &ndash;&gt;-->
+<!--    <record id="view_poultry_stock_tree" model="ir.ui.view">-->
+<!--        <field name="name">poultry.stock.tree</field>-->
+<!--        <field name="model">poultry.stock</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <tree string="Poultry Stock" create="false" edit="false">-->
+<!--                <field name="branch_id"/>-->
+<!--                <field name="farm_id"/>-->
+<!--                <field name="product_id"/>-->
+<!--                <field name="uom_id"/>-->
+<!--                <field name="total_quantity"/>-->
+<!--                <field name="cost"/>-->
+<!--                <field name="cost_amount"/>-->
+<!--                <field name="currency_id"/>-->
+<!--                <field name="last_updated" readonly="1"/>-->
+<!--            </tree>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    &lt;!&ndash; =========================-->
+<!--         Search View for Poultry Stock-->
+<!--         Allows filtering by branch and poultry type-->
+<!--         Includes a search panel for easy filtering by type-->
+<!--    ========================= &ndash;&gt;-->
+<!--    <record id="view_poultry_stock_search" model="ir.ui.view">-->
+<!--        <field name="name">poultry.stock.search</field>-->
+<!--        <field name="model">poultry.stock</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search string="Search Stock">-->
+<!--                <field name="branch_id"/>-->
+<!--                &lt;!&ndash;                <field name="item_type_id"/>&ndash;&gt;-->
+
+<!--                &lt;!&ndash; Search panel for quick filtering by poultry type &ndash;&gt;-->
+<!--                <searchpanel>-->
+<!--                    <field name="branch_id" string="Branch" icon="fa-sitemap"/>-->
+<!--                    <field name="farm_id" string="Farm House" icon="fa-home"/>-->
+<!--                    &lt;!&ndash;                    <field name="item_type_id" string="Type" icon="fa-tags"/>&ndash;&gt;-->
+
+<!--                </searchpanel>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    &lt;!&ndash; =========================-->
+<!--         Form View for Poultry Stock-->
+<!--         Displays details of a single stock record-->
+<!--         All fields are read-only to prevent accidental changes-->
+<!--    ========================= &ndash;&gt;-->
+<!--    <record id="view_poultry_stock_form" model="ir.ui.view">-->
+<!--        <field name="name">poultry.stock.form</field>-->
+<!--        <field name="model">poultry.stock</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <form string="Poultry Stock">-->
+<!--                <sheet>-->
+<!--                    <group>-->
+<!--                        <field name="branch_id" readonly="1"/>-->
+<!--                        &lt;!&ndash;                        <field name="item_type_id" readonly="1"/>&ndash;&gt;-->
+<!--                        <field name="total_quantity" readonly="1"/>-->
+<!--                        <field name="last_updated" readonly="1"/>-->
+<!--                    </group>-->
+<!--                </sheet>-->
+<!--            </form>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    &lt;!&ndash;    kanban view poultry.stock model  &ndash;&gt;-->
+<!--    <record id="view_poultry_stock_kanban" model="ir.ui.view">-->
+<!--        <field name="name">poultry.stock.kanban</field>-->
+<!--        <field name="model">poultry.stock</field>-->
+
+<!--        <field name="arch" type="xml">-->
+<!--            <kanban class="o_kanban_example">-->
+<!--                <templates>-->
+<!--                    <t t-name="kanban-box">-->
+
+<!--                        <div class="oe_kanban_global_click o_kanban_card card-shadow p-3 mb-3"-->
+<!--                             style="border-radius: 12px; transition: transform 0.2s; cursor: pointer;">-->
+
+<!--                            &lt;!&ndash; Header: Poultry Type + Branch &ndash;&gt;-->
+<!--                            <div class="d-flex justify-content-between align-items-center mb-2">-->
+<!--                                <strong class="h4 text-primary">-->
+<!--                                    <field name="branch_id"/>-->
+<!--                                </strong>-->
+
+<!--                                <span class="badge bg-info text-white" style="font-size: 14px;">-->
+<!--                                    <i class="fa fa-code-branch"></i>-->
+<!--                                    <field name="farm_id"/>-->
+<!--                                </span>-->
+<!--                            </div>-->
+
+<!--                            &lt;!&ndash; Body Details &ndash;&gt;-->
+<!--                            <div class="o_kanban_details mb-2">-->
+
+<!--                                &lt;!&ndash; Farm House &ndash;&gt;-->
+<!--                                <div>-->
+<!--                                    <i class="fa fa-warehouse text-secondary"></i>-->
+<!--                                    Farm House:-->
+<!--                                    &lt;!&ndash;                                <field name="item_type_id"/>&ndash;&gt;-->
+<!--                                </div>-->
+
+<!--                                &lt;!&ndash; Total Quantity &ndash;&gt;-->
+<!--                                <div style="font-size: 14px;">-->
+<!--                                    <i class="fa fa-box text-success"></i>-->
+<!--                                    Total Quantity:-->
+<!--                                    <span class="badge bg-secondary" style="font-size: 14px;">-->
+<!--                                        <field name="total_quantity"/>-->
+<!--                                    </span>-->
+<!--                                </div>-->
+
+<!--                                &lt;!&ndash; Purchase / Sale Record Info &ndash;&gt;-->
+<!--                                <div>-->
+<!--                                    <i class="fa fa-shopping-cart text-primary"></i>-->
+<!--                                    Purchases:-->
+<!--                                    <span class="badge bg-primary">-->
+<!--                                        &lt;!&ndash;                                    <field name="purchase_count"/>&ndash;&gt;-->
+<!--                                    </span>-->
+<!--                                </div>-->
+
+<!--                                <div>-->
+<!--                                    <i class="fa fa-money-bill text-warning"></i>-->
+<!--                                    Sales:-->
+<!--                                    <span class="badge bg-warning text-dark">-->
+<!--                                        &lt;!&ndash;                                    <field name="sale_count"/>&ndash;&gt;-->
+<!--                                    </span>-->
+<!--                                </div>-->
+
+<!--                            </div>-->
+
+<!--                            &lt;!&ndash; Footer: Updated Date &ndash;&gt;-->
+<!--                            <div class="mt-3">-->
+<!--                                <span class="badge bg-secondary">-->
+<!--                                    <i class="fa fa-clock"></i>-->
+<!--                                    Updated:-->
+<!--                                    <field name="last_updated"/>-->
+<!--                                </span>-->
+<!--                            </div>-->
+
+<!--                        </div>-->
+
+<!--                    </t>-->
+<!--                </templates>-->
+
+<!--                <kanban quick_create="true"/>-->
+<!--            </kanban>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    &lt;!&ndash; =========================-->
+<!--         Action Window for Poultry Stock-->
+<!--         Links tree and form views-->
+<!--         Associates with the search view for filtering-->
+<!--    ========================= &ndash;&gt;-->
+<!--    <record id="action_poultry" model="ir.actions.act_window">-->
+<!--        <field name="name">Poultry Records</field>-->
+<!--        <field name="res_model">poultry.stock</field>-->
+<!--        <field name="view_mode">tree,form,kanban</field>-->
+<!--        <field name="search_view_id" ref="view_poultry_stock_search"/>-->
+<!--    </record>-->
+
+<!--    &lt;!&ndash; =========================-->
+<!--         Menu Items-->
+<!--         Root menu: Poultry Farm-->
+<!--         Submenu: Farm, opens Poultry Records action-->
+<!--    ========================= &ndash;&gt;-->
+<!--    <menuitem id="menu_poultry" name="Poultry Farm"/>-->
+<!--    <menuitem id="menu_poultry" name="Poultry Farm" action="action_poultry"/>-->
+
+<!--</odoo>-->
+
 <odoo>
     <!-- =========================
-         Poultry Stock Views and Menus
+         Poultry Stock Tree Views
+         Three views: Medicine, Chicken, Food
     ========================= -->
 
-    <!-- =========================
-         Tree View for Poultry Stock
-         Displays branch, poultry type, total quantity, and last updated
-         Read-only: Users cannot create or edit records from the tree view
-    ========================= -->
-    <record id="view_poultry_stock_tree" model="ir.ui.view">
-        <field name="name">poultry.stock.tree</field>
+    <!-- Medicine Stock Tree View -->
+    <record id="view_poultry_stock_medicine_tree" model="ir.ui.view">
+        <field name="name">poultry.stock.medicine.tree</field>
         <field name="model">poultry.stock</field>
         <field name="arch" type="xml">
-            <tree string="Poultry Stock" create="false" edit="false">
+            <tree string="Medicine Stock" create="false" edit="false">
                 <field name="branch_id"/>
                 <field name="farm_id"/>
                 <field name="product_id"/>
@@ -26,10 +201,46 @@
         </field>
     </record>
 
-    <!-- =========================
-         Search View for Poultry Stock
-         Allows filtering by branch and poultry type
-         Includes a search panel for easy filtering by type
+    <!-- Chicken Stock Tree View -->
+    <record id="view_poultry_stock_chicken_tree" model="ir.ui.view">
+        <field name="name">poultry.stock.chicken.tree</field>
+        <field name="model">poultry.stock</field>
+        <field name="arch" type="xml">
+            <tree string="Chicken Stock" create="false" edit="false">
+                <field name="branch_id"/>
+                <field name="farm_id"/>
+                <field name="product_id"/>
+                <field name="uom_id"/>
+                <field name="total_quantity"/>
+                <field name="cost"/>
+                <field name="cost_amount"/>
+                <field name="currency_id"/>
+                <field name="last_updated" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Food Stock Tree View -->
+    <record id="view_poultry_stock_food_tree" model="ir.ui.view">
+        <field name="name">poultry.stock.food.tree</field>
+        <field name="model">poultry.stock</field>
+        <field name="arch" type="xml">
+            <tree string="Food Stock" create="false" edit="false">
+                <field name="branch_id"/>
+                <field name="farm_id"/>
+                <field name="product_id"/>
+                <field name="uom_id"/>
+                <field name="total_quantity"/>
+                <field name="cost"/>
+                <field name="cost_amount"/>
+                <field name="currency_id"/>
+                <field name="last_updated" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+     <!-- =========================
+         Search Panel (shared for all menus)
     ========================= -->
     <record id="view_poultry_stock_search" model="ir.ui.view">
         <field name="name">poultry.stock.search</field>
@@ -37,141 +248,72 @@
         <field name="arch" type="xml">
             <search string="Search Stock">
                 <field name="branch_id"/>
-                <!--                <field name="item_type_id"/>-->
-
-                <!-- Search panel for quick filtering by poultry type -->
+                <field name="farm_id"/>
+                <field name="product_id"/>
                 <searchpanel>
                     <field name="branch_id" string="Branch" icon="fa-sitemap"/>
                     <field name="farm_id" string="Farm House" icon="fa-home"/>
-                    <!--                    <field name="item_type_id" string="Type" icon="fa-tags"/>-->
-
+                    <field name="product_id" string="Product" icon="fa-tags"/>
                 </searchpanel>
             </search>
         </field>
     </record>
 
-    <!-- =========================
-         Form View for Poultry Stock
-         Displays details of a single stock record
-         All fields are read-only to prevent accidental changes
-    ========================= -->
-    <record id="view_poultry_stock_form" model="ir.ui.view">
-        <field name="name">poultry.stock.form</field>
-        <field name="model">poultry.stock</field>
-        <field name="arch" type="xml">
-            <form string="Poultry Stock">
-                <sheet>
-                    <group>
-                        <field name="branch_id" readonly="1"/>
-                        <!--                        <field name="item_type_id" readonly="1"/>-->
-                        <field name="total_quantity" readonly="1"/>
-                        <field name="last_updated" readonly="1"/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-    <!--    kanban view poultry.stock model  -->
-    <record id="view_poultry_stock_kanban" model="ir.ui.view">
-        <field name="name">poultry.stock.kanban</field>
-        <field name="model">poultry.stock</field>
-
-        <field name="arch" type="xml">
-            <kanban class="o_kanban_example">
-                <templates>
-                    <t t-name="kanban-box">
-
-                        <div class="oe_kanban_global_click o_kanban_card card-shadow p-3 mb-3"
-                             style="border-radius: 12px; transition: transform 0.2s; cursor: pointer;">
-
-                            <!-- Header: Poultry Type + Branch -->
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <strong class="h4 text-primary">
-                                    <field name="branch_id"/>
-                                </strong>
-
-                                <span class="badge bg-info text-white" style="font-size: 14px;">
-                                    <i class="fa fa-code-branch"></i>
-                                    <field name="farm_id"/>
-                                </span>
-                            </div>
-
-                            <!-- Body Details -->
-                            <div class="o_kanban_details mb-2">
-
-                                <!-- Farm House -->
-                                <div>
-                                    <i class="fa fa-warehouse text-secondary"></i>
-                                    Farm House:
-                                    <!--                                <field name="item_type_id"/>-->
-                                </div>
-
-                                <!-- Total Quantity -->
-                                <div style="font-size: 14px;">
-                                    <i class="fa fa-box text-success"></i>
-                                    Total Quantity:
-                                    <span class="badge bg-secondary" style="font-size: 14px;">
-                                        <field name="total_quantity"/>
-                                    </span>
-                                </div>
-
-                                <!-- Purchase / Sale Record Info -->
-                                <div>
-                                    <i class="fa fa-shopping-cart text-primary"></i>
-                                    Purchases:
-                                    <span class="badge bg-primary">
-                                        <!--                                    <field name="purchase_count"/>-->
-                                    </span>
-                                </div>
-
-                                <div>
-                                    <i class="fa fa-money-bill text-warning"></i>
-                                    Sales:
-                                    <span class="badge bg-warning text-dark">
-                                        <!--                                    <field name="sale_count"/>-->
-                                    </span>
-                                </div>
-
-                            </div>
-
-                            <!-- Footer: Updated Date -->
-                            <div class="mt-3">
-                                <span class="badge bg-secondary">
-                                    <i class="fa fa-clock"></i>
-                                    Updated:
-                                    <field name="last_updated"/>
-                                </span>
-                            </div>
-
-                        </div>
-
-                    </t>
-                </templates>
-
-                <kanban quick_create="true"/>
-            </kanban>
-        </field>
-    </record>
 
     <!-- =========================
-         Action Window for Poultry Stock
-         Links tree and form views
-         Associates with the search view for filtering
+         Actions filtered by product_type
     ========================= -->
-    <record id="action_poultry" model="ir.actions.act_window">
-        <field name="name">Poultry Records</field>
+
+    <!-- Medicine Stock Action -->
+    <record id="action_poultry_medicine" model="ir.actions.act_window">
+        <field name="name">Medicine Stock</field>
         <field name="res_model">poultry.stock</field>
-        <field name="view_mode">tree,form,kanban</field>
-        <field name="search_view_id" ref="view_poultry_stock_search"/>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_poultry_stock_medicine_tree"/>
+        <field name="domain">[('product_id.product_type','=','medicine')]</field>
+    </record>
+
+    <!-- Chicken Stock Action -->
+    <record id="action_poultry_chicken" model="ir.actions.act_window">
+        <field name="name">Chicken Stock</field>
+        <field name="res_model">poultry.stock</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_poultry_stock_chicken_tree"/>
+        <field name="domain">[('product_id.product_type','=','chicken')]</field>
+    </record>
+
+    <!-- Food Stock Action -->
+    <record id="action_poultry_food" model="ir.actions.act_window">
+        <field name="name">Food Stock</field>
+        <field name="res_model">poultry.stock</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_poultry_stock_food_tree"/>
+        <field name="domain">[('product_id.product_type','=','feed')]</field>
     </record>
 
     <!-- =========================
-         Menu Items
-         Root menu: Poultry Farm
-         Submenu: Farm, opens Poultry Records action
+         Menus
     ========================= -->
-    <menuitem id="menu_poultry" name="Poultry Farm"/>
-    <menuitem id="menu_poultry" name="Poultry Farm" action="action_poultry"/>
+
+    <!-- Root Menu -->
+    <menuitem id="menu_poultry_stock_root" name="Poultry Stock" parent="menu_poultry"/>
+
+    <!-- Medicine Submenu -->
+    <menuitem id="menu_poultry_stock_medicine"
+              name="Medicine Stock"
+              parent="menu_poultry_stock_root"
+              action="action_poultry_medicine"/>
+
+    <!-- Chicken Submenu -->
+    <menuitem id="menu_poultry_stock_chicken"
+              name="Chicken Stock"
+              parent="menu_poultry_stock_root"
+              action="action_poultry_chicken"/>
+
+    <!-- Food Submenu -->
+    <menuitem id="menu_poultry_stock_food"
+              name="Food Stock"
+              parent="menu_poultry_stock_root"
+              action="action_poultry_food"/>
 
 </odoo>

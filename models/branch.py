@@ -12,7 +12,6 @@ class PoultryBranch(models.Model):
     code = fields.Char(string='Branch Code', tracking=True, readonly=True)
     address = fields.Text(tracking=True)  # track address changes
     manager_ids = fields.Many2one('res.users', string='Branch Manager')
-    # is_main = fields.Boolean(string='Is Main Branch')
     branch_type = fields.Selection([
         ('main', 'Main Branch'),
         ('sub', 'Sub Branch')

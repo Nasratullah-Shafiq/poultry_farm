@@ -22,7 +22,7 @@
                                 <field name="date"/>
                                 <field name="branch_id"/>
                                 <field name="farm_id"/>
-                                <field name="item_type_id"/>
+<!--                                <field name="item_type_id"/>-->
                                 <field name="quantity"/>
                                 <field name="reason"/>
                                 <field name="description"/>

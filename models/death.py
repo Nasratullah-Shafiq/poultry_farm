@@ -36,12 +36,15 @@ class PoultryDeath(models.Model):
         default='disease'
     )
 
-    item_type_id = fields.Many2one(
-        'item.type',
-        string="Poultry Type",
-        required=True,
-        help="The poultry type for the death record",
-        store=True
+    product_type = fields.Selection(
+        [
+            ('chicken', 'Chicken'),
+            ('feed', 'Feed'),
+            ('medicine', 'Medicine'),
+        ],
+        string="Product Type",
+        default='chicken',
+        required=True
     )
 
     # total poultry in the selected branch (all types)
@@ -107,13 +110,15 @@ class PoultryDeath(models.Model):
     def _compute_year_month(self):
         for rec in self:
             if rec.date:
-                rec.death_month = str(rec.date.month)  # Correct field name
-                rec.death_year = str(rec.date.year)  # Correct field name
+                rec.death_month = str(rec.date.month)
+                rec.death_year = str(rec.date.year)
             else:
                 rec.death_month = False
                 rec.death_year = False
 
-
+    # --------------------------------------------------
+    # VALIDATION
+    # --------------------------------------------------
 
     @api.constrains('quantity')
     def _check_quantity(self):
@@ -121,28 +126,49 @@ class PoultryDeath(models.Model):
             if rec.quantity <= 0:
                 raise UserError("Death quantity must be greater than zero.")
 
-    @api.depends('branch_id', 'item_type_id')
-    def _compute_death_count(self):
-        """Sum of deaths for same branch & type"""
-        for rec in self:
-            if rec.branch_id and rec.item_type_id:
-                deaths = self.env['poultry.death'].search([
-                    ('branch_id', '=', rec.branch_id.id),
-                    ('item_type_id', '=', rec.item_type_id.id)
-                ])
-                rec.death_count = sum(deaths.mapped('quantity'))
-            else:
-                rec.death_count = 0
+    # --------------------------------------------------
+    # COMPUTE TOTAL DEATH COUNT
+    # --------------------------------------------------
 
+    @api.depends('branch_id', 'product_type', 'farm_id')
+    def _compute_total_poultry(self):
+        for rec in self:
+            if not rec.branch_id or not rec.product_type or not rec.farm_id:
+                rec.total_poultry = 0
+                continue
+
+            stocks = self.env['poultry.stock'].search([
+                ('branch_id', '=', rec.branch_id.id),
+                ('farm_id', '=', rec.farm_id.id),
+                ('product_type', '=', rec.product_type),
+            ])
+
+            rec.total_poultry = sum(stocks.mapped('total_quantity'))
+
+    # --------------------------------------------------
+    # COMPUTE TOTAL POULTRY IN FARM
+    # --------------------------------------------------
+
+    @api.depends('branch_id', 'product_type', 'farm_id')
+    def _compute_total_poultry(self):
+        for rec in self:
+            if not rec.branch_id or not rec.product_type or not rec.farm_id:
+                rec.total_poultry = 0
+                continue
+
+            stocks = self.env['poultry.stock'].search([
+                ('branch_id', '=', rec.branch_id.id),
+                ('farm_id', '=', rec.farm_id.id),
+                ('product_type', '=', rec.product_type),
+            ])
+
+            rec.total_poultry = sum(stocks.mapped('total_quantity'))
+
+    # --------------------------------------------------
+    # DEATH STATISTICS
+    # --------------------------------------------------
 
     def _compute_death_statistics(self):
-        """
-        Compute:
-        - Last 24 hours deaths
-        - Current month deaths
-        - Current year deaths
-        """
-        # We compute once and reuse for all records
         now = datetime.now()
         today = date.today()
 
@@ -152,14 +178,10 @@ class PoultryDeath(models.Model):
 
         Death = self.env['poultry.death']
 
-        # Last 24 hours
         last_24h_total = sum(
-            Death.search([
-                ('date', '>=', last_24h.date())
-            ]).mapped('quantity')
+            Death.search([('date', '>=', last_24h.date())]).mapped('quantity')
         )
 
-        # Current month
         month_total = sum(
             Death.search([
                 ('date', '>=', month_start),
@@ -167,7 +189,6 @@ class PoultryDeath(models.Model):
             ]).mapped('quantity')
         )
 
-        # Current year
         year_total = sum(
             Death.search([
                 ('date', '>=', year_start),
@@ -180,177 +201,83 @@ class PoultryDeath(models.Model):
             rec.death_current_month = month_total
             rec.death_current_year = year_total
 
-
-
-    @api.depends('branch_id', 'item_type_id')
-    def _compute_death_count(self):
-        for rec in self:
-            deaths = self.env['poultry.death'].search([
-                ('branch_id', '=', rec.branch_id.id),
-                ('item_type_id', '=', rec.item_type_id.id)
-            ])
-            rec.death_count = sum(d.quantity for d in deaths)
-
-    @api.depends('branch_id', 'item_type_id', 'farm_id')
-    def _compute_total_poultry(self):
-        for rec in self:
-            if not rec.branch_id or not rec.item_type_id or not rec.farm_id:
-                rec.total_poultry = 0
-                continue
-
-            farms = self.env['poultry.farm'].search([
-                ('branch_id', '=', rec.branch_id.id),
-                ('item_type_id', '=', rec.item_type_id.id),
-                ('farm_id', '=', rec.farm_id.id),
-            ])
-
-            rec.total_poultry = sum(f.total_quantity for f in farms)
-
-
-    # -------------------------
-    # Helpers to modify stock
-    # -------------------------
-    def _get_farm_stock(self, branch_id, item_type_id):
-        """Return the poultry.farm record for branch+type or None"""
-        return self.env['poultry.farm'].search([
-            ('branch_id', '=', branch_id),
-            ('item_type_id', '=', item_type_id)
-        ], limit=1)
-
-    def _ensure_sufficient_stock(self, farm_record, qty):
-        """Raise if farm_record missing or does not have at least qty available"""
-        if not farm_record:
-            raise UserError("No stock found for branch %s and type %s. Add purchases first." %
-                            (self.env['poultry.branch'].browse(self.branch_id.id).name if self.branch_id else branch_id,
-                             self.env['item.type'].browse(
-                                 self.item_type_id.id).name if self.item_type_id else item_type_id))
-        if farm_record.total_quantity < qty:
-            raise UserError("Insufficient stock to record this death. Available: %s, Requested: %s" %
-                            (farm_record.total_quantity, qty))
+    # --------------------------------------------------
+    # STOCK UPDATE LOGIC
+    # --------------------------------------------------
 
     def _update_stock(self, old_qty=0, old_branch=None, old_farm=None):
-        """
-        Update stock in poultry.farm when deaths are recorded.
-        Handles create, update, and delete with validation.
-        """
         for rec in self:
 
-            # ------------------------------------------------
-            # 1️⃣ REVERT OLD STOCK (when editing)
-            # ------------------------------------------------
+            # Restore old stock when editing
             if old_branch and old_farm:
-                old_stock = self.env['poultry.farm'].search([
+                old_stock = self.env['poultry.stock'].search([
                     ('branch_id', '=', old_branch.id),
                     ('farm_id', '=', old_farm.id),
+                    ('product_type', '=', rec.product_type),
                 ], limit=1)
 
                 if old_stock:
                     old_stock.total_quantity += old_qty
 
-            # ------------------------------------------------
-            # 2️⃣ GET CURRENT STOCK (branch + farm)
-            # ------------------------------------------------
-            stock = self.env['poultry.farm'].search([
+            stock = self.env['poultry.stock'].search([
                 ('branch_id', '=', rec.branch_id.id),
                 ('farm_id', '=', rec.farm_id.id),
+                ('product_type', '=', rec.product_type),
             ], limit=1)
 
             if not stock:
                 raise UserError(
-                    "No poultry stock found for the selected branch and farm!"
+                    "No poultry stock found for the selected branch, farm, and product type!"
                 )
 
-            # ------------------------------------------------
-            # 3️⃣ VALIDATION
-            # ------------------------------------------------
-            if rec.quantity > stock.total_quantity:
+            remaining_qty = stock.total_quantity - rec.quantity
+
+            if remaining_qty < 0:
                 raise UserError(
                     f"Invalid Entry!\n"
-                    f"Death quantity ({rec.quantity}) cannot be greater "
-                    f"than available stock ({stock.total_quantity})."
+                    f"Death quantity ({rec.quantity}) exceeds available stock ({stock.total_quantity})."
                 )
 
-            # ------------------------------------------------
-            # 4️⃣ APPLY NEW STOCK
-            # ------------------------------------------------
-            stock.total_quantity -= rec.quantity
-    # def _update_stock(self, old_qty=0, old_branch=None, old_type=None):
-    #     """
-    #     Update stock in poultry.farm when deaths are recorded.
-    #     Handles create, update, and delete with validation.
-    #     """
-    #     for rec in self:
-    #
-    #         # ------------------------------------------------
-    #         # 1️⃣ REVERT OLD STOCK (when editing)
-    #         # ------------------------------------------------
-    #         if old_branch:
-    #             old_stock = self.env['poultry.farm'].search([
-    #                 ('branch_id', '=', old_branch.id),
-    #             ], limit=1)
-    #
-    #             if old_stock:
-    #                 old_stock.total_quantity += old_qty
-    #
-    #         # ------------------------------------------------
-    #         # 2️⃣ GET CURRENT STOCK FOR NEW WRITE/CREATE
-    #         # ------------------------------------------------
-    #         stock = self.env['poultry.farm'].search([
-    #             ('branch_id', '=', rec.branch_id.id),
-    #         ], limit=1)
-    #
-    #         if not stock:
-    #             raise UserError("No poultry stock found for this branch!")
-    #
-    #         # ------------------------------------------------
-    #         # 3️⃣ VALIDATION — DEAD CHICKENS > AVAILABLE STOCK
-    #         # ------------------------------------------------
-    #         if rec.quantity > stock.total_quantity:
-    #             raise UserError(
-    #                 f"Invalid Entry!\n"
-    #                 f"Death quantity ({rec.quantity}) cannot be greater "
-    #                 f"than available stock ({stock.total_quantity})."
-    #             )
-    #
-    #         # ------------------------------------------------
-    #         # 4️⃣ APPLY NEW STOCK (subtract)
-    #         # ------------------------------------------------
-    #         stock.total_quantity -= rec.quantity
+            stock.total_quantity = remaining_qty
 
-    # ======================================================
-    # OVERRIDE CREATE
-    # ======================================================
+    # --------------------------------------------------
+    # CREATE
+    # --------------------------------------------------
+
     @api.model
     def create(self, vals):
         rec = super().create(vals)
         rec._update_stock()
         return rec
 
-    # ======================================================
-    # OVERRIDE WRITE
-    # ======================================================
+    # --------------------------------------------------
+    # WRITE
+    # --------------------------------------------------
+
     def write(self, vals):
         for rec in self:
             old_qty = rec.quantity
             old_branch = rec.branch_id
-            old_type = None  # remove if not needed
+            old_farm = rec.farm_id
 
-            res = super(PoultryDeath, rec).write(vals)
-            rec._update_stock(old_qty, old_branch, old_type)
+            super(PoultryDeath, rec).write(vals)
+            rec._update_stock(old_qty, old_branch, old_farm)
 
         return True
 
-    # ======================================================
-    # OVERRIDE DELETE
-    # ======================================================
+    # --------------------------------------------------
+    # DELETE
+    # --------------------------------------------------
+
     def unlink(self):
         for rec in self:
-            stock = self.env['poultry.farm'].search([
+            stock = self.env['poultry.stock'].search([
                 ('branch_id', '=', rec.branch_id.id),
                 ('farm_id', '=', rec.farm_id.id),
+                ('product_type', '=', rec.product_type),
             ], limit=1)
 
             if stock:
-                stock.total_quantity += rec.quantity  # restore
+                stock.total_quantity += rec.quantity
 
         return super().unlink()
