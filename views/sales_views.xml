@@ -13,7 +13,8 @@
                 <field name="date"/>
                 <field name="branch_id"/>
                 <field name="farm_id" domain="[('branch_id', '=', branch_id)]"/>
-                <field name="item_type_id"/>
+                <field name="product_id"/>
+                <field name="product_type"/>
                 <field name="quantity"/>
                 <field name="sale_price"/>
                 <field name="total"/>
@@ -63,7 +64,8 @@
                         <field name="branch_id"/>
                         <field name="farm_id"
                                domain="[('branch_id', '=', branch_id)]"/>
-                        <field name="item_type_id"/>
+                        <field name="product_id"/>
+                        <field name="product_type"/>
                         <field name="customer_id"/>
                     </group>
                 </group>
@@ -110,13 +112,13 @@
             <search string="Search Sales">
                 <field name="date"/>
                 <field name="branch_id"/>
-                <field name="item_type_id"/>
+                <field name="product_type"/>
                 <field name="customer_id"/>
 
                 <!-- Quick filter search panel -->
                 <searchpanel>
                     <field name="branch_id" string="Branch"/>
-                    <field name="item_type_id" string="Poultry Type"/>
+                    <field name="product_type" string="Poultry Type"/>
                 </searchpanel>
             </search>
         </field>
@@ -150,7 +152,7 @@
                 <field name="quantity" type="measure"/>
                 <field name="total" type="measure"/>
                 <field name="branch_id" type="row"/>
-                <field name="item_type_id" type="col"/>
+                <field name="product_type" type="col"/>
             </pivot>
         </field>
     </record>

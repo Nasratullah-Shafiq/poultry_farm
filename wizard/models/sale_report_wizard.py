@@ -2,6 +2,7 @@ from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
 
+
 class PoultrySaleReportWizard(models.TransientModel):
     _name = 'poultry.sale.report.wizard'
     _description = 'Poultry Sale Report Wizard'
@@ -44,7 +45,7 @@ class PoultrySaleReportWizard(models.TransientModel):
     )
 
     # -----------------------------
-    # Validations
+    # Validation
     # -----------------------------
     @api.constrains('start_date', 'end_date')
     def _check_date_range(self):
@@ -72,7 +73,7 @@ class PoultrySaleReportWizard(models.TransientModel):
         return domain
 
     # -----------------------------
-    # Report Generator
+    # Generate Report
     # -----------------------------
     def generate_report(self):
         self.ensure_one()
@@ -81,7 +82,7 @@ class PoultrySaleReportWizard(models.TransientModel):
         domain = self._get_domain()
         sales = Sale.search(domain, order='date asc')
 
-        # Clear previous lines
+        # remove previous report lines
         self.sale_lines.unlink()
 
         total_qty = 0.0
@@ -93,11 +94,11 @@ class PoultrySaleReportWizard(models.TransientModel):
                 'date': sale.date,
                 'branch_id': sale.branch_id.id,
                 'farm_id': sale.farm_id.id,
-                'item_type_id': sale.item_type_id.id,
+                'product_type': sale.product_type,
                 'quantity': sale.quantity,
                 'unit_price': sale.sale_price,
                 'total': sale.total,
-                'customer_id': sale.customer_id.id,
+                'customer_id': sale.customer_id.id if sale.customer_id else False,
             })
 
             total_qty += sale.quantity
@@ -115,7 +116,7 @@ class PoultrySaleReportWizard(models.TransientModel):
         }
 
     # -----------------------------
-    # PDF Report
+    # Print PDF
     # -----------------------------
     def print_pdf_report(self):
         self.generate_report()
@@ -145,12 +146,15 @@ class PoultrySaleReportLine(models.TransientModel):
         string="Farm"
     )
 
-    item_type_id = fields.Many2one(
-        'item.type',
-        string="Type"
-    )
+    product_type = fields.Selection([
+        ('chicken', 'Chicken'),
+        ('feed', 'Feed'),
+        ('medicine', 'Medicine'),
+    ], string="Product Type")
 
-    quantity = fields.Float(string="Quantity")
+    quantity = fields.Float(
+        string="Quantity"
+    )
 
     unit_price = fields.Monetary(
         string="Unit Price",
@@ -163,7 +167,7 @@ class PoultrySaleReportLine(models.TransientModel):
     )
 
     customer_id = fields.Many2one(
-        'poultry.customer',
+        'poultry.partner',
         string="Customer"
     )
 

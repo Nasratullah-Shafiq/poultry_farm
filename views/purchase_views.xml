@@ -5,43 +5,6 @@
     ========================== -->
     <menuitem id="menu_farm_root" name="Farm" sequence="15" parent=""/>
 
-    <!-- =========================
-         POULTRY ITEM TYPE VIEWS
-    ========================== -->
-    <!-- Tree View for Item Types -->
-    <record id="view_item_type_tree" model="ir.ui.view">
-        <field name="name">item.type.tree</field>
-        <field name="model">item.type</field>
-        <field name="arch" type="xml">
-            <tree>
-                <field name="name"/>
-            </tree>
-        </field>
-    </record>
-
-    <!-- Form View for Item Types -->
-    <record id="view_item_type_form" model="ir.ui.view">
-        <field name="name">item.type.form</field>
-        <field name="model">item.type</field>
-        <field name="arch" type="xml">
-            <form>
-                <sheet>
-                    <field name="name"/>
-                    <field name="description"/>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-    <!-- Action to open Item Types -->
-    <record id="action_item_type" model="ir.actions.act_window">
-        <field name="name">Item Types</field>
-        <field name="res_model">item.type</field>
-        <field name="view_mode">tree,form</field>
-    </record>
-
-    <!-- Menu for Item Types -->
-    <menuitem id="menu_item_types" name="Item Types" parent="menu_poultry_setup" action="action_item_type"/>
 
     <!-- =========================
          POULTRY PURCHASE VIEWS
@@ -55,7 +18,6 @@
                 <field name="date"/>
                 <field name="branch_id"/>
                 <field name="farm_id" domain="[('branch_id', '=', branch_id)]"/>
-                <field name="item_type_id"/>
                 <field name="uom_id"/>
                 <field name="quantity"/>
                 <field name="purchase_price" widget="monetary" sum="Total Unit Price"/>
@@ -95,22 +57,25 @@
                             title="Purchase Done"
                             bg_color="bg-info"
                             invisible="status != 'purchase_done'"/>
+                   <group>
                     <group>
-                        <group>
-                            <field name="date"/>
-                            <field name="branch_id"/>
-                            <field name="farm_id" domain="[('branch_id', '=', branch_id)]"/>
-                            <field name="item_type_id"/>
-                            <field name="supplier_id"/>
-                            <field name="currency_id" invisible="1"/>
-                        </group>
-                        <group>
-                            <field name="uom_id"/>
-                            <field name="quantity"/>
-                            <field name="purchase_price"/>
-                            <field name="total" readonly="1"/>
-                        </group>
+                        <field name="date"/>
+                        <field name="branch_id"/>
+                        <field name="farm_id" domain="[('branch_id', '=', branch_id)]"/>
+                        <field name="product_id"/>
+                        <field name="product_type"/>
+                        <field name="supplier_id"/>
+
                     </group>
+                    <group>
+                        <field name="uom_id"/>
+                        <field name="quantity"/>
+                        <field name="currency_id"/>
+                        <field name="purchase_price"/>
+                        <field name="total" readonly="1"/>
+<!--                        <field name="cost_amount" readonly="1"/>-->
+                    </group>
+                </group>
                 </sheet>
                 <!-- Chatter for messages and activities -->
                 <div class="oe_chatter">
@@ -131,7 +96,7 @@
                 <field name="quantity" type="measure"/>
                 <field name="purchase_price" type="measure"/>
                 <field name="branch_id" type="row"/>
-                <field name="item_type_id" type="col"/>
+
             </pivot>
         </field>
     </record>
@@ -156,13 +121,11 @@
             <search string="Search Purchases">
                 <field name="date"/>
                 <field name="branch_id"/>
-                <field name="item_type_id"/>
                 <field name="supplier_id"/>
 
                 <!-- Search Panel for Branch and Type -->
                 <searchpanel>
                     <field name="branch_id" string="Branch" icon="fa-building"/>
-                    <field name="item_type_id" string="Poultry Type" icon="fa-tags"/>
                     <field name="farm_id" string="Farm House" icon="fa-home"/>
                 </searchpanel>
 

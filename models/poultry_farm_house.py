@@ -19,7 +19,7 @@ class PoultryFarmHouse(models.Model):
     # Add item type
     item_type_id = fields.Many2one('item.type', string="Type")
 
-    farm_id = fields.Many2one('poultry.farm', string='Farm')
+    farm_id = fields.Many2one('poultry.stock', string='Farm')
 
     manager_id = fields.Many2one('res.partner', string='Manager')
 
