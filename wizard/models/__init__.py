@@ -6,3 +6,6 @@ from . import expense_report_wizard
 from . import death_report_wizard
 from . import cash_deposit_report_wizard
 from . import cash_account_report_wizard
+from . import customer_payment_report_wizard
+from . import supplier_payment_report_wizard
+from . import payment_report_wizard

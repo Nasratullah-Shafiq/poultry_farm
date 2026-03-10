@@ -57,7 +57,16 @@ access_cash_deposit_report_line_user,cash.deposit.report.line user,model_cash_de
 access_cash_account_report_wizard,cash.account.report.wizard,model_cash_account_report_wizard,,1,1,1,1
 access_cash_account_report_line,cash.account.report.line,model_cash_account_report_line,,1,1,1,1
 
-access_poultry_payment_manager,Poultry Payment Manager,model_poultry_payment,base.group_system,1,1,1,1
+access_poultry_payment_manager,Poultry Payment Manager,model_poultry_payment,base.group_user,1,1,1,1
 
 access_poultry_product_user,poultry.product.user,model_poultry_product,base.group_user,1,1,1,1
-access_poultry_partner_manager,Poultry Partner Manager,model_poultry_partner,base.group_system,1,1,1,1
+access_poultry_partner_manager,Poultry Partner Manager,model_poultry_partner,base.group_user,1,1,1,1
+
+access_customer_payment_report_wizard,access.customer.payment.report.wizard,model_customer_payment_report_wizard,base.group_user,1,1,1,1
+access_customer_payment_report_line,access.customer.payment.report.line,model_customer_payment_report_line,base.group_user,1,1,1,1
+
+access_supplier_payment_report_wizard,supplier.payment.report.wizard,model_supplier_payment_report_wizard,poultry_farm.group_poultry_manager,1,1,1,1
+access_supplier_payment_report_line,supplier.payment.report.line,model_supplier_payment_report_line,poultry_farm.group_poultry_manager,1,1,1,1
+
+access_payment_report_wizard_user,Payment Report Wizard User,model_payment_report_wizard,poultry_farm.group_poultry_manager,1,1,1,1
+access_payment_report_line_user,Payment Report Line User,model_payment_report_line,poultry_farm.group_poultry_manager,1,1,1,1
