@@ -32,6 +32,9 @@
         'wizard/views/death_report_wizard_views.xml',
         'wizard/views/cash_deposit_report_wizard_views.xml',
         'wizard/views/cash_account_report_wizard_views.xml',
+        'wizard/views/customer_payment_report_wizard_views.xml',
+        'wizard/views/supplier_payment_report_wizard_views.xml',
+        'wizard/views/payment_report_wizard_views.xml',
 
         # view files
         'views/branch_views.xml',
@@ -64,6 +67,9 @@
         'report/death_report_template.xml',
         'report/cash_deposit_report_template.xml',
         'report/cash_account_report_template.xml',
+        'report/customer_payment_report_template.xml',
+        'report/supplier_payment_report_template.xml',
+        'report/payment_report_template.xml',
     ],
     'assets': {
         'web.assets_backend': [

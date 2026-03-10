@@ -2,6 +2,7 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
 
+
 class PoultryFinanceReport(models.TransientModel):
     _name = 'poultry.finance.report'
     _description = 'Comprehensive Poultry Finance Report Wizard'
@@ -12,16 +13,9 @@ class PoultryFinanceReport(models.TransientModel):
     start_date = fields.Date(string="Start Date", required=True)
     end_date = fields.Date(string="End Date", required=True)
 
-    branch_id = fields.Many2one(
-        'poultry.branch',
-        string="Branch"
-    )
+    branch_id = fields.Many2one('poultry.branch', string="Branch")
 
-    farm_id = fields.Many2one(
-        'poultry.farm.house',
-        string="Farm",
-        domain="[('branch_id', '=', branch_id)]"
-    )
+    farm_id = fields.Many2one('poultry.farm.house', string="Farm", domain="[('branch_id', '=', branch_id)]")
 
     # -------------------------------------------------
     # Totals
@@ -32,19 +26,13 @@ class PoultryFinanceReport(models.TransientModel):
     total_expenses = fields.Monetary(string="Total Expenses", readonly=True)
     total_income = fields.Monetary(string="Total Income", readonly=True)
 
-    total_expense_by_type = fields.Monetary(
-        string="Total Expenses (All Types)",
-        readonly=True
-    )
+    total_expense_by_type = fields.Monetary(string="Total Expenses (All Types)", readonly=True)
 
+    total_expense_by_type_text = fields.Text(string="Expense Breakdown", readonly=True)
 
     net_profit = fields.Monetary(string="Net Profit", readonly=True)
 
-    currency_id = fields.Many2one(
-        'res.currency',
-        default=lambda self: self.env.company.currency_id,
-        readonly=True
-    )
+    currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id, readonly=True)
 
     # -------------------------------------------------
     # Validation
@@ -108,7 +96,7 @@ class PoultryFinanceReport(models.TransientModel):
         return self._calculate_purchases() + self._calculate_salaries()
 
     def _calculate_income(self):
-        return self._calculate_sales() - self._calculate_expenses()
+        return self._calculate_sales()
 
     # -------------------------------------------------
     # Expense by Type
@@ -144,7 +132,7 @@ class PoultryFinanceReport(models.TransientModel):
 
             rec.total_expense_by_type = total_amount
             rec.total_expense_by_type_text = "\n".join(
-                f"Total {k}: {v:.2f}" for k, v in totals.items()
+                f"{k}: {v:.2f}" for k, v in totals.items()
             )
 
     # -------------------------------------------------
@@ -169,7 +157,7 @@ class PoultryFinanceReport(models.TransientModel):
         self._compute_total_expense_by_type()
 
         self.net_profit = (
-            self.total_income
+            self.total_sales
             - (self.total_expenses + self.total_expense_by_type)
         )
 
