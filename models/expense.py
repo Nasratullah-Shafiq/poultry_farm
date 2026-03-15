@@ -55,11 +55,10 @@ class PoultryExpense(models.Model):
         store=True
     )
 
-    @api.model
     def action_expense_done(self):
-        for record in self:
-            if record.expense_status != 'done':
-                record.expense_status = 'done'
+        for rec in self:
+            if rec.expense_status != 'done':
+                rec.write({'expense_status': 'done'})
 
     # Prevent saving zero or negative amounts
     # -------------------------
