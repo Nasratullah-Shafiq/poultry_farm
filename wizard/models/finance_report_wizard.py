@@ -66,8 +66,36 @@ class PoultryFinanceReport(models.TransientModel):
     def _calculate_sales(self):
         return self._sum_model('poultry.sale', self._get_domain('date'), 'total')
 
+    def get_sales_by_customer(self):
+
+        domain = self._get_domain('date')
+        sales = self.env['poultry.sale'].search(domain)
+
+        totals = {}
+
+        for rec in sales:
+            customer = rec.customer_id.name if rec.customer_id else "Unknown Customer"
+            totals[customer] = totals.get(customer, 0) + rec.total
+
+        return [{'customer': k, 'amount': v} for k, v in totals.items()]
+
+
     def _calculate_purchases(self):
         return self._sum_model('poultry.purchase', self._get_domain('date'), 'total')
+
+    def get_purchase_by_supplier(self):
+
+        domain = self._get_domain('date')
+        purchases = self.env['poultry.purchase'].search(domain)
+
+        totals = {}
+
+        for rec in purchases:
+            supplier = rec.supplier_id.name if rec.supplier_id else "Unknown Supplier"
+            totals[supplier] = totals.get(supplier, 0) + rec.total
+
+        return [{'supplier': k, 'amount': v} for k, v in totals.items()]
+
 
     def _calculate_salaries(self):
         self._validate_dates()
@@ -92,11 +120,53 @@ class PoultryFinanceReport(models.TransientModel):
         payments = self.env['salary.payment'].search(payment_domain)
         return sum(payments.mapped('amount'))
 
+    def get_salary_by_employee(self):
+
+        domain = [
+            ('salary_date', '>=', self.start_date),
+            ('salary_date', '<=', self.end_date),
+        ]
+
+        payments = self.env['salary.payment'].search(domain)
+
+        totals = {}
+
+        for rec in payments:
+            employee = rec.employee_id.name
+            totals[employee] = totals.get(employee, 0) + rec.amount
+
+        return [{'employee': k, 'amount': v} for k, v in totals.items()]
+
     def _calculate_expenses(self):
-        return self._calculate_purchases() + self._calculate_salaries()
+        domain = self._get_domain('date')
+        domain.append(('expense_status', '=', 'done'))
+
+        expenses = self.env['poultry.expense'].search(domain)
+        return sum(expenses.mapped('amount'))
+
+    def get_expense_breakdown(self):
+        domain = self._get_domain('date')
+        domain.append(('expense_status', '=', 'done'))
+
+        expenses = self.env['poultry.expense'].search(domain)
+
+        totals = {}
+
+        for exp in expenses:
+            name = exp.expense_type_id.name
+            totals[name] = totals.get(name, 0) + exp.amount
+
+        lines = []
+        for k, v in totals.items():
+            lines.append({
+                'type': k,
+                'amount': v
+            })
+
+        return lines
 
     def _calculate_income(self):
-        return self._calculate_sales()
+        return self._calculate_sales() - self._calculate_purchases()
 
     # -------------------------------------------------
     # Expense by Type
