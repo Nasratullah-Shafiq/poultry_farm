@@ -17,6 +17,8 @@
                 <field name="product_type"/>
                 <field name="quantity"/>
                 <field name="sale_price"/>
+                <field name="currency_id"/>
+
                 <field name="total"/>
                 <field name="customer_id"/>
             </tree>
@@ -76,6 +78,7 @@
                         <field name="available_quantity" readonly="1"/>
                         <field name="quantity"/>
                         <field name="uom_id"/>
+                        <field name="currency_id"/>
                     </group>
 
                     <group>

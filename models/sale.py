@@ -203,7 +203,11 @@ class PoultrySale(models.Model):
         'uom.uom', string='Unit of Measure', required=True,
         default=lambda self: self.env.ref('uom.product_uom_unit')
     )
-    currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
+    currency_id = fields.Many2one(
+        'res.currency',
+        string='Currency',
+        default=lambda self: self.env.ref('poultry_farm.currency_afn')
+    )
     customer_id = fields.Many2one(
         'poultry.partner',
         domain="[('partner_type','=','customer')]",
