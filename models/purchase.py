@@ -32,12 +32,18 @@ class PoultryPurchase(models.Model):
     uom_id = fields.Many2one('uom.uom', string='Unit of Measure', required=True,
                              default=lambda self: self.env.ref('uom.product_uom_unit'))
     purchase_price = fields.Monetary(currency_field='currency_id', required=True)
-    currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
+    currency_id = fields.Many2one(
+        'res.currency',
+        string='Currency',
+        default=lambda self: self.env.ref('poultry_farm.currency_afn')
+    )
     supplier_id = fields.Many2one(
         'poultry.partner',
         string="Supplier",
         domain="[('partner_type','=','supplier')]",
-        context={'default_partner_type': 'supplier'}
+        context={'default_partner_type': 'supplier'},
+        tracking=True,
+        required=True
     )
 
     total = fields.Monetary(currency_field='currency_id', compute='_compute_total', store=True)
