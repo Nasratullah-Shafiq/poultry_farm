@@ -19,7 +19,6 @@ class PoultryEmployee(models.Model):
     currency_id = fields.Many2one('res.currency', string='Currency', default=lambda self: self.env.company.currency_id)
     farm_id = fields.Many2one('poultry.farm.house', string="Farm", domain="[('branch_id', '=', branch_id)]")
     image_1920 = fields.Image(string='Employee Photo', max_width=1920, max_height=1920)
-
     employee_status = fields.Selection(
         [
             ('new', 'New Employee'),
