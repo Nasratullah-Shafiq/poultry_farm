@@ -52,10 +52,10 @@
         'views/cash_transfer_views.xml',
         'views/expenses_views.xml',
         'views/hide_menu.xml',
-        'views/poultry_death_kpi.xml',
         'views/product_views.xml',
         'views/poultry_payment_views.xml',
         'views/partner_views.xml',
+        'views/dashboard_action.xml',
 
         # Reports - actions before templates
         'report/finance_report_action.xml',
@@ -73,8 +73,9 @@
     ],
     'assets': {
         'web.assets_backend': [
-            # 'poultry_farm/static/src/css/dashboard.css',
-            # 'poultry_farm/static/src/js/dashboard_graph.js',
+            'poultry_farm/static/src/xml/dashboard.xml',
+            'poultry_farm/static/src/js/dashboard.js',
+            'poultry_farm/static/src/css/dashboard.css',
         ],
     },
 
